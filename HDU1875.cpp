@@ -23,8 +23,9 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 const int maxn=205;
-const int INF=1000000;
+const int INF=0x3f3f3f3f;
 double dis[maxn];
+double G[maxn][maxn];
 bool vis[maxn];
 struct Node{
     int u,v;
@@ -50,6 +51,7 @@ int main(void)
     while(T--){
         int n;
         cin>>n;
+        if(n==1)    cout<<"oh!"<<endl;
         memset(dis,0,sizeof(dis));
         for(int i=1;i<=n;i++){
             cin>>node[i].u>>node[i].v;
@@ -57,19 +59,31 @@ int main(void)
         
         memset(vis,0,sizeof(vis));
         memset(dis,0,sizeof(dis));
+        memset(G,0,sizeof(G));
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                if(i==j)    G[i][j]=0;
+                else{  
+                    if(checkdis(getdis(i,j)))
+                        G[i][j]=getdis(i,j);
+                    else
+                        G[i][j]=INF;
+                }
+            }
+        }
 
         double sum=0;
         vis[1]=true;
         int index=1;
 
         for(int i=1;i<=n;i++){
-            dis[i]=getdis(1,i);
+            dis[i]=G[1][i];
         }
 
         for(int i=1;i<=n;i++){
             double mincost=INF;
             for(int j=1;j<=n;j++){
-                if(!vis[j]&&checkdis(dis[j])&&dis[j]<mincost){
+                if(!vis[j]&&dis[j]<mincost){
                     mincost=dis[j];
                     index=j;
                 }
@@ -81,14 +95,14 @@ int main(void)
             }
             //更新dis
             for(int j=1;j<=n;j++){
-                if(!vis[j]&&dis[j]>getdis(index,j)&&checkdis(getdis(index,j))){
-                    dis[j]=getdis(index,j);
-                }
+                if(!vis[j]&&dis[j]>G[index][j])
+                    dis[j]=G[index][j];
+                
             }
 
         }
         int cnt=0; 
-        for(const bool & v : vis) {if(v) cnt++;}
+        for(int i=0;i<=n;i++) {if(vis[i]) cnt++;}
         if(cnt==n)    cout<<fixed<<setprecision(1)<<sum*100<<endl;
         else    cout<<"oh!"<<endl;
     }
