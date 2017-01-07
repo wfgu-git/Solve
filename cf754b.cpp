@@ -24,8 +24,12 @@ typedef long long ll;
 typedef unsigned long long ull;
 char pic[4][4];
 
-set<string> ans={"xx.",",xx","x.x","xxx"};
+set<string> ans={"xx.",".xx","x.x","xxx"};
 
+bool inside(int r,int c){
+    if(r<0||r>=4||c<0||c>=4)    return false;
+    return true;
+}
 
 int main(void)
 {
@@ -35,7 +39,7 @@ int main(void)
     for(int r=0;r<4;r++){
         string pat1="",pat2="";
         for(int c=0;c<3;c++)    pat1+=pic[r][c];
-        for(int c=1;c<3;c++)    pat2+=pic[r][c];
+        for(int c=1;c<4;c++)    pat2+=pic[r][c];
         if(ans.count(pat1)||ans.count(pat2)){
             cout<<"YES"<<endl;
             return 0;
@@ -46,7 +50,7 @@ int main(void)
     for(int c=0;c<4;c++){
          string pat1="",pat2="";
         for(int r=0;r<3;r++)    pat1+=pic[r][c];
-        for(int r=1;r<3;r++)    pat2+=pic[r][c];
+        for(int r=1;r<4;r++)    pat2+=pic[r][c];
         if(ans.count(pat1)||ans.count(pat2)){
             cout<<"YES"<<endl;
             return 0;
@@ -54,6 +58,34 @@ int main(void)
     }
        
     //diagonal
+    string dia[9];
+    for(int i=1;i<=8;i++)    dia[i]="";
+
+    for(int i=0;i<3;i++){
+        dia[1]+=pic[i][i];
+        dia[3]+=pic[i][4-i-1];
+    }
+    for(int i=1;i<4;i++){
+        dia[2]+=pic[i][i];
+        dia[4]+=pic[i][4-i-1];
+    }
     
+
+    for(int i=0;i<3;i++){
+        dia[5]+=pic[i][i+1];
+        dia[7]+=pic[i][4-i-2];
+    }
+
+    for(int i=1;i<4;i++){
+        dia[6]+=pic[i][i-1];
+        dia[8]+=pic[i][4-i];
+    }
+    for(int i=1;i<=8;i++){
+        if(ans.count(dia[i])){
+            cout<<"YES"<<endl;
+            return 0;
+        }
+    }
+    cout<<"NO"<<endl;
     return 0;
 }
