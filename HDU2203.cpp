@@ -22,8 +22,7 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 
-//const int maxn=100005;
-//int f[maxn];
+//int f[100005];
 //
 //void getfail(const string& pat,int f[]){
 //    f[0]=-1;
@@ -66,21 +65,21 @@ typedef unsigned long long ull;
 //    }
 //    return 0;
 //}
+//
 
-
-const int maxn=100005;
-char ob[maxn],pat[maxn],newob[maxn];
-
-int main(void)
-{
-    while(~scanf("%s",ob)){
-        scanf("%s",pat);
-        strcpy(newob,ob);
-        strcat(newob,ob);
-        if(strstr(newob,pat))
-            cout<<"yes"<<endl;
-        else
-            cout<<"no"<<endl;
-    }
-    return 0;
-}
+//const int maxn=100005;
+//char ob[maxn],pat[maxn],newob[maxn*2];
+//
+//int main(void)
+//{
+//    while(~scanf("%s",ob)){
+//        scanf("%s",pat);
+//        strcpy(newob,ob);
+//        strcat(newob,ob);
+//        if(strstr(newob,pat))
+//            cout<<"yes"<<endl;
+//        else
+//            cout<<"no"<<endl;
+//    }
+//    return 0;
+//}
