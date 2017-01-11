@@ -101,6 +101,9 @@ int main()
         vector<Point> qs=convex_hull(ps,n);
         double ans=0;
         int k=(int)qs.size();
+        for(auto &p : qs){
+            cout<<'('<<p.x<<','<<p.y<<')'<<endl;
+        }
         for(int i=0;i<k;i++){
             ans+=dist(qs[i],qs[(i+1)%k]);
         }
