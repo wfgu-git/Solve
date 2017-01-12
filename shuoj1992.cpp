@@ -27,15 +27,27 @@ const int mod = 1e9+7;
 const int INF = 0x3f3f3f3f;
 const double PI = acos(-1.0);
 const double eps = 1e-8;
-
-int dp[1000000];
+const int maxn=550;
+int dp[maxn][maxn];
+int t[maxn];
+//dp[k][m]   k个人抄m本书的最少时间 
+//t[i]  前i本书需要的时间
 
 int main()
 {
     ios::sync_with_stdio(false);
     int m,k;
     while(cin>>m>>k){
-        
+        MEM(dp,0);
+        MEM(t,0);
+        for(int i=1;i<=m;i++){
+            cin>>t[i];
+            t[i]+=t[i-1];
+        }
+        for(int i=1;i<=k;i++){
+            dp[1][i]=t[i];
+        }
+
     }
     return 0;
 }
