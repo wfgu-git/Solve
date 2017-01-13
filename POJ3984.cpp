@@ -13,63 +13,78 @@
 #include<cctype>
 #include<climits>
 #include<queue>
+#include<utility>
+#include<functional>
 using namespace std;
+typedef pair<int,int> PII;
 typedef long long ll;
 typedef unsigned long long ull;
-typedef pair<int,int> PII;
 #define MP(a,b) make_pair(a,b)
+#define MEM(x,i) memset(x,i,sizeof(x))
+#define fi first
+#define se second
+const int mod = 1e9+7;
+const int INF = 0x3f3f3f3f;
+const double PI = acos(-1.0);
+const double eps = 1e-8;
+
+bool vis[5][5];
+int pic[5][5];
+PII pre[5][5];
 int dr[]={1,0,-1,0};
 int dc[]={0,1,0,-1};
 
-int pic[5][5];
-int dist[5][5];
 
 bool inside(int r,int c)
 {
-    if(r<0||r>=5||c<0||c>=5)  return false;
-    return true;
+    return !(r<0||r>=5||c<0||c>=5);
 }
 
-void print()
-{
-    vector<PII> ans;
-    for(;;){
-        ans.push_back(MP(0,0));
-        if()
-    }
-}
 
-int bfs()
+void bfs()
 {
-    memset(dist,-1,sizeof(dist));
+    MEM(vis,false);
     queue<PII> q;
     q.push(MP(0,0));
-    dist[0][0]=0;
+    vis[0][0]=true;
+    
     while(!q.empty()){
         PII cur=q.front();q.pop();
-        int r=cur.first;
-        int c=cur.second;
-        if(r==4&&c==4) break;
-        
+        int r=cur.fi;
+        int c=cur.se;
         for(int i=0;i<4;i++){
             int nr=r+dr[i];
             int nc=c+dc[i];
-            if(inside(nr,nc)&&dist[nr][nc]==-1){
-                dist[nr][nc]=dist[r][c]+1;
+            if(!vis[nr][nc]&&inside(nr,nc)&&pic[nr][nc]==0){
+                vis[nr][nc]=true;
                 q.push(MP(nr,nc));
+                pre[nr][nc]=MP(r,c);
+                if(nr==4&&nc==4) break;
             }
         }
     }
-    return dist[4][4];
+
 }
+//dfs 打印路径
+void print_path(int r,int c)
+{
+    if(r==0&&c==0){
+        cout<<"("<<r<<", "<<c<<")\n";
+        return ;
+    }
+    print_path(pre[r][c].fi,pre[r][c].se);
+    cout<<"("<<r<<", "<<c<<")\n";
+}
+
 int main()
 {
     for(int i=0;i<5;i++){
         for(int j=0;j<5;j++){
             cin>>pic[i][j];
         }
-    }    
-    
-    
+    }
+
+    bfs();
+    print_path(4,4);
     return 0;
 }
