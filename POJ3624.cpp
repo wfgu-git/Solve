@@ -62,7 +62,8 @@ int main(void)
     MEM(dp,0);
     for(int i=1;i<=n;i++) { cin>>c[i]>>w[i]; }
     for(int i=1;i<=n;i++){
-        for(int j=V;j>=0;j--){
+        cout<<i<<":\n";
+        for(int j=V;j>=c[i];j--){
             if(c[i]<=j)
                 dp[j]=max(dp[j],dp[j-c[i]]+w[i]);
         }
