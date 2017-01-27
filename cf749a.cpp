@@ -1,8 +1,8 @@
 /*************************************************************************
-	> File Name: cf749a.cpp
-	> Author:Pr 
-	> Mail:peter.wfgu@gmail.com 
-	> Created Time: 2017年01月02日 星期一 14时40分58秒
+    > File Name: cf749a.cpp
+    > Author:Pr
+    > Mail:peter.wfgu@gmail.com
+    > Created Time: 2017年01月02日 星期一 14时40分58秒
  ************************************************************************/
 
 #include<iostream>
@@ -26,24 +26,24 @@ typedef unsigned long long ull;
 int main(void)
 {
     int n;
-    cin>>n;
-    if(n%2==0){
-        cout<<n/2<<endl;
-        int t=n/2;
-        for(int i=0;i<t;i++){
-            if(i)    cout<<" ";
-            cout<<2;
+    cin >> n;
+    if (n % 2 == 0) {
+        cout << n / 2 << endl;
+        int t = n / 2;
+        for (int i = 0; i < t; i++) {
+            if (i)    cout << " ";
+            cout << 2;
         }
-        cout<<endl;
+        cout << endl;
     }
-    else{
-        int t=(n-3)/2;
-        cout<<t+1<<endl;
-        for(int i=0;i<t;i++){
-            if(i)    cout<<" ";
-            cout<<2;
+    else {
+        int t = (n - 3) / 2;
+        cout << t + 1 << endl;
+        for (int i = 0; i < t; i++) {
+            if (i)    cout << " ";
+            cout << 2;
         }
-        cout<<" "<<3<<endl;
+        cout << " " << 3 << endl;
     }
     return 0;
 }

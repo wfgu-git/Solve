@@ -1,8 +1,8 @@
 /*************************************************************************
-	> File Name: cf282a.cpp
-	> Author:Prgu 
-	> Mail:peter.wfgu@gmail.com 
-	> Created Time: 2017年01月07日 星期六 17时49分32秒
+    > File Name: cf282a.cpp
+    > Author:Prgu
+    > Mail:peter.wfgu@gmail.com
+    > Created Time: 2017年01月07日 星期六 17时49分32秒
  ************************************************************************/
 
 #include<iostream>
@@ -26,13 +26,13 @@ char str[3];
 int main(void)
 {
     int n;
-    scanf("%d",&n);
-    int ans=0;
-    for(int i=0;i<n;i++){
-        scanf("%s",str);
-        if(strstr(str,"++"))    ans++;
-        if(strstr(str,"--"))    ans--;
+    scanf("%d", &n);
+    int ans = 0;
+    for (int i = 0; i < n; i++) {
+        scanf("%s", str);
+        if (strstr(str, "++"))    ans++;
+        if (strstr(str, "--"))    ans--;
     }
-    cout<<ans<<endl;
+    cout << ans << endl;
     return 0;
 }
