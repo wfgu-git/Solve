@@ -46,6 +46,7 @@ int main(int argc, char const *argv[])
 			while (N--) {
 				cin >> v >> d;
 				dist[u][v] = d;
+				dist[v][u]=d;
 			}
 		}
 		floyd();
