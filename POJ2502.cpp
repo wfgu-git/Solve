@@ -67,7 +67,6 @@ void Floyd(int n)
 	}
 }
 
-#define LOCAL_TEST
 int main(void)
 {
 #ifdef LOCAL_TEST
