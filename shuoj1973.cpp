@@ -31,31 +31,53 @@ const double PI = acos(-1.0);
 const double eps = 1e-8;
 
 const int maxn=100000;
-int sum[maxn<<2];
-int lazy[maxn<<2];
+struct Segtree{
+    int sum[3],lazy,num;
+}st[maxn<<2];
 
 void PushUp(int rt)
 {
-    sum[rt]=sum[rt<<1]+sum[rt<<1|1];
+    st[rt].sum[0]=st[rt<<1].sum[0]+st[rt<<1|1].sum[0];
+    st[rt].sum[1]=st[rt<<1].sum[1]+st[rt<<1|1].sum[1];
+    st[rt].sum[2]=st[rt<<1].sum[2]+st[rt<<1|1].sum[2];
 }
 
 void PushDown(int l,int r,int rt)
 {
-    if(lazy[rt]==-1){
-        return ;
+    int times = st[rt].lazy;
+    if(times){
+        times %= 3;
+        for(int i=0; i < times; i++){
+            int y0,y1,y2;
+            //lch
+            y0=st[rt<<1].sum[0];
+            y1=st[rt<<1].sum[1];
+            y2=st[rt<<1].sum[2];
+            st[rt<<1].sum[0] = y2;
+            st[rt<<1].sum[1] = y0;
+            st[rt<<1].sum[2] = y1;
+            st[rt<<1].lazy++;
+            //rch
+            y0=st[rt<<1|1].sum[0];
+            y1=st[rt<<1|1].sum[1];
+            y2=st[rt<<1|1].sum[2];
+            st[rt<<1|1].sum[0]=y2;
+            st[rt<<1|1].sum[1]=y0;
+            st[rt<<1|1].sum[2]=y1;
+            st[rt<<1|1].lazy++;
+        }
     }
-    lazy[rt<<1]=lazy[rt<<1|1]=lazy[rt];
-    int m=(l+r>>1);
-    sum[rt<<1]+=lazy[rt]*(m-l+1);
-    sum[rt<<1|1]+=lazy[rt]*(r-m);
-    lazy[rt]=-1;
+    st[rt].lazy=0;
 }
 
 void build(int l,int r,int rt)
 {
-    lazy[rt] = -1;
+    st[rt].lazy = 0;
     if(l==r){
-        sum[rt]=0;
+        st[rt].num=0;
+        st[rt].sum[0]=1;
+        st[rt].sum[1]=0;
+        st[rt].sum[2]=0;
         return ;
     }   
     int m=(l+r)>>1;
@@ -66,9 +88,15 @@ void build(int l,int r,int rt)
 
 void update(int L,int R,int k,int l,int r,int rt)
 {
-    if(L<=l&&r<=R){
-        lazy[rt]=k;
-        sum[rt]+=lazy[rt]*(r-l+1);
+    if(L<=l && r<=R){
+        st[rt].lazy+=k;
+        int y0,y1,y2;
+        y0=st[rt].sum[0];
+        y1=st[rt].sum[1];
+        y2=st[rt].sum[2];
+        st[rt].sum[0]=y2;
+        st[rt].sum[1]=y0;
+        st[rt].sum[2]=y1;
     }else{
         PushDown(l, r, rt);
         int m = l + (r-l) / 2;
@@ -81,15 +109,29 @@ void update(int L,int R,int k,int l,int r,int rt)
 int query(int L,int R,int l,int r,int rt)
 {
     if(L <= l && r <= R){
-        return sum[rt];
+        return st[rt].sum[0];
     }
     PushDown(l,r,rt);
     int m=(l+r)>>1;
-    
+    int res=0;
+    if(L <= m)  res += query(L,R,lch);
+    if(R > m)  res += query(L,R,rch);
+    return res;
 }
 
 int main(void)
 {
-        
+    int n,q;
+    scanf("%d%d",&n,&q);
+    build(1,n,1);
+    for(int i=0;i<q;i++){
+        int tag,L,R;
+        scanf("%d%d%d",&tag,&L,&R);
+        if(tag==0){
+            update(L,R,1,1,n,1); 
+        } else{
+            printf("%d\n",query(L,R,1,n,1));
+        } 
+    }
     return 0;
 }
