@@ -1,90 +1,111 @@
-/*************************************************************************
-	> File Name: POJ3180.cpp
-	> Author:Prgu 
-	> Mail:peter.wfgu@gmail.com 
-	> Created Time: 2017年01月04日 星期三 22时26分20秒
- ************************************************************************/
-
-#include<iostream>
-#include<algorithm>
-#include<string>
-#include<vector>
-#include<map>
-#include<cstring>
-#include<cstdio>
-#include<cmath>
-#include<cstdlib>
-#include<stack>
-#include<iomanip>
-#include<cctype>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <queue>
+#include <cstring>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <stack>
+#include <iomanip>
+#include <cctype>
+#include <climits>
+#include <utility>
+#include <memory>
+#include <functional>
 using namespace std;
+typedef pair<int, int> PII;
+typedef vector<int> VI;
 typedef long long ll;
 typedef unsigned long long ull;
-#define MEM(a) memset(a,0,sizeof(0))
-const int maxn=20010;
+#define sc(a) scanf("%d",&a)
+#define sc2(a,b) scanf("%d%d",&a,&b)
+#define sc3(a,c,b) scanf("%d%d%d",&a,&b,&c)
+#define pt(a) printf("%d\n",a)
+#define ptlld(a) printf("%lld\n",a)
+#define mp(a,b) make_pair(a,b)
+#define mset(x,i) memset(x,i,sizeof(x))
+#define pb(a) push_back(a)
+#define fi first
+#define se second
+#define lch l,m,rt<<1
+#define rch m+1,r,rt<<1|1
+#define rep(i,x,n) for(int i=x;i<n;i++)
+const int mod = 1e9 + 7;
+const int INF = 0x3f3f3f3f;
+const double PI = acos(-1.0);
+const double eps = 1e-8;
+
+const int maxn = 10010;
+int n, m, cnt, sccno_cnt;
+int DFN[maxn];
+int LOW[maxn];
 vector<int> G[maxn];
-int pre[maxn],low[maxn],sccno[maxn],ans[maxn],dfs_clock,scc_cnt;
-stack<int> S;
-
-//ans来计算 点数大于1个的强连通分量的个数
-
-void dfs(int u)
+int sccno[maxn];
+int dfs_clock;
+int ans[maxn];
+stack<int> s;
+void tarjan(int u)
 {
-    pre[u]=low[u]=++dfs_clock;
-    S.push(u);
-    for(int i=0;i<(int)G[u].size();i++){
-        int v=G[u][i];
-        if(!pre[v]){
-            dfs(v);
-            low[u]=min(low[u],low[v]);
-        }
-        else if(!sccno[v]){
-            low[u]=min(low[u],pre[v]);
+    DFN[u] = LOW[u] = ++dfs_clock;
+    s.push(u);
+    for(int i = 0; i < (int)G[u].size(); i++) {
+        int v = G[u][i];
+        if(!DFN[v]) {
+            tarjan(v);
+            LOW[u] = min(LOW[u], LOW[v]);
+        } else if(!sccno[v]) {
+            LOW[u] = min(LOW[u], DFN[v]);
         }
     }
-
-    if(low[u]==pre[u]){
-        scc_cnt++;
-        while(1){
-            int x=S.top();S.pop();
-            sccno[x]=scc_cnt;
-            if(x==u)
+    if(LOW[u] == DFN[u]) {
+        ++sccno_cnt;
+        while(true) {
+            int x = s.top(); s.pop();
+            sccno[x] = sccno_cnt;
+            if(x == u)
                 break;
         }
     }
 }
 
-void find_scc(int n)
+void find_sccno()
 {
-    scc_cnt=dfs_clock=0;
-    MEM(sccno);MEM(pre);MEM(ans);
-    for(int i=1;i<=n;i++){
-        if(!pre[i])
-            dfs(i);
+    dfs_clock = sccno_cnt = 0;
+    cnt = 0;
+    mset(LOW, 0), mset(DFN, 0), mset(sccno, 0), mset(ans, 0);
+    for(int i = 1; i <= n; i++) {
+        if(!DFN[i]) {
+            tarjan(i);
+        }
     }
 }
 
+//#define LOCAL_TEST
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    int n,m;
-    while(cin>>n>>m){
-        for(int i=1;i<=n;i++)G[i].clear();
-        for(int i=1;i<=m;i++){
-            int a,b;
-            cin>>a>>b;
-            G[a].push_back(b);
-        }
-        find_scc(n);
-        for(int i=1;i<=n;i++){
-            ans[sccno[i]]++;
-        }
-        int cnt=0;
-        for(int i=1;i<=scc_cnt;i++){
-            if(ans[i]>1)
-                cnt++;
-        }
-        cout<<cnt<<endl;
+#ifdef LOCAL_TEST
+    freopen("data.in", "r", stdin);
+    freopen("data.out", "w", stdout);
+#endif
+    sc2(n, m);
+    for(int i = 0; i <= n; i++)  G[i].clear();
+    for(int i = 0; i < m; i++) {
+        int u, v;
+        sc2(u, v);
+        G[u].pb(v);
     }
+    find_sccno();
+    for(int i = 1; i <= n; i++) {
+        ans[sccno[i]]++;
+    }
+    for(int i = 1; i <= sccno_cnt; i++) {
+        if(ans[i] > 1)
+            cnt++;
+    }
+    pt(cnt);
     return 0;
 }
