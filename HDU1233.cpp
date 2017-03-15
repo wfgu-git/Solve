@@ -1,82 +1,96 @@
-/*************************************************************************
-	> File Name: HDU1233.cpp
-	> Author:Pr 
-	> Mail:peter.wfgu@gmail.com 
-	> Created Time: 2017年01月05日 星期四 18时12分09秒
- ************************************************************************/
-
-#include<iostream>
-#include<cstdio>
-#include<cstring>
-#include<cmath>
-#include<algorithm>
-#include<string>
-#include<vector>
-#include<queue>
-#include<stack>
-#include<set>
-#include<map>
-#include<iomanip>
-#include<functional>
-#include<cctype>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <queue>
+#include <cstring>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <stack>
+#include <iomanip>
+#include <cctype>
+#include <climits>
+#include <utility>
+#include <memory>
+#include <functional>
 using namespace std;
+typedef pair<int, int> PII;
+typedef vector<int> VI;
 typedef long long ll;
 typedef unsigned long long ull;
-const int maxn=5010;
-int fa[maxn];
+#define sc(a) scanf("%d",&a)
+#define sc2(a,b) scanf("%d%d",&a,&b)
+#define sc3(a,c,b) scanf("%d%d%d",&a,&b,&c)
+#define pt(a) printf("%d\n",a)
+#define ptlld(a) printf("%lld\n",a)
+#define mp(a,b) make_pair(a,b)
+#define mset(x,i) memset(x,i,sizeof(x))
+#define pb(a) push_back(a)
+#define fi first
+#define se second
+#define lch l,m,rt<<1
+#define rch m+1,r,rt<<1|1
+#define rep(i,x,n) for(int i=x;i<n;i++)
+const int mod = 1e9 + 7;
+const int INF = 0x3f3f3f3f;
+const double PI = acos(-1.0);
+const double eps = 1e-8;
 
-struct Node
+const int maxn = 110;
+int cost[maxn][maxn];
+int mincost[maxn];
+bool used[maxn];
+int n, m;
+
+int Prim()
 {
-        int u,v,value;
+    mset(used, 0);
+    for(int i = 1; i <= n; i++) {
+        mincost[i] = INF;
+        used[i] = false;
+    }
 
-}node[maxn];
+    mincost[1] = 0;
+    int res = 0;
 
-bool cmp(Node a,Node b){
-    if(a.value<b.value)
-        return true;
-    return false;
+    while(true) {
+        int v = -1;
+        for(int u = 1; u <= n; u++) {
+            if(!used[u] && (v == -1 || mincost[u] < mincost[v]))
+                v = u;
+        }
+
+        if(v == -1)  break;
+        used[v] = true;
+        res += mincost[v];
+
+        for(int u = 1; u <= n; u++) {
+            mincost[u] = min(mincost[u], cost[v][u]);
+        }
+    }
+    return res;
 }
-void init(int n){
-    for(int i=1;i<=n;i++)   fa[i]=i;
-}
 
-int find(int x){
-    if(x!=fa[x])    fa[x]=find(fa[x]);
-    return fa[x];
-}
-
-//void Union(int a,int b)
-//{
-//        a=find(a);
-//        b=find(b);
-//        if(a==b)    return ;
-//        fa[a]=b;
-//}
-//
+//#define LOCAL_TEST
 int main(void)
 {
-        ios::sync_with_stdio(false);
-        int n,k;
-    while(cin>>n&&n){
-                init(n);
-                int ans=0;
-                k=n*(n-1)/2;
-        for(int i=1;i<=k;i++){
-                    cin>>node[i].u>>node[i].v>>node[i].value;
+#ifdef LOCAL_TEST
+    freopen("data.in", "r", stdin);
+    freopen("data.out", "w", stdout);
+#endif
+    while(~scanf("%d", &n) && n) {
+        mset(cost, 0), mset(mincost, 0);
+        m = n * (n - 1) / 2;
+        int u, v, d;
+        for(int i = 0; i < m; i++) {
+            scanf("%d%d%d", &u, &v, &d);
+            cost[u][v] = d;
+            cost[v][u] = d;
         }
-                sort(node+1,node+k+1,cmp);
-        for(int i=1;i<=k;i++){
-                        int x=find(node[i].u);
-                        int y=find(node[i].v);
-                        if(x==y)   continue;
-                        ans+=node[i].value;
-                        fa[y]=x;
-                    
-        }
-                cout<<ans<<endl;
-            
+        printf("%d\n", Prim());
     }
-        return 0;
-
+    return 0;
 }
-
