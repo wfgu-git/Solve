@@ -49,14 +49,16 @@ map<PII, int> id;
 
 struct Edge {
 	int u, v, w;
-	void add_edge(int _u, int _v, int _w) {
+	void add_edge(int _u, int _v, int _w)
+	{
 		u = _u, v = _v, w = _w;
 	}
 } e[100010];
 
 Edge edge[100010];
 
-int ZL(int root, int V, int E) {
+int ZL(int root, int V, int E)
+{
 	int res = 0;
 	while(true) {
 		for(int i = 0; i < V; i++) {
@@ -112,7 +114,8 @@ int ZL(int root, int V, int E) {
 	return res;
 }
 
-void tarjan(int u) {
+void tarjan(int u)
+{
 	dfn[u] = low[u] = ++dfs_clock;
 	s.push(u);
 	for(int i = 0; i < (int)G[u].size(); i++) {
@@ -136,7 +139,8 @@ void tarjan(int u) {
 	}
 }
 
-void find_scc(int n) {
+void find_scc(int n)
+{
 	dfs_clock = sccno_cnt = 0;
 	mset(dfn, 0), mset(low, 0), mset(sccno, 0);
 	for(int i = 0; i < n; i++) {
@@ -146,7 +150,8 @@ void find_scc(int n) {
 	}
 }
 
-int main(void) {
+int main(void)
+{
 	// freopen("data.in", "r", stdin);
 	// freopen("data.out", "w", stdout);
 	int n, m;
