@@ -50,61 +50,45 @@ const double eps = 1e-8;
 
 //gcd lcm
 int gcd(int a, int b) {
-    return b ? gcd(b, a % b) : a;
+	return b ? gcd(b, a % b) : a;
 }
 
 int lcm(int a, int b) {
-    return a / gcd(a, b) * b;
+	return a / gcd(a, b) * b;
 }
 
-//
-int dx[] = { -1, 1, 0, 0 };
-int dy[] = { 0, 0, -1, 1 };
-int grid[5][5];
-int dist[5][5];
-PII pre[5][5];
-
-bool inside(int x, int y) {
-    return !(x < 0 || x >= 5 || y < 0 || y >= 5);
+int T, n;
+int a[105], b[105];
+int main(int argc, char const *argv[]) {
+	// freopen("data.in","r",stdin);
+	// freopen("data.out","w",stdout);
+	iscanf(T);
+	while(T--) {
+		clr(a, 0), clr(b, 0);
+		int n;
+		iscanf(n);
+		for(int i = 0; i < n; i++) {
+			int x;
+			iscanf(x);
+			a[x]++;
+		}
+		for(int i = 0; i < n; i++) {
+			int x;
+			iscanf(x);
+			b[x]++;
+		}
+		int ret = 0;
+		for(int i = 1; i <= 5; i++) {
+			if((a[i] + b[i]) % 2 == 1) {
+				ret = -1;
+				break;
+			} else {
+				ret += Max(a[i], b[i]) - (a[i] + b[i]) / 2;
+			}
+		}
+		if(ret == -1)  printf("-1\n");
+		else printf("%d\n", ret / 2);
+	}
+	return 0;
 }
 
-void Bfs() {
-    clr(dist, -1);
-    queue<PII> q;
-    dist[0][0] = 0;
-    q.push(mp(0, 0));
-    while(!q.empty()) {
-        PII cur = q.front(); q.pop();
-        for(int i = 0; i < 4; i++) {
-            int nx = cur.first + dx[i];
-            int ny = cur.second + dy[i];
-            if(inside(nx, ny) && dist[nx][ny] == -1 && grid[nx][ny] == 0) {
-                dist[nx][ny] = dist[cur.first][cur.second] + 1;
-                pre[nx][ny] = cur;
-                if(nx == 4 && ny == 4) return;
-                q.push(mp(nx, ny));
-            }
-        }
-    }
-}
-
-void Print_path(int x, int y) {
-    if(x == 0 && y == 0) {
-        printf("(%d, %d)\n", x, y);
-        return;
-    }
-    Print_path(pre[x][y].first, pre[x][y].second);
-    printf("(%d, %d)\n", x, y);
-}
-
-int main() {
-    for(int i = 0; i < 5; i++) {
-        for(int j = 0; j < 5; j++) {
-            iscanf(grid[i][j]);
-        }
-    }
-    Bfs();
-    Print_path(4, 4);
-    //system("pause");
-    return 0;
-}

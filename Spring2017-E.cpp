@@ -57,54 +57,43 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
 
-//
-int dx[] = { -1, 1, 0, 0 };
-int dy[] = { 0, 0, -1, 1 };
-int grid[5][5];
-int dist[5][5];
-PII pre[5][5];
-
-bool inside(int x, int y) {
-    return !(x < 0 || x >= 5 || y < 0 || y >= 5);
+const int maxn = 200000;
+struct Good {
+    int price, discnt;
+    int sale;
+    int id;
+} good[maxn];
+bool cmp(Good a, Good b) {
+    return a.sale < b.sale;
 }
-
-void Bfs() {
-    clr(dist, -1);
-    queue<PII> q;
-    dist[0][0] = 0;
-    q.push(mp(0, 0));
-    while(!q.empty()) {
-        PII cur = q.front(); q.pop();
-        for(int i = 0; i < 4; i++) {
-            int nx = cur.first + dx[i];
-            int ny = cur.second + dy[i];
-            if(inside(nx, ny) && dist[nx][ny] == -1 && grid[nx][ny] == 0) {
-                dist[nx][ny] = dist[cur.first][cur.second] + 1;
-                pre[nx][ny] = cur;
-                if(nx == 4 && ny == 4) return;
-                q.push(mp(nx, ny));
-            }
-        }
-    }
-}
-
-void Print_path(int x, int y) {
-    if(x == 0 && y == 0) {
-        printf("(%d, %d)\n", x, y);
-        return;
-    }
-    Print_path(pre[x][y].first, pre[x][y].second);
-    printf("(%d, %d)\n", x, y);
-}
-
+int n, k;
 int main() {
-    for(int i = 0; i < 5; i++) {
-        for(int j = 0; j < 5; j++) {
-            iscanf(grid[i][j]);
+    // freopen("data.in", "r", stdin);
+    // freopen("data.out", "w", stdout);
+    while (~iscanf2(n, k)) {
+        clr(good, 0);
+        for (int i = 0; i < n; i++) {
+            iscanf(good[i].price);
         }
+        for (int i = 0; i < n; i++) {
+            iscanf(good[i].discnt);
+        }
+        for (int i = 0; i < n; i++) {
+            good[i].id = i;
+            good[i].sale = good[i].price - good[i].discnt;
+        }
+        sort(good, good + n, cmp);
+        int ret = 0;
+        for (int i = 0; i < k; i++) {
+            ret += good[i].price;
+        }
+        for (int i = k; i < n; i++) {
+            if (good[i].price - good[i].discnt > 0)
+                ret += good[i].discnt;
+            else
+                ret += good[i].price;
+        }
+        printf("%d\n", ret);
     }
-    Bfs();
-    Print_path(4, 4);
-    //system("pause");
     return 0;
 }

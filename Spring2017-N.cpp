@@ -50,61 +50,41 @@ const double eps = 1e-8;
 
 //gcd lcm
 int gcd(int a, int b) {
-    return b ? gcd(b, a % b) : a;
+	return b ? gcd(b, a % b) : a;
 }
 
 int lcm(int a, int b) {
-    return a / gcd(a, b) * b;
+	return a / gcd(a, b) * b;
 }
 
-//
-int dx[] = { -1, 1, 0, 0 };
-int dy[] = { 0, 0, -1, 1 };
-int grid[5][5];
-int dist[5][5];
-PII pre[5][5];
 
-bool inside(int x, int y) {
-    return !(x < 0 || x >= 5 || y < 0 || y >= 5);
+const int maxn = 20;
+int a[maxn];
+int T, n, m, ret;
+void dfs(int cur_idx, int cur_num, int deep) {
+	if(deep == m) {
+		ret = Max(ret, cur_num);
+		return;
+	}
+	if(cur_idx == n) return;
+	dfs(cur_idx + 1, cur_num * a[cur_idx], deep + 1);
+	dfs(cur_idx + 1, cur_num, deep);
 }
 
-void Bfs() {
-    clr(dist, -1);
-    queue<PII> q;
-    dist[0][0] = 0;
-    q.push(mp(0, 0));
-    while(!q.empty()) {
-        PII cur = q.front(); q.pop();
-        for(int i = 0; i < 4; i++) {
-            int nx = cur.first + dx[i];
-            int ny = cur.second + dy[i];
-            if(inside(nx, ny) && dist[nx][ny] == -1 && grid[nx][ny] == 0) {
-                dist[nx][ny] = dist[cur.first][cur.second] + 1;
-                pre[nx][ny] = cur;
-                if(nx == 4 && ny == 4) return;
-                q.push(mp(nx, ny));
-            }
-        }
-    }
+int main(int argc, char const *argv[]) {
+	// freopen("data.in","r",stdin);
+	// freopen("data.out","w",stdout);
+	iscanf(T);
+	while(T--) {
+		clr(a, 0);
+		iscanf2(n, m);
+		ret = -INF;
+		for(int i = 0; i < n; i++) {
+			iscanf(a[i]);
+		}
+		dfs(0, 1, 0);
+		printf("%d\n", ret);
+	}
+	return 0;
 }
 
-void Print_path(int x, int y) {
-    if(x == 0 && y == 0) {
-        printf("(%d, %d)\n", x, y);
-        return;
-    }
-    Print_path(pre[x][y].first, pre[x][y].second);
-    printf("(%d, %d)\n", x, y);
-}
-
-int main() {
-    for(int i = 0; i < 5; i++) {
-        for(int j = 0; j < 5; j++) {
-            iscanf(grid[i][j]);
-        }
-    }
-    Bfs();
-    Print_path(4, 4);
-    //system("pause");
-    return 0;
-}

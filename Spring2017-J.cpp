@@ -56,55 +56,58 @@ int gcd(int a, int b) {
 int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
+const int maxn = 2000020;
+int prime[maxn] = {0}, num = 0;
+int isNotPrime[maxn] = {1, 1};
 
-//
-int dx[] = { -1, 1, 0, 0 };
-int dy[] = { 0, 0, -1, 1 };
-int grid[5][5];
-int dist[5][5];
-PII pre[5][5];
-
-bool inside(int x, int y) {
-    return !(x < 0 || x >= 5 || y < 0 || y >= 5);
-}
-
-void Bfs() {
-    clr(dist, -1);
-    queue<PII> q;
-    dist[0][0] = 0;
-    q.push(mp(0, 0));
-    while(!q.empty()) {
-        PII cur = q.front(); q.pop();
-        for(int i = 0; i < 4; i++) {
-            int nx = cur.first + dx[i];
-            int ny = cur.second + dy[i];
-            if(inside(nx, ny) && dist[nx][ny] == -1 && grid[nx][ny] == 0) {
-                dist[nx][ny] = dist[cur.first][cur.second] + 1;
-                pre[nx][ny] = cur;
-                if(nx == 4 && ny == 4) return;
-                q.push(mp(nx, ny));
+void getPrime() {
+    for (int i = 2; i < maxn; i++) {
+        if (!isNotPrime[i]) {
+            prime[num++] = i;
+        }
+        for (int j = 0; j < num && i * prime[j] < maxn; j++) {
+            isNotPrime[i * prime[j]] = true;
+            if (i % prime[j] == 0) {
+                break;
             }
         }
     }
 }
 
-void Print_path(int x, int y) {
-    if(x == 0 && y == 0) {
-        printf("(%d, %d)\n", x, y);
-        return;
+bool isPrime(int n) {
+    for (int i = 2; i <= (int)sqrt(n); i++) {
+        if (n % i == 0) {
+            return false;
+        }
     }
-    Print_path(pre[x][y].first, pre[x][y].second);
-    printf("(%d, %d)\n", x, y);
+    return true;
 }
 
 int main() {
-    for(int i = 0; i < 5; i++) {
-        for(int j = 0; j < 5; j++) {
-            iscanf(grid[i][j]);
+    // freopen("data.in", "r", stdin);
+    // freopen("data.out", "w", stdout);
+    int n;
+    while (iscanf(n) != EOF) {
+        if (n == 1) {
+            printf("0\n");
+            continue;
+        }
+        if (n == 2 || n == 3) {
+            printf("1\n");
+            continue;
+        }
+
+        if (n % 2 == 0) {
+            printf("2\n");
+            continue;
+        }
+        if (isPrime(n) == true) {
+            printf("1\n");
+        } else if (isPrime(n - 2) == true) {
+            printf("2\n");
+        } else {
+            printf("3\n");
         }
     }
-    Bfs();
-    Print_path(4, 4);
-    //system("pause");
     return 0;
 }

@@ -1,7 +1,7 @@
-组合数学
+// 缂佸嫬鎮庨弫鏉款劅
 #include<iostream>
 using namespace std;
-//f(m,n)  m个苹果放入n个盘子的方法数
+//f(m,n)  m娑擃亣瀚婚弸婊勬杹閸忣櫞娑擃亞娲忕�涙劗娈戦弬瑙勭《閺侊拷
 int solve(int m,int n)
 {
     if(m==0||n==1)    return 1;

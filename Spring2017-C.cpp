@@ -57,54 +57,46 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
 
-//
-int dx[] = { -1, 1, 0, 0 };
-int dy[] = { 0, 0, -1, 1 };
-int grid[5][5];
-int dist[5][5];
-PII pre[5][5];
-
-bool inside(int x, int y) {
-    return !(x < 0 || x >= 5 || y < 0 || y >= 5);
-}
-
-void Bfs() {
-    clr(dist, -1);
-    queue<PII> q;
-    dist[0][0] = 0;
-    q.push(mp(0, 0));
-    while(!q.empty()) {
-        PII cur = q.front(); q.pop();
-        for(int i = 0; i < 4; i++) {
-            int nx = cur.first + dx[i];
-            int ny = cur.second + dy[i];
-            if(inside(nx, ny) && dist[nx][ny] == -1 && grid[nx][ny] == 0) {
-                dist[nx][ny] = dist[cur.first][cur.second] + 1;
-                pre[nx][ny] = cur;
-                if(nx == 4 && ny == 4) return;
-                q.push(mp(nx, ny));
+int t;
+char str[10];
+int a[10];
+map<char, char> init;
+int main() {
+    // freopen("data.in", "r", stdin);
+    // freopen("data.out", "w", stdout);
+    init['0'] = 'a';
+    init['1'] = 'b';
+    init['2'] = 'c';
+    iscanf(t);
+    while (t--) {
+        scanf("%s", str);
+        for (int i = 0; i < 9; i++) {
+            str[i] = init[str[i]];
+        }
+        char firstChar, secondChar;
+        firstChar = str[0];
+        for (int i = 0; i < 9; i++) {
+            if (str[i] == firstChar) {
+                str[i] = '0';
             }
         }
-    }
-}
-
-void Print_path(int x, int y) {
-    if(x == 0 && y == 0) {
-        printf("(%d, %d)\n", x, y);
-        return;
-    }
-    Print_path(pre[x][y].first, pre[x][y].second);
-    printf("(%d, %d)\n", x, y);
-}
-
-int main() {
-    for(int i = 0; i < 5; i++) {
-        for(int j = 0; j < 5; j++) {
-            iscanf(grid[i][j]);
+        for (int i = 0; i < 9; i++) {
+            if (str[i] != '0') {
+                secondChar = str[i];
+                break;
+            }
         }
+        for (int i = 0; i < 9; i++) {
+            if (str[i] == secondChar) {
+                str[i] = '1';
+            }
+        }
+        for (int i = 0; i < 9; i++) {
+            if (str[i] != '0' && str[i] != '1') {
+                str[i] = '2';
+            }
+        }
+        printf("%s\n", str);
     }
-    Bfs();
-    Print_path(4, 4);
-    //system("pause");
     return 0;
 }
