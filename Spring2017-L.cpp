@@ -56,51 +56,22 @@ int gcd(int a, int b) {
 int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
-
-int n;
-double p[15];
-bool oo[15];
-double getPower() {
-    int l, r;
-    double ret = 0;
-    for (int i = 0; i < n; i++) {
-        if (oo[i] == true) {
-            l = i;
-            for (int j = l + 1; i < n; j++) {
-                if (oo[j] == false) {
-                    r = j;
-                    i = j;
-                    break;
-                }
-            }
-            ret += (r - l) * (r - l);
-        }
-    }
-    return ret;
-}
-
-double Dfs(int cur, int deepth, double pbty) {
-    if (deepth == n) {
-        return pbty * getPower();
-    }
-
-    double ret = 0;
-    oo[cur] = true;
-    ret += Dfs(cur + 1, deepth + 1, pbty * p[cur]);
-    oo[cur] = false;
-    ret += Dfs(cur + 1, deepth + 1, pbty * (1 - p[cur]));
-    return ret;
-}
-
+const int maxn = 200020;
+char t[maxn];
+char p[maxn];
+int del[maxn];
 int main() {
     // freopen("data.in", "r", stdin);
     // freopen("data.out", "w", stdout);
-    while (cin >> n) {
-        clr(p, 0), clr(oo, 0);
+    while (~scanf("%s", t)) {
+        scanf("%s", p);
+        int n = strlen(t);
         for (int i = 0; i < n; i++) {
-            cin >> p[i];
+            int x;
+            iscanf(x);
+            del[i] = x + 1;
         }
-        printf("%.6f\n", Dfs(0, 0, 1));
+
     }
     return 0;
 }
