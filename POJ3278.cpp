@@ -56,22 +56,59 @@ int gcd(int a, int b) {
 int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
-const int maxn = 200020;
-char t[maxn];
-char p[maxn];
-int del[maxn];
+
+int dm[] = {-1, 1, 2};
+int Move(int x, int tag) {
+    int ret = 0;
+    if (tag == 1) {
+        ret = x + 1;
+    } else if (tag == -1) {
+        ret = x - 1;
+    } else {
+        ret = x * 2;
+    }
+    return ret;
+}
+
+const int maxn = 100010;
+int step[maxn];
+int ret;
+void Bfs(int start, int target) {
+    if (start == target) {
+        ret = 0;
+        return;
+    }
+    clr(step, -1);
+    step[start] = 0;
+    queue<int> q;
+    q.push(start);
+
+    while (!q.empty()) {
+        int cur = q.front();
+        q.pop();
+
+        for (int i = 0; i < 3; i++) {
+            int nx = Move(cur, dm[i]);
+            if (nx < 0 || nx >100000)  continue;
+            if (step[nx] == -1) {
+                step[nx] = step[cur] + 1;
+                if (nx == target) {
+                    ret = step[nx];
+                    return;
+                }
+                q.push(nx);
+            }
+        }
+    }
+}
+
 int main() {
     // freopen("data.in", "r", stdin);
     // freopen("data.out", "w", stdout);
-    while (~scanf("%s", t)) {
-        scanf("%s", p);
-        int n = strlen(t);
-        for (int i = 0; i < n; i++) {
-            int x;
-            iscanf(x);
-            del[i] = x + 1;
-        }
-
+    int n, k;
+    while (~scanf("%d%d", &n, &k)) {
+        Bfs(n, k);
+        printf("%d\n", ret);
     }
     return 0;
 }
