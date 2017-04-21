@@ -48,54 +48,34 @@ const int INF = 0x3f3f3f3f;
 const double pi = acos(-1.0);
 const double eps = 1e-8;
 
-//gcd lcm
-int gcd(int a, int b) {
-    return b ? gcd(b, a % b) : a;
+int k;
+// 1/k = 1/x + 1/y
+// x >= y
+// 1/x <= 1/y
+// y <= 2*k
+bool isInt(double x) {
+    if (x - (int)x == 0)  return true;
+    return false;
 }
 
-int lcm(int a, int b) {
-    return a / gcd(a, b) * b;
-}
-
-const int maxn = 100010;
-int fa[maxn], Rank[maxn];
-void init(int n) {
-    for (int i = 0; i <= n; i++)  {
-        fa[i] = i;
-        Rank[i] = 1;
-    }
-}
-
-int find(int x) {
-
-}
-
-void merge(int a, int b) {
-    int faa = find(a);
-    int fab = find(b);
-    if (faa == fab)  return;
-    fa[faa] = b;
-    Rank[b] = Rank[faa] + 1;
-}
-
+vector<PII> ret;
 int main(int argc, char const *argv[]) {
-    // freopen("data.in","r",stdin);
-    // freopen("data.out","w",stdout);
-    int n, m;
-    while (~iscanf2(n, m)) {
-        init(n);
-        for (int i = 0; i < m; i++) {
-            int tag, a, b;
-            iscanf3(tag, a, b);
-            if (tag == 1) {
-                merge(a, b);
-            } else {
-                if (find(a) == find(b)) {
-                    printf("Yes %d\n", Rank[b] - Rank[a]);
-                } else {
-                    printf("No\n");
-                }
+    while (~iscanf(k)) {
+        ret.clear();
+        int x, y;
+        int cnt = 0;
+        for (y = k + 1; y <= 2 * k; y++) {
+            double xx = 1.0 * k * y / (1.0 * (y - k));
+            // printf("%d  %f\n", y, xx);
+            if (isInt(xx) == true) {
+                cnt++;
+                x = (int)xx;
+                ret.push_back(make_pair(x, y));
             }
+        }
+        printf("%d\n", ret.size());
+        for (const pair<int, int> &p : ret) {
+            printf("1/%d = 1/%d + 1/%d\n", k, p.fi, p.se);
         }
     }
     return 0;
