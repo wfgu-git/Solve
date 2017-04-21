@@ -57,9 +57,28 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
 
+const int maxn = 20;
+int grid[maxn][maxn];
+
+bool isBlack(int r, int c) {
+    if (grid[r][c])  return true;
+    return false;
+}
+
+void Bfs() {
+
+}
+
 int main() {
     // freopen("data.in", "r", stdin);
     // freopen("data.out", "w", stdout);
-
+    int m, n;
+    while (~scanf("%d%d", &m, &n)) {
+        for (int r = 0; r < m; r++) {
+            for (int c = 0; r < n; c++) {
+                iscanf(grid[r][c]);
+            }
+        }
+    }
     return 0;
 }
