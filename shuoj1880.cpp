@@ -60,37 +60,42 @@ int lcm(int a, int b) {
 const int maxn = 100010;
 int fa[maxn], Rank[maxn];
 void init(int n) {
-    for (int i = 0; i <= n; i++)  {
+    for(int i = 0; i <= n; i++)  {
         fa[i] = i;
-        Rank[i] = 1;
+        Rank[i] = 0;
     }
 }
 
 int find(int x) {
-
+    // To tell the truth  : I don't know why...
+    if(x == fa[x])  return fa[x];
+    int temp = find(fa[x]);
+    Rank[x] += Rank[fa[x]];
+    return fa[x] = temp;
 }
 
 void merge(int a, int b) {
     int faa = find(a);
     int fab = find(b);
-    if (faa == fab)  return;
+    if(faa == fab)  return;
     fa[faa] = b;
-    Rank[b] = Rank[faa] + 1;
+    // WA so many times...
+    Rank[faa] = 1;
 }
 
 int main(int argc, char const *argv[]) {
     // freopen("data.in","r",stdin);
     // freopen("data.out","w",stdout);
     int n, m;
-    while (~iscanf2(n, m)) {
+    while(~iscanf2(n, m)) {
         init(n);
-        for (int i = 0; i < m; i++) {
+        for(int i = 0; i < m; i++) {
             int tag, a, b;
             iscanf3(tag, a, b);
-            if (tag == 1) {
+            if(tag == 1) {
                 merge(a, b);
             } else {
-                if (find(a) == find(b)) {
+                if(find(a) == find(b)) {
                     printf("Yes %d\n", Rank[b] - Rank[a]);
                 } else {
                     printf("No\n");
