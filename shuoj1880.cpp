@@ -57,56 +57,58 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
 
-int dm[] = { -1, 1,  2};
-int Move(int x, int tag) {
-    int ret = 0;
-    if(tag == 1) {
-        ret = x + 1;
-    } else if(tag == -1) {
-        ret = x - 1;
-    } else {
-        ret = x * 2;
+const int maxn = 100010;
+int fa[maxn], Rank[maxn];
+void init(int n) {
+    for(int i = 0; i <= n; i++)  {
+        fa[i] = i;
+        Rank[i] = 1;
     }
-    return ret;
 }
 
-const int maxn = 100010;
-int step[maxn];
-int ret;
-void Bfs(int start, int target) {
-    if(start == target) {
-        ret = 0;
-        return;
+int find(int x) {
+    int s;
+    for(s = fa[x]; s != fa[s]; s = fa[s]) {
+        Rank[x] += Rank[s];
+        x = fa[x];
     }
-    clr(step, -1);
-    step[start] = 0;
-    queue<int> q;
-    q.push(start);
-    while(!q.empty()) {
-        int cur = q.front();
-        q.pop();
-        for(int i = 0; i < 3; i++) {
-            int nx = Move(cur, dm[i]);
-            if(nx < 0 || nx > 100000)  continue;
-            if(step[nx] == -1) {
-                step[nx] = step[cur] + 1;
-                if(nx == target) {
-                    ret = step[nx];
-                    return;
+    // if(fa[x] != x)  fa[x] = find(fa[x]);
+    // 路径压缩
+    // while(fax != x) {
+    //     temp = fa[x];
+    //     fa[x] = fax;
+    //     x = temp;
+    // }
+    return s;
+}
+
+void merge(int a, int b) {
+    int faa = find(a);
+    int fab = find(b);
+    if(faa == fab)  return;
+    fa[faa] = b;
+    Rank[b] = 1;
+}
+
+int main(int argc, char const *argv[]) {
+    // freopen("data.in","r",stdin);
+    // freopen("data.out","w",stdout);
+    int n, m;
+    while(~iscanf2(n, m)) {
+        init(n);
+        for(int i = 0; i < m; i++) {
+            int tag, a, b;
+            iscanf3(tag, a, b);
+            if(tag == 1) {
+                merge(a, b);
+            } else {
+                if(find(a) == find(b)) {
+                    printf("Yes %d\n", Rank[b] - Rank[a]);
+                } else {
+                    printf("No\n");
                 }
-                q.push(nx);
             }
         }
-    }
-}
-
-int main() {
-    // freopen("data.in", "r", stdin);
-    // freopen("data.out", "w", stdout);
-    int n, k;
-    while(~scanf("%d%d", &n, &k)) {
-        Bfs(n, k);
-        printf("%d\n", ret);
     }
     return 0;
 }

@@ -50,15 +50,16 @@ const double eps = 1e-8;
 
 //gcd lcm
 int gcd(int a, int b) {
-    return b ? gcd(b, a % b) : a;
+	return b ? gcd(b, a % b) : a;
 }
 
 int lcm(int a, int b) {
-    return a / gcd(a, b) * b;
+	return a / gcd(a, b) * b;
 }
 
 const int maxn = 20;
 int grid[maxn][maxn];
+<<<<<<< HEAD
 
 bool isBlack(int r, int c) {
     if (grid[r][c])  return true;
@@ -82,3 +83,19 @@ int main() {
     }
     return 0;
 }
+=======
+bool flip[maxn][maxn];
+int main() {
+	// freopen("data.in", "r", stdin);
+	// freopen("data.out", "w", stdout);
+	int m, n;
+	while(~scanf("%d%d", &m, &n)) {
+		for(int i = 0; i < m; i++) {
+			for(int j = 0; j < n; j++) {
+				iscanf(grid[i][j]);
+			}
+		}
+	}
+	return 0;
+}
+>>>>>>> e510e3db2f30ae70ad728116077711800bd8c03e

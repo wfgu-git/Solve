@@ -57,56 +57,49 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
 
-int dm[] = { -1, 1,  2};
-int Move(int x, int tag) {
-    int ret = 0;
-    if(tag == 1) {
-        ret = x + 1;
-    } else if(tag == -1) {
-        ret = x - 1;
-    } else {
-        ret = x * 2;
-    }
-    return ret;
+const int maxn = 105;
+int m, n;
+char grid[maxn][maxn];
+// bool vis[maxn][maxn];
+int dr[] = { -1, 1, 0, 0, -1, 1, -1, 1};
+int dc[] = {0, 0, -1, 1, -1, -1, 1, 1};
+bool inside(int r, int c) {
+    if(r < 0 || r >= m || c < 0 || c >= n) return false;
+    return true;
 }
 
-const int maxn = 100010;
-int step[maxn];
-int ret;
-void Bfs(int start, int target) {
-    if(start == target) {
-        ret = 0;
-        return;
+void Dfs(int r, int c) {
+    if(inside(r, c) == false) return;
+    if(grid[r][c] == '*') return;
+    grid[r][c] = '*';
+    for(int i = 0; i < 8; i++) {
+        Dfs(r + dr[i], c + dc[i]);
     }
-    clr(step, -1);
-    step[start] = 0;
-    queue<int> q;
-    q.push(start);
-    while(!q.empty()) {
-        int cur = q.front();
-        q.pop();
-        for(int i = 0; i < 3; i++) {
-            int nx = Move(cur, dm[i]);
-            if(nx < 0 || nx > 100000)  continue;
-            if(step[nx] == -1) {
-                step[nx] = step[cur] + 1;
-                if(nx == target) {
-                    ret = step[nx];
-                    return;
+}
+int main(int argc, char const *argv[]) {
+// freopen("data.in","r",stdin);
+// freopen("data.out","w",stdout);
+    while(~iscanf2(m, n) && (m + n)) {
+        clr(grid, 0);
+        // clr(vis, 0);
+        for(int i = 0; i < m; i++) {
+            scanf("%s", &grid[i]);
+        }
+
+        //dfs
+        int ret = 0;
+        for(int r = 0; r < m; r++) {
+            for(int c = 0; c < n; c++) {
+                if(grid[r][c] == '@') {
+                    ret++;
+                    Dfs(r, c);
                 }
-                q.push(nx);
             }
         }
-    }
-}
 
-int main() {
-    // freopen("data.in", "r", stdin);
-    // freopen("data.out", "w", stdout);
-    int n, k;
-    while(~scanf("%d%d", &n, &k)) {
-        Bfs(n, k);
         printf("%d\n", ret);
     }
     return 0;
 }
+
+
