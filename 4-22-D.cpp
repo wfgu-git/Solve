@@ -38,7 +38,7 @@ typedef unsigned long long ull;
 #define pb(a) push_back(a)
 #define fi first
 #define se second
-#define lch l,m,rt<< 1
+#define lch l,m,rt<<1
 #define rch m+1,r,rt<<1|1
 #define rep(i,x,n) for(int i=x;i<n;i++)
 #define Max(a,b)  ((a)>(b)?(a):(b))
@@ -57,56 +57,61 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
 
-int dm[] = { -1, 1,  2};
-int Move(int x, int tag) {
-    int ret = 0;
-    if(tag == 1) {
-        ret = x + 1;
-    } else if(tag == -1) {
-        ret = x - 1;
-    } else {
-        ret = x * 2;
-    }
+struct Interval {
+    int l, r;
+    int d;  // the length of this []
+    Interval() {}
+    Interval(int _l, int _r): l(_l), r(_r), d(r - l + 1) {}
+};
+bool cmp(Interval p, Interval q) {
+    return p.l < q.l;
+}
+int cntDays(Interval p, Interval q) {
+    int ret = Min(p.r, q.r) - Max(p.l, q.l) + 1;
     return ret;
 }
+Interval a[110];
+Interval b[110];
 
-const int maxn = 100010;
-int step[maxn];
-int ret;
-void Bfs(int start, int target) {
-    if(start == target) {
-        ret = 0;
-        return;
-    }
-    clr(step, -1);
-    step[start] = 0;
-    queue<int> q;
-    q.push(start);
-    while(!q.empty()) {
-        int cur = q.front();
-        q.pop();
-        for(int i = 0; i < 3; i++) {
-            int nx = Move(cur, dm[i]);
-            if(nx < 0 || nx > 100000)  continue;
-            if(step[nx] == -1) {
-                step[nx] = step[cur] + 1;
-                if(nx == target) {
-                    ret = step[nx];
-                    return;
-                }
-                q.push(nx);
-            }
-        }
-    }
-}
-
-int main() {
+int main(int argc, char const *argv[]) {
     // freopen("data.in", "r", stdin);
     // freopen("data.out", "w", stdout);
-    int n, k;
-    while(~scanf("%d%d", &n, &k)) {
-        Bfs(n, k);
+    int t;
+    scanf("%d", &t);
+    while(t--) {
+        clr(a, 0), clr(b, 0);
+        //input
+        int n, m, x, y;
+        scanf("%d%d%d%d", &n, &m, &x, &y);
+        int l, r, cntX, cntY;
+        cntX = 0;
+        for(int i = 0; i < x; i++) {
+            scanf("%d%d", &l, &r);
+            if(r - l + 1 < m)  continue;
+            a[cntX++] = Interval(l, r);
+        }
+        sort(a, a + cntX, cmp);
+        cntY = 0;
+        for(int i = 0; i < y; i++) {
+            scanf("%d%d", &l, &r);
+            if(r - l + 1 < m)  continue;
+            b[cntY++] = Interval(l, r);
+        }
+        sort(b, b + cntY , cmp);
+
+        int ret = 0;
+        for(int i = 0; i < cntX; i++) {
+            for(int j = 0; j < cntY; j++) {
+                // if(a[i].r <= b[i].l)  continue;
+                int temp;
+                if((temp = cntDays(a[i], b[j])) >= m) {
+                    ret += temp - m + 1;
+                }
+            }
+        }
         printf("%d\n", ret);
     }
     return 0;
 }
+
+

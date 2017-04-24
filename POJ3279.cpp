@@ -48,54 +48,121 @@ const int INF = 0x3f3f3f3f;
 const double pi = acos(-1.0);
 const double eps = 1e-8;
 
-//gcd lcm
-int gcd(int a, int b) {
-	return b ? gcd(b, a % b) : a;
-}
-
-int lcm(int a, int b) {
-	return a / gcd(a, b) * b;
-}
-
 const int maxn = 20;
-int grid[maxn][maxn];
-<<<<<<< HEAD
+int row, col;
+int step;
+int grid[maxn][maxn], ret[maxn][maxn], temp[maxn][maxn];
+int dx[] = { -1, 1, 0, 0, 0};
+int dy[] = {0, 0, 0, -1, 1};
 
-bool isBlack(int r, int c) {
-    if (grid[r][c])  return true;
-    return false;
+bool inside(int x, int y) {
+	return !(x < 0 || x >= row || y < 0 || y >= col);
 }
 
-void Bfs() {
-
+void filp(int x, int y) {
+	for(int i = 0; i < 5; i++) {
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		if(inside(nx, ny)) {
+			grid[nx][ny] = !grid[nx][ny];
+		}
+	}
 }
 
-int main() {
-    // freopen("data.in", "r", stdin);
-    // freopen("data.out", "w", stdout);
-    int m, n;
-    while (~scanf("%d%d", &m, &n)) {
-        for (int r = 0; r < m; r++) {
-            for (int c = 0; r < n; c++) {
-                iscanf(grid[r][c]);
-            }
-        }
-    }
-    return 0;
-}
-=======
-bool flip[maxn][maxn];
-int main() {
-	// freopen("data.in", "r", stdin);
-	// freopen("data.out", "w", stdout);
-	int m, n;
-	while(~scanf("%d%d", &m, &n)) {
-		for(int i = 0; i < m; i++) {
-			for(int j = 0; j < n; j++) {
-				iscanf(grid[i][j]);
+bool cmp() {
+	for(int i = 0; i < row; i++) {
+		for(int j = 0; j < col; j++) {
+			if(temp[i][j] != ret[i][j]) {
+				return ret[i][j] < temp[i][j];
 			}
+		}
+	}
+}
+
+void dfs(int cur, int cnt) {
+	// dfs at the last layer --> check the last layer
+	if(cur == row) {
+		// copy the data of this situation
+		int cntCopy = cnt;
+		int gridCopy[maxn][maxn];
+		int retCopy[maxn][maxn];
+		memcpy(gridCopy, grid, sizeof(gridCopy));
+		memcpy(retCopy, ret, sizeof(retCopy));
+
+		for(int i = 1; i < row; i++) {
+			for(int j = 0; j < col; j++) {
+				if(grid[i - 1][j] == 1) {
+					filp(i, j);
+					cnt++;
+					ret[i][j]++;
+				}
+			}
+		}
+
+		// cnt > last situation
+		if(cnt > step) {
+			cnt = cntCopy;
+			memcpy(grid, gridCopy, sizeof(grid));
+			memcpy(ret, retCopy, sizeof(ret));
+			return;
+		}
+		// check the last layer
+		bool flag = true;
+		for(int i = 0; i < col; i++) {
+			if(grid[row - 1][i] == 1) {
+				flag = false;
+			}
+		}
+		// less step or dict sort
+		if(flag && (cnt < step || cmp())) {
+			step = cnt;
+			memcpy(temp, ret, sizeof(temp));
+		}
+		// back
+		cnt = cntCopy;
+		memcpy(grid, gridCopy, sizeof(grid));
+		memcpy(ret, retCopy, sizeof(ret));
+		return;
+	}
+	// to try filp each piece of the first layer
+	filp(0, cur);
+	ret[0][cur]++;
+	dfs(cur + 1, cnt + 1);
+	ret[0][cur]--;
+	filp(0, cur);  // filp twice  == init
+	dfs(cur + 1, cnt);
+}
+
+int main(int argc, char const *argv[]) {
+// freopen("data.in","r",stdin);
+// freopen("data.out","w",stdout);
+	while(scanf("%d%d", &row, &col) == 2) {
+		// init and input
+		clr(grid, 0), clr(ret, 0), clr(temp, 0);
+		for(int i = 0; i < row; i++) {
+			for(int j = 0; j < col; j++) {
+				scanf("%d", &grid[i][j]);
+			}
+		}
+
+		// solve
+		step = INF;
+		dfs(0, 0);
+		// print the ret
+		if(step == INF) {
+			printf("IMPOSSIBLE\n");
+		} else {
+			for(int i = 0; i < row; i++) {
+				if(i)	printf("\n");
+				for(int j = 0; j < col; j++) {
+					if(j)  printf(" ");
+					printf("%d", temp[i][j]);
+				}
+			}
+			printf("\n");
 		}
 	}
 	return 0;
 }
->>>>>>> e510e3db2f30ae70ad728116077711800bd8c03e
+
+

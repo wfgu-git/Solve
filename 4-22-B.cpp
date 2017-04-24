@@ -38,7 +38,7 @@ typedef unsigned long long ull;
 #define pb(a) push_back(a)
 #define fi first
 #define se second
-#define lch l,m,rt<< 1
+#define lch l,m,rt<<1
 #define rch m+1,r,rt<<1|1
 #define rep(i,x,n) for(int i=x;i<n;i++)
 #define Max(a,b)  ((a)>(b)?(a):(b))
@@ -57,56 +57,53 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
 
-int dm[] = { -1, 1,  2};
-int Move(int x, int tag) {
-    int ret = 0;
-    if(tag == 1) {
-        ret = x + 1;
-    } else if(tag == -1) {
-        ret = x - 1;
-    } else {
-        ret = x * 2;
-    }
-    return ret;
-}
-
-const int maxn = 100010;
-int step[maxn];
-int ret;
-void Bfs(int start, int target) {
-    if(start == target) {
-        ret = 0;
-        return;
-    }
-    clr(step, -1);
-    step[start] = 0;
-    queue<int> q;
-    q.push(start);
-    while(!q.empty()) {
-        int cur = q.front();
-        q.pop();
-        for(int i = 0; i < 3; i++) {
-            int nx = Move(cur, dm[i]);
-            if(nx < 0 || nx > 100000)  continue;
-            if(step[nx] == -1) {
-                step[nx] = step[cur] + 1;
-                if(nx == target) {
-                    ret = step[nx];
-                    return;
-                }
-                q.push(nx);
-            }
-        }
-    }
-}
-
-int main() {
+int a[110];
+int main(int argc, char const *argv[]) {
     // freopen("data.in", "r", stdin);
     // freopen("data.out", "w", stdout);
-    int n, k;
-    while(~scanf("%d%d", &n, &k)) {
-        Bfs(n, k);
-        printf("%d\n", ret);
+    int t;
+    iscanf(t);
+    while(t--) {
+        clr(a, 0);
+        int n, MIN = INF,  cnt = 0;
+        iscanf(n);
+        for(int i = 0; i < n; i++) {
+            int temp;
+            iscanf(temp);
+            a[i] = temp;
+            MIN = Min(MIN, temp);
+            // MAX = Max(MAX, temp);
+            if(temp == 1)  cnt++;
+        }
+        if(n < 10 || n > 13 || cnt < 2 || MIN != 1)  {
+            printf("No\n");
+            continue;
+        }
+        sort(a, a + n);
+
+        bool flag = true;
+        int MAX = -1;
+        for(int i = 1; i < n; i++) {
+            if(MAX != -1) {
+                if(a[i] > MAX) {
+                    flag = false;
+                    break;
+                }
+            }
+            if(a[i] - a[i - 1] > 2) {
+                if(MAX == -1) {
+                    MAX = a[i];
+                } else {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+
+        if(flag)  printf("Yes\n");
+        else  printf("No\n");
     }
     return 0;
 }
+
+
