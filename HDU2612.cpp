@@ -57,49 +57,16 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
 
-// void bfs(int n) {
-//     ll p = 1;
-//     queue<ll> q;
-//     q.push(p);
-
-//     while(!q.empty()) {
-//         ll cur = q.front(); q.pop();
-
-//         ll NextNum1 = cur * 10 + 0;
-//         if(NextNum1 % n == 0) {
-//             printf("%lld\n", NextNum1);
-//             break;
-//         }
-//         q.push(NextNum1);
-//         ll NextNum2 = cur * 10 + 1;
-//         if(NextNum2 % n == 0) {
-//             printf("%lld\n", NextNum2);
-//             break;
-//         }
-//         q.push(NextNum2);
-//     }
-// }
-
-bool flag;
-void dfs(int n, ull cur, int deepth) {
-    if(flag)  return;
-    if(cur % n == 0) {
-        printf("%llu\n", cur);
-        flag = true;
-        return;
-    }
-    if(deepth == 19) return;
-    dfs(n, cur * 10 + 0, deepth + 1);
-    dfs(n, cur * 10 + 1, deepth + 1);
-}
-
-int main(int argc, char const * argv[]) {
+int r, c;
+const int maxn = 220;
+char grid[maxn][maxn];
+int main(int argc, char const *argv[]) {
 // freopen("data.in","r",stdin);
 // freopen("data.out","w",stdout);
-    int n;
-    while(cin >> n && n) {
-        flag = false;
-        dfs(n, 1, 0);
+    for(int i = 0; i < r; i++) {
+        scanf("%s", grid + i);
     }
     return 0;
 }
+
+
