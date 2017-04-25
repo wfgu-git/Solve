@@ -64,9 +64,9 @@ struct Node {
 };
 
 void pour(int &x, const int &v, int &cur) {
-    if(!x)  return ;
+    if (!x)  return ;
     int left = v - cur;
-    if(x >= left) {
+    if (x >= left) {
         cur += left;
         x -= left;
     } else {
@@ -82,19 +82,19 @@ void bfs() {
     dist[s][0][0] = 0;
     queue<Node> q;
     q.push(Node(cola(s, s), cola(m, 0), cola(n, 0)));
-    if(s & 1)  return;
+    if (s & 1)  return;
     int target = s / 2;
-    while(!q.empty()) {
+    while (!q.empty()) {
         Node cur = q.front(); q.pop();
         //对于每一桶 都有两个选择  全部倒给另两个中的一个
         cola v[3];
-        for(int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             v[0] = cur.v0, v[1] = cur.v1, v[2] = cur.v2;
             pour(v[i].curv, v[(i + 1) % 3].v, v[(i + 1) % 3].curv);
-            if(dist[v[0].curv][v[1].curv][v[2].curv] == -1) {
+            if (dist[v[0].curv][v[1].curv][v[2].curv] == -1) {
                 dist[v[0].curv][v[1].curv][v[2].curv] = dist[cur.v0.curv][cur.v1.curv][cur.v2.curv] + 1;
 
-                if(v[0].curv == target)  {
+                if (v[0].curv == target)  {
                     ret = dist[v[0].curv][v[1].curv][v[2].curv];
                     return;
                 }
@@ -103,10 +103,10 @@ void bfs() {
             //
             v[0] = cur.v0, v[1] = cur.v1, v[2] = cur.v2;
             pour(v[i].curv, v[(i + 2) % 3].v, v[(i + 2) % 3].curv);
-            if(dist[v[0].curv][v[1].curv][v[2].curv] == -1) {
+            if (dist[v[0].curv][v[1].curv][v[2].curv] == -1) {
                 dist[v[0].curv][v[1].curv][v[2].curv] = dist[cur.v0.curv][cur.v1.curv][cur.v2.curv] + 1;
 
-                if(v[0].curv == target)  {
+                if (v[0].curv == target)  {
                     ret = dist[v[0].curv][v[1].curv][v[2].curv];
                     return;
                 }
@@ -122,10 +122,10 @@ int gcd(int a, int b) {
 }
 
 int main(int argc, char const *argv[]) {
-    while(~iscanf3(s, m, n) && (s + m + n)) {
+    while (~iscanf3(s, m, n) && (s + m + n)) {
         ret = INF;
         bfs();
-        if(ret == INF)  printf("NO\n");
+        if (ret == INF)  printf("NO\n");
         else printf("%d\n", ret);
         // pour(s, m, n);
         // printf("%d %d %d\n", s, m, n);
