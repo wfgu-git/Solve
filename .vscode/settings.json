@@ -1,8 +1,0 @@
-{
-    "files.defaultLanguage": "cpp",
-    "files.associations": {
-        "cstdlib": "cpp",
-        "cstring": "cpp",
-        "queue": "cpp"
-    }
-}
