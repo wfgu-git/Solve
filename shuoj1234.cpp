@@ -50,40 +50,38 @@ const int INF = 0x3f3f3f3f;
 const double pi = acos(-1.0);
 const double eps = 1e-8;
 
-// gcd lcm
-int gcd(int a, int b) { return b ? gcd(b, a % b) : a; }
-
-int lcm(int a, int b) { return a / gcd(a, b) * b; }
-
 const int maxn = 105;
 int a[maxn << 1];
 int dp[maxn << 1][maxn << 1];
-// (m, r) (r, n)
-// m * r * n
-int main(int argc, char const *argv[]) {
+// dp(i,j) means the max value of merge(i,j)
+// dp(i,j) = max{dp(i,k)+dp(k+1,j)+a[i]*a[k+1]*a[j+1]}
+// (m,r) + (r,n) --> (m,n)
+int main()
+{
     // freopen("data.in","r",stdin);
     // freopen("data.out","w",stdout);
     int n;
-    while (scanf("%d", &n) == 1) {
-        clr(a, 0), clr(dp, -1);
-        for (int i = 0; i < n; i++) {
-            int x;
-            scanf("%d\n", &x);
-            a[i] = x;
-            a[i + n] = x;
+    while(scanf("%d", &n) == 1) {
+        for(int i = 0; i < n; i++) {
+            scanf("%d", &a[i]);
         }
-        // init dp
-        for (int i = 0; i < 2 * n; i++) dp[i][i] = a[i];
+        memset(dp, -1, sizeof(dp));
+        memcpy(a + n, a, sizeof(int)*n);
         // dp
-        for (int len = 1; len <= n; len++) {
-            for (int i = 0; i < 2 * n - 1; i++) {
+        for(int i = 0; i < 2 * n; i++)  dp[i][i] = 0;
+        for(int len = 1; len <= n; len++) {
+            for(int i = 0; i < 2 * n - len; i++) {
                 int j = i + len;
-                for (int k = i; k < j; k++) {
-                    dp[i][j] = Max(dp[i][j], dp[i][k] * dp[k + 1][j] *
-                                                 a[(i - 2) % (2 * n)]);
+                for(int k = i; k < j; k++) {
+                    dp[i][j] = Max(dp[i][j], dp[i][k] + dp[k + 1][j] + a[i] * a[k + 1] * a[j + 1]);
                 }
             }
         }
+        int ret = -INF;
+        for(int i = 0; i < n; i++) {
+            ret = Max(ret, dp[i][i + n - 1]);
+        }
+        printf("%d\n", ret);
     }
     return 0;
 }
