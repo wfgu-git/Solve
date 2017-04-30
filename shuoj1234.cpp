@@ -67,13 +67,14 @@ int main()
         }
         memset(dp, -1, sizeof(dp));
         memcpy(a + n, a, sizeof(int)*n);
-        // dp
+        // dp init
         for(int i = 0; i < 2 * n; i++)  dp[i][i] = 0;
+        // do dp
         for(int len = 1; len <= n; len++) {
             for(int i = 0; i < 2 * n - len; i++) {
                 int j = i + len;
                 for(int k = i; k < j; k++) {
-                    dp[i][j] = Max(dp[i][j], dp[i][k] + dp[k + 1][j] + a[i] * a[k + 1] * a[j + 1]);
+                    dp[i][j] = Max(dp[i][j], dp[i][k] + dp[k + 1][j] + a[i] * a[k+1] * a[j + 1]);
                 }
             }
         }
