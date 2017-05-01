@@ -58,20 +58,39 @@ int lcm(int a, int b) {
 }
 
 const int maxn = 1000000;
-bool page[maxn];
-bool check[maxn];
+int a[maxn];
+set<int> s;
+map<int, int> cnt;
 int main(int argc, char const *argv[]) {
 // freopen("data.in","r",stdin);
 // freopen("data.out","w",stdout);
     int p;
     while(~scanf("%d", &p)) {
-        clr(page, 0), clr(check, 0);
+        s.clear();
+        cnt.clear();
         for(int i = 0; i < p; i++) {
             int temp;
             scanf("%d", &temp);
-            page[temp] = true;
+            a[i] = temp;
+            s.insert(temp);
         }
+        int l = 0, r = -1;
+        int tot, num = 0, ret = INF;
+        tot = s.size();
+
+        while(true) {
+            while(r < p && num < tot) {
+                if(cnt[a[++r]]++ == 0) {
+                    num++;
+                }
+            }
+            if(num < tot) break;
+            ret = Min(ret, r - l + 1);
+            if(--cnt[a[l++]] == 0) {
+                num--;
+            }
+        }
+        printf("%d\n", ret);
     }
     return 0;
 }
-
