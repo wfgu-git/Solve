@@ -56,7 +56,12 @@ int dp[maxn << 1][maxn << 1];
 // dp(i,j) means the max value of merge(i,j)
 // dp(i,j) = max{dp(i,k)+dp(k+1,j)+a[i]*a[k+1]*a[j+1]}
 // (m,r) + (r,n) --> (m,n)
+<<<<<<< HEAD
 int main() {
+=======
+int main()
+{
+>>>>>>> bd3945c6a680add0b413898e83245563eafceddb
     // freopen("data.in","r",stdin);
     // freopen("data.out","w",stdout);
     int n;
@@ -66,13 +71,23 @@ int main() {
         }
         memset(dp, -1, sizeof(dp));
         memcpy(a + n, a, sizeof(int)*n);
+<<<<<<< HEAD
         // dp
         for(int i = 0; i < 2 * n; i++)  dp[i][i] = 0;
+=======
+        // dp init
+        for(int i = 0; i < 2 * n; i++)  dp[i][i] = 0;
+        // do dp
+>>>>>>> bd3945c6a680add0b413898e83245563eafceddb
         for(int len = 1; len <= n; len++) {
             for(int i = 0; i < 2 * n - len; i++) {
                 int j = i + len;
                 for(int k = i; k < j; k++) {
+<<<<<<< HEAD
                     dp[i][j] = Max(dp[i][j], dp[i][k] + dp[k + 1][j] + a[i] * a[k + 1] * a[j + 1]);
+=======
+                    dp[i][j] = Max(dp[i][j], dp[i][k] + dp[k + 1][j] + a[i] * a[k+1] * a[j + 1]);
+>>>>>>> bd3945c6a680add0b413898e83245563eafceddb
                 }
             }
         }
