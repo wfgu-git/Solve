@@ -58,7 +58,7 @@ const int maxn = 11;
 int t, r, c, ret;
 char grid[maxn][maxn];
 char temp[maxn][maxn];
-int dx[] = {-1, 1, 0, 0};
+int dx[] = { -1, 1, 0, 0};
 int dy[] = {0, 0, -1, 1};
 int step[maxn][maxn];
 int fired[maxn][maxn][maxn];  // (i, j, t)
@@ -66,28 +66,28 @@ PII start[500];
 // map<pair<PII, PII>, bool> s;
 bool firedAll() {
   int flag = true;
-  for (int i = 0; i < r; i++) {
-    for (int j = 0; j < c; j++) {
-      if (temp[i][j] == '#') {
+  for(int i = 0; i < r; i++) {
+    for(int j = 0; j < c; j++) {
+      if(temp[i][j] == '#') {
         flag = false;
         break;
       }
     }
-    if (!flag) break;
+    if(!flag) break;
   }
   return flag ? true : false;
 }
 int cntTime() {
   int cnt = -INF;
-  for (int i = 0; i < r; i++) {
-    for (int j = 0; j < c; j++) {
-      if (temp[i][j] == '@') cnt = Max(cnt, step[i][j]);
+  for(int i = 0; i < r; i++) {
+    for(int j = 0; j < c; j++) {
+      if(temp[i][j] == '@') cnt = Max(cnt, step[i][j]);
     }
   }
   return cnt;
 }
 bool canFire(int x, int y) {
-  if (x < 0 || x >= r || y < 0 || y >= c || step[x][y] != -1 ||
+  if(x < 0 || x >= r || y < 0 || y >= c || step[x][y] != -1 ||
       temp[x][y] == '.')
     return false;
   return true;
@@ -102,15 +102,15 @@ int bfs(int x1, int y1, int x2, int y2) {
   q.push(make_pair(x2, y2));
   int cnt = 0;
   // if (firedAll()) return cntTime();
-  while (!q.empty()) {
+  while(!q.empty()) {
     PII cur = q.front();
     q.pop();
     int x = cur.first;
     int y = cur.second;
-    for (int i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; i++) {
       int nx = x + dx[i];
       int ny = y + dy[i];
-      if (!canFire(nx, ny)) continue;
+      if(!canFire(nx, ny)) continue;
       // printf("at this step!!!\n");
       temp[nx][ny] = '@';
       step[nx][ny] = step[x][y] + 1;
@@ -118,7 +118,7 @@ int bfs(int x1, int y1, int x2, int y2) {
       q.push(make_pair(nx, ny));
     }
   }
-  if (firedAll() == true)
+  if(firedAll() == true)
     return cnt;
   else
     return INF;
@@ -128,26 +128,26 @@ int main(int argc, char const *argv[]) {
   // freopen("data.out", "w", stdout);
   int kase = 0;
   scanf("%d", &t);
-  while (t--) {
+  while(t--) {
     // s.clear();
     clr(start, -1);
     scanf("%d%d", &r, &c);
-    for (int i = 0; i < r; i++) {
+    for(int i = 0; i < r; i++) {
       scanf("%s", grid + i);
     }
     // find all '#'
     int tot = 0;
-    for (int i = 0; i < r; i++) {
-      for (int j = 0; j < c; j++) {
-        if (grid[i][j] == '#') {
+    for(int i = 0; i < r; i++) {
+      for(int j = 0; j < c; j++) {
+        if(grid[i][j] == '#') {
           start[tot++] = make_pair(i, j);
         }
       }
     }
     // solve by bfs
     ret = INF;
-    for (int i = 0; i < tot; i++) {
-      for (int j = i; j < tot; j++) {
+    for(int i = 0; i < tot; i++) {
+      for(int j = i; j < tot; j++) {
         // if (s.count(make_pair(start[i], start[j]))) continue;
         // s[make_pair(start[i], start[j])] = 1;
         // s[make_pair(start[j], start[i])] = 1;
@@ -156,7 +156,7 @@ int main(int argc, char const *argv[]) {
       }
     }
     // print the ret
-    if (ret == INF) {
+    if(ret == INF) {
       printf("Case %d: %d\n", ++kase, -1);
     } else {
       printf("Case %d: %d\n", ++kase, ret);

@@ -57,40 +57,21 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
 
-const int maxn = 1000000;
-int a[maxn];
-set<int> s;
-map<int, int> cnt;
+
 int main(int argc, char const *argv[]) {
 // freopen("data.in","r",stdin);
 // freopen("data.out","w",stdout);
-    int p;
-    while(~scanf("%d", &p)) {
-        s.clear();
-        cnt.clear();
-        for(int i = 0; i < p; i++) {
-            int temp;
-            scanf("%d", &temp);
-            a[i] = temp;
-            s.insert(temp);
-        }
-        int l = 0, r = -1;
-        int tot, num = 0, ret = INF;
-        tot = s.size();
-
-        while(true) {
-            while(r < p && num < tot) {
-                if(cnt[a[++r]]++ == 0) {
-                    num++;
-                }
-            }
-            if(num < tot) break;
-            ret = Min(ret, r - l + 1);
-            if(--cnt[a[l++]] == 0) {
-                num--;
-            }
-        }
-        printf("%d\n", ret);
+    int n, l;
+    double a[1005];
+    cin >> n >> l;
+    for(int i = 0; i < n; i++) cin >> a[i];
+    sort(a, a + n);
+    double maxDist = Max(a[0] - 0, l - a[n - 1]) * 2;
+    for(int i = 0; i < n - 1; i++) {
+        maxDist = Max(maxDist, a[i + 1] - a[i]);
     }
+    printf("%f\n", maxDist / 2.0);
     return 0;
 }
+
+

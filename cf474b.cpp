@@ -57,40 +57,38 @@ int lcm(int a, int b) {
     return a / gcd(a, b) * b;
 }
 
-const int maxn = 1000000;
-int a[maxn];
-set<int> s;
-map<int, int> cnt;
+
+int a[100005];
+int al[100005], ar[100005];
 int main(int argc, char const *argv[]) {
 // freopen("data.in","r",stdin);
 // freopen("data.out","w",stdout);
-    int p;
-    while(~scanf("%d", &p)) {
-        s.clear();
-        cnt.clear();
-        for(int i = 0; i < p; i++) {
-            int temp;
-            scanf("%d", &temp);
-            a[i] = temp;
-            s.insert(temp);
-        }
-        int l = 0, r = -1;
-        int tot, num = 0, ret = INF;
-        tot = s.size();
-
-        while(true) {
-            while(r < p && num < tot) {
-                if(cnt[a[++r]]++ == 0) {
-                    num++;
-                }
+    int n;
+    cin >> n;
+    for(int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    al[1] = 1;
+    for(int i = 2; i <= n; i++) al[i] = al[i - 1] + a[i - 1];
+    for(int i = 1; i <= n; i++) ar[i] = ar[i - 1] + a[i];
+    int q;
+    cin >> q;
+    while(q--) {
+        int k;
+        cin >> k;
+        int l = 1, r = n;
+        while(l <= r) {
+            int mid  = l + (r - l) / 2 ;
+            if(al[mid] > k) {
+                r = mid - 1;
+            } else if(ar[mid] < k) {
+                l = mid + 1;
+            } else {
+                cout << mid << endl;
+                break;
             }
-            if(num < tot) break;
-            ret = Min(ret, r - l + 1);
-            if(--cnt[a[l++]] == 0) {
-                num--;
-            }
         }
-        printf("%d\n", ret);
     }
     return 0;
 }
+

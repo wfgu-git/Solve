@@ -48,49 +48,25 @@ const int INF = 0x3f3f3f3f;
 const double pi = acos(-1.0);
 const double eps = 1e-8;
 
-//gcd lcm
-int gcd(int a, int b) {
-    return b ? gcd(b, a % b) : a;
-}
-
-int lcm(int a, int b) {
-    return a / gcd(a, b) * b;
-}
-
-const int maxn = 1000000;
-int a[maxn];
-set<int> s;
-map<int, int> cnt;
+int k, n, t;
+int a[100010];
 int main(int argc, char const *argv[]) {
 // freopen("data.in","r",stdin);
 // freopen("data.out","w",stdout);
-    int p;
-    while(~scanf("%d", &p)) {
-        s.clear();
-        cnt.clear();
-        for(int i = 0; i < p; i++) {
-            int temp;
-            scanf("%d", &temp);
-            a[i] = temp;
-            s.insert(temp);
-        }
-        int l = 0, r = -1;
-        int tot, num = 0, ret = INF;
-        tot = s.size();
+    ios::sync_with_stdio(false);
+    while(cin >> k >> n && (k + n)) {
+        for(int i = 0; i < n; i++)  cin >> a[i];
 
+        // ruler
+        int l = 0, r = -1, retl, retr;
+        int sum = 0, dist = INF;
         while(true) {
-            while(r < p && num < tot) {
-                if(cnt[a[++r]]++ == 0) {
-                    num++;
-                }
-            }
-            if(num < tot) break;
-            ret = Min(ret, r - l + 1);
-            if(--cnt[a[l++]] == 0) {
-                num--;
+            while(r < n) {
+                sum 
             }
         }
-        printf("%d\n", ret);
     }
     return 0;
 }
+
+
