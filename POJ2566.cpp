@@ -49,24 +49,52 @@ const double pi = acos(-1.0);
 const double eps = 1e-8;
 
 int k, n, t;
-int a[100010];
-int main(int argc, char const *argv[]) {
-// freopen("data.in","r",stdin);
-// freopen("data.out","w",stdout);
-    ios::sync_with_stdio(false);
-    while(cin >> k >> n && (k + n)) {
-        for(int i = 0; i < n; i++)  cin >> a[i];
+struct prefix {
+    int val, idx;
+} p[100010];
+bool cmp(prefix a, prefix b)
+{
+    return a.val < b.val;
+}
 
-        // ruler
-        int l = 0, r = -1, retl, retr;
-        int sum = 0, dist = INF;
-        while(true) {
-            while(r < n) {
-                sum 
+int main(void)
+{
+    ios::sync_with_stdio(false);
+    while(cin >> n >> k && (n + k)) {
+        //memset(p,0,sizeof(p));
+        p[0].val = 0, p[0].idx = 0;
+        int s = 0;
+        for(int i = 1; i <= n; i++) {
+            int temp;
+            cin >> temp;
+            s += temp;
+            p[i].val = s;
+            p[i].idx = i;
+        }
+        sort(p, p + 1 + n, cmp);
+
+        for(int i = 0; i < k; i++) { // k times query
+            cin >> t;
+            int l, r,  sub = INF, ret = INF;
+            int st, en; // record the ret [l,r]
+
+            // move as a ruler
+            l = 0, r = 1;
+            while(r <= n && sub) {
+                int sum = p[r].val - p[l].val; // sum ==> (l,r]
+                if(abs(sum - t) < sub) {
+                    sub  = abs(sum - t);
+                    ret = sum;
+                    st = p[l].idx;
+                    en = p[r].idx;
+                    //cout << st << " "  << en << endl;
+                }
+                if(sum < t) r++;
+                else l++;
+                if(l == r) r++;
             }
+            cout << ret << " " << min(st, en) + 1 << " " << max(st, en) << endl;
         }
     }
     return 0;
 }
-
-
