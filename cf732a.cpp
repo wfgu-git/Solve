@@ -1,8 +1,8 @@
 /*************************************************************************
-	> File Name: cf732a.cpp
-	> Author:Pr 
-	> Mail:peter.wfgu@gmail.com 
-	> Created Time: 2017年01月03日 星期二 13时47分38秒
+    > File Name: cf732a.cpp
+    > Author:Pr
+    > Mail:peter.wfgu@gmail.com
+    > Created Time: 2017年01月03日 星期二 13时47分38秒
  ************************************************************************/
 
 #include<iostream>
@@ -22,16 +22,15 @@
 using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
-int main(void)
-{
+int main(void) {
     ios::sync_with_stdio(false);
-    int k,r;
-    int cnt=1;
-    cin>>k>>r;
-    int kk=k;
-    while(k%10!=0&&(k-r)%10!=0){
-        k=kk*(++cnt);
+    int k, r;
+    int cnt = 1;
+    cin >> k >> r;
+    int kk = k;
+    while(k % 10 != 0 && (k - r) % 10 != 0) {
+        k = kk * (++cnt);
     }
-    cout<<cnt<<endl;
+    cout << cnt << endl;
     return 0;
 }

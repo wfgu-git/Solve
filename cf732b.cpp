@@ -5,8 +5,7 @@ typedef pair<int, int> PII;
 const int INF = 0x3f3f3f3f;
 
 int a[550];
-int main(void)
-{
+int main(void) {
     ios::sync_with_stdio(false);
     int n, k;
     cin >> n >> k;
