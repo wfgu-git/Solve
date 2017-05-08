@@ -1,43 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-const int inf = INT_MAX;
+
+const int inf = 0x3f3f3f3f;
 const int maxn = 1e5 + 10;
 int n, k;
 int a[maxn];
-int check(int v) {
-    int cnt = 1;
-    int temp = 0, num = 0;
-    int k = 0;
-    for(int i = n - 1; i >= k; i++) {
-        temp += a[i];
-        if(temp + a[k] <= v) {
-            temp += a[k];
-            k++;
-        }
-        ++cnt;
-    }
-}
-
-int l, mid;
-ll r;
 int main(int argc, char const *argv[]) {
     ios::sync_with_stdio(false);
     cin >> n >> k;
-    l = r = 0;
-    for(int i = 0; i < n; i++) {
+    int maxv = -inf;
+    for (int i = 0; i < n; i++) {
         cin >> a[i];
-        r += a[i];
+        maxv = max(maxv, a[i]);
     }
-
-    while(r - l > 1) {
-        mid = l + (r - l) / 2;
-        if(check(mid) <= k) {
-            r = mid;
-        } else {
-            l = mid;
+    if (k >= n) {
+        cout << maxv << endl;
+    } else {
+        int single = 2 * k - n;
+        int left = n - single;
+        for (int i = n - 1; i >= n - single + 1; i--) {
+            maxv = max(maxv, a[i]);
         }
+        for (int i = 0; i < left / 2; i++) {
+            maxv = max(maxv, a[i] + a[left - i - 1]);
+        }
+        cout << maxv << endl;
     }
-    cout << r << endl;
     return 0;
 }
