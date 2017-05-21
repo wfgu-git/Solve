@@ -1,16 +1,20 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
 using namespace std;
 
-typedef long long ll;
+typedef __int64 ll;
 const int maxn = 100010;
 ll seg[maxn << 2];
-int lazy[maxn << 2];
+ll lazy[maxn << 2];
 int n, m;
 void pushDown(int l, int r, int rt) {
     if(!lazy[rt])
         return;
 
-    lazy[rt << 1] = lazy[rt << 1 | 1] = lazy[rt];
+    lazy[rt << 1] += lazy[rt];
+    lazy[rt << 1 | 1] += lazy[rt];
     int m = l + (r - l) / 2;
     seg[rt << 1] += (m - l) * lazy[rt];
     seg[rt << 1 | 1] += (r - m) * lazy[rt];
@@ -20,7 +24,7 @@ void pushDown(int l, int r, int rt) {
 void build(int l = 1, int r = n + 1, int rt = 1) {
     lazy[rt] = 0;
     if(r - l == 1) {
-        scanf("%lld", &seg[rt]);
+        scanf("%I64d", &seg[rt]);
         return;
     }
     int m = l + (r - l) / 2;
@@ -31,8 +35,8 @@ void build(int l = 1, int r = n + 1, int rt = 1) {
 
 void update(int ul, int ur, int c, int l = 1, int r = n + 1, int rt = 1) {
     if(ul <= l && r <= ur) {
-        lazy[rt] = c;
-        seg[rt] += (r - l) * c;
+        lazy[rt] += c;
+        seg[rt] += (r - l) * (ll)c;
         return;
     }
     pushDown(l, r, rt);
@@ -57,7 +61,7 @@ ll query(int ql, int qr, int l = 1, int r = n + 1 , int rt = 1) {
 int main(int argc, char const *argv[]) {
     while(scanf("%d%d", &n, &m) == 2) {
         memset(seg, 0, sizeof(seg));
-        memset(lazy, 0, sizeof(lazy));
+        // memset(lazy, 0, sizeof(lazy));
         build();
         char op[10];
         for(int i = 0; i < m; i++) {
@@ -65,8 +69,8 @@ int main(int argc, char const *argv[]) {
             if(op[0] == 'Q') {
                 int ql, qr;
                 scanf("%d%d", &ql, &qr);
-                printf("%lld\n", query(ql, qr + 1));
-            } else {
+                printf("%I64d\n", query(ql, qr + 1));
+            } else if(op[0] == 'C') {
                 int ul, ur, k;
                 scanf("%d%d%d", &ul, &ur, &k);
                 update(ul, ur + 1, k);
