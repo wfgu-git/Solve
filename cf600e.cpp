@@ -1,49 +1,53 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+typedef long long ll;
 const int maxn = 1e5 + 10;
-int col[maxn], cnt[maxn], sz[maxn];
-bool big[maxn];
+map<int, int> cnt[maxn];
+map<int, ll> sum[maxn];
+int col[maxn];
+ll ret[maxn];
 vector<vector<int> > g;
-void getsz(int u, int p)
+int n;
+void dfs(int u, int p)
 {
-    sz[u] = 1;
-    for(auto v : g[u]){
-        if(v != p){
-            getsz(v, u);
-            sz[u] += sz[v];
-        }
-    }
-}
+    cnt[u][col[u]] = 1;
+    sum[u][1] = (ll)col[u];
 
-void dfs(int u, int p, bool keep){
-    int Max = 0, bigChild = -1;
-    for(auto v : g[u]){
-        if(v != p && sz[v] > Max){
-            Max = sz[v];
-            bigChild = v;
+    for(auto v : g[u]) {
+        if(v != p) {
+            dfs(v, u);
+            if(cnt[u].size() < cnt[v].size()) {
+                swap(cnt[u], cnt[v]);
+                swap(sum[u], sum[v]);
+            }
+            for(auto kv : cnt[v]) {
+                cnt[u][kv.first] += kv.second;
+                int t = cnt[u][kv.first];
+                sum[u][t] += (ll)kv.first;
+            }
+            cnt[v].clear();
+            sum[v].clear();
         }
     }
-    for(auto v : g[u]){
-        if(v != p && v != bigChild){
-            dfs(v, u, 0);
-        }
-    }
-
+    ret[u] = sum[u].rbegin()->second;
 }
-int main(void)
+void init()
 {
-    int n;
+    g.resize(n + 2);
+    g.clear();
+}
+int main()
+{
     scanf("%d", &n);
-    for(int i = 1; i <n; i++) {scanf("%d", &col[i]);}
-    for(int i = 0; i < n - 1; i++){
-        int u, v;
+    init();
+    for_each(col + 1, col + 1 + n, [](int &x) {scanf("%d", &x);});
+    for(int i = 0, u, v; i < n - 1; i++) {
         scanf("%d%d", &u, &v);
         g[u].push_back(v);
         g[v].push_back(u);
     }
-    getsz(1, 0);
-
-
+    dfs(1, 0);
+    for_each(ret + 1, ret + 1 + n, [](ll x) {printf("%I64d ", x);});
     return 0;
 }
+
