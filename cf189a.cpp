@@ -1,20 +1,4 @@
-#include<iostream>
-#include<algorithm>
-#include<string>
-#include<vector>
-#include<map>
-#include<set>
-#include<cstring>
-#include<cstdio>
-#include<cmath>
-#include<cstdlib>
-#include<stack>
-#include<iomanip>
-#include<cctype>
-#include<climits>
-#include<queue>
-#include<utility>
-#include<functional>
+#include <bits/stdc++.h>
 using namespace std;
 typedef pair<int, int> PII;
 typedef long long ll;
