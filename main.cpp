@@ -3,11 +3,7 @@ using namespace std;
 
 int main()
 {
-    int cas;
-    cin >> cas;
-    for (int i = 0; i < cas; i++){
-
-    }
+    ios::sync_with_stdio(false);
 
     return 0;
 }
