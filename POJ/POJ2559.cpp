@@ -27,9 +27,8 @@ int main() {
         }
         solve(n);
         ans = -1;
-
         for (int i = 0; i < n; i++) {
-            cout << a[i] << " --> (" << l[i] << ", " << r[i] << ")" << endl;
+            // cout << a[i] << " --> (" << l[i] << ", " << r[i] << ")" << endl;
             ans = max(ans, (ll)a[i] * ((ll)r[i] - (ll)l[i] + (ll)1));
         }
         cout << ans << endl;
