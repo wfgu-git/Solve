@@ -4,8 +4,8 @@
 #include <cstring>
 using namespace std;
 
-const int maxn = 20000;
-const int logmaxn = 15;
+const int maxn = 1e5;
+const int logmaxn = 20;
 int tot, head[maxn + 5];
 struct Edge {
     int v, d, next;
@@ -75,22 +75,26 @@ int lca(int u, int v)
         }
         _lca = fa[u][0];
     }
-    printf("lca of %d and %d --> %d\n", uu, vv, _lca);
-    return dis[u] + dis[v] - 2 * dis[_lca];
+    return dis[uu] + dis[vv] - 2 * dis[_lca];
 }
 int main()
 {
-    int n, k;
-    while (scanf("%d%d", &n, &k) == 2) {
+    int n, m, k;
+    while (scanf("%d%d", &n, &m) == 2) {
         clr();
-        for (int i = 1; i < n; i++) {
-            int u, v, d;
+        for (int i = 0; i < m; i++) {
             char dir[5];
+            int u, v, d;
             scanf("%d%d%d%s", &u, &v, &d, dir);
             add_edge(u, v, d);
             add_edge(v, u, d);
         }
         init(n);
+
+        // for (int i = 1; i <= n; i++) {
+        //     cout << "dis " << i << " == " << dis[i] << endl;
+        // }
+        scanf("%d", &k);
         for (int i = 0; i < k; i++) {
             int u, v;
             scanf("%d%d", &u, &v);
