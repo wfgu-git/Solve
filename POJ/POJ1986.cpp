@@ -50,7 +50,7 @@ void init(const int &n)
     for (int k = 0; k + 1 < logmaxn; k++) {
         for (int v = 1; v <= n; v++) {
             if (fa[v][k] < 0) fa[v][k + 1] = -1;
-            else fa[v][k + 1] = fa[fa[v][k]][k];
+            else fa[v][k + 1] = fa[fa[v][k]][k]; 
         }
     }
 }
@@ -60,7 +60,7 @@ int lca(int u, int v)
     int vv = v;
     if (dep[u] > dep[v]) swap(u, v);
     for (int k = 0; k < logmaxn; k++) {
-        if ((dep[v] - dep[u]) >> k & 1)
+        if ((dep[v] - dep[u]) >> k & 1) 
             v = fa[v][k];
     }
 
