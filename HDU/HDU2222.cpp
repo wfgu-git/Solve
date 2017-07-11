@@ -1,5 +1,3 @@
-// ac automation  模板题
-// 祼ac automation
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 500500;
@@ -20,9 +18,8 @@ struct trie {
     }
     void insert(char *s) {
         int cur = root;
-        int id;
         while (*s) {
-            id = *s - 'a';
+            int id = *s - 'a';
             if (next[cur][id] == -1) next[cur][id] = newnode();
             cur = next[cur][id];
             s++;

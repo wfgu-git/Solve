@@ -4,16 +4,17 @@ map < int, set < int > > problem;
 map < int, set < int > > contest;
 int tot_contest;
 int tot;
-map < string, int > id;
+map < string, int > ID;
 int get_id(const string &s) {
-  if (id.count(s)) return id[s];
-  return id[s] = ++tot;
+  if (ID.count(s)) return ID[s];
+  return ID[s] = ++tot;
 }
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
 
   tot = tot_contest = 0;
+  ID.clear(), problem.clear(), contest.clear();
   int n, q;
   cin >> n >> q;
   for (int i = 0; i < n; i++) {
@@ -22,14 +23,14 @@ int main() {
     problem[get_id(s)] = set < int >();
   }
   for (int i = 0; i < q; i++) {
-    int op;
+    int op, id;
     string s;
-    int id;
     cin >> op;
     if (op == 1) {
       cin >> s;
       id = get_id(s);
-      if (!problem.count(id) || !problem[id].size()) {
+      if (!(problem.count(id) && problem[id].size())) {
+        cout << "DoNotExist" << endl;
       } else {
         bool first = true;
         for (auto x : problem[id]) {
@@ -47,7 +48,7 @@ int main() {
         cout << "Response" << endl;
       }
     } else if (op == 3) {
-      contest[++tot] = set < int >();
+      contest[++tot_contest] = set < int >();
     } else if (op == 4) {
       cin >> id;
       if (contest.count(id)) {
@@ -66,8 +67,9 @@ int main() {
       if (!contest.count(k)) cout << "Invalid" << endl;
       else {
         contest[k].insert(id);
-        if (problem.count(id)) problem[id].insert(k);
-        else problem[id] = set < int >();
+        // if (problem.count(id)) problem[id].insert(k);
+        // else problem[id] = set < int >();
+        problem[id].insert(k);
       }
     }
   }
