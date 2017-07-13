@@ -2,14 +2,15 @@
 using namespace std;
 struct Treap {
   Treap* ch[2];
-  int key, fix, size;
+  long long key;
+  int fix, size;
 
-  Treap(int x) : key(x) {
+  Treap(long long x) : key(x) {
     size = 1;
     fix = rand();
     ch[0] = ch[1] = NULL;
   }
-  int comp(int x) const {
+  int comp(long long x) const {
     if (x == key) return -1;
     return x < key ? 0 : 1;
   }
@@ -19,14 +20,6 @@ struct Treap {
     if (ch[1] != NULL) size += ch[1]->size;
   }
 };
-bool fnd(Treap* o, int x) {
-  while (o != NULL) {
-    int d = o->comp(x);
-    if (d == -1) return true;
-    o = o->ch[d];
-  }
-  return false;
-}
 void rotate(Treap* &o, int d) {
   Treap* k = o->ch[d ^ 1];
   o->ch[d ^ 1] = k->ch[d];
@@ -39,14 +32,13 @@ void insert(Treap* &o, int x) {
   if (o == NULL) {
     o = new Treap(x);
   } else {
-    int d = o->comp(x);
-    // int d = (x < o->key ? 0 : 1);
+    int d = (x < o->key ? 0 : 1);
     insert(o->ch[d], x);
     if (o->ch[d]->fix > o->fix) rotate(o, d ^ 1);
   }
   o->maintain();
 }
-void remove(Treap* &o, int x) {
+void remove(Treap* &o, long long x) {
   int d = o->comp(x);
   if (d == -1) {
     Treap* u = o;
@@ -66,6 +58,7 @@ void remove(Treap* &o, int x) {
   if (o != NULL) o->maintain();
 }
 void clear(Treap* &o) {
+  if (o == NULL) return;
   if (o->ch[0] != NULL) clear(o->ch[0]);
   if (o->ch[1] != NULL) clear(o->ch[1]);
   delete o;
@@ -78,7 +71,7 @@ int Kth(Treap* o, int k) {
   else if (sz >= k) return Kth(o->ch[0], k);
   else return Kth(o->ch[1], k - sz - 1);
 }
-int Rnk(Treap* o, int x) {
+int Rnk(Treap* o, long long x) {
   int r;
   if (o == NULL) return 0;
   if (o->ch[0] == NULL) r = 0;
@@ -86,4 +79,53 @@ int Rnk(Treap* o, int x) {
   if (x == o->key) return r + 1;
   if (x < o->key) return Rnk(o->ch[0], x);
   else return r + 1 + Rnk(o->ch[1], x);
+}
+const int maxn = 1e5 + 100;
+const long long inf = 0x3f3f3f3f3f3f3f3fLL;
+int n, ans;
+long long k;
+long long a[maxn + 1];
+int in[maxn + 1];
+// vector< vector< int > > g;
+vector< int > g[maxn + 1];
+Treap* tree;
+void dfs(int u, int p) {
+  if (a[u] == 0) ans += Rnk(tree, inf);
+  else ans += Rnk(tree, k / a[u]);
+  insert(tree, a[u]);
+  for (auto v : g[u]) {
+    if (v == p)continue;
+    dfs(v, u);
+  }
+  remove(tree, a[u]);
+}
+int main() {
+  int T;
+  scanf("%d", &T);
+  for (int cas = 1; cas <= T; ++cas) {
+    tree = NULL;
+    scanf("%d%lld", &n, &k);
+    for (int i = 0; i < n; i++) g[i].clear(), in[i] = 0;
+    for (int i = 0; i < n; i++) {
+      scanf("%lld", a + i);
+    }
+    for (int i = 1; i < n; i++) {
+      int u, v;
+      scanf("%d%d", &u, &v);
+      --u, --v;
+      g[u].push_back(v);
+      in[v]++;
+    }
+    int st;
+    for (int i = 0; i < n; i++) {
+      if (!in[i]) {
+        st = i; break;
+      }
+    }
+    ans = 0;
+    dfs(st, -1);
+    printf("%d\n", ans);
+    clear(tree);
+  }
+  return 0;
 }
