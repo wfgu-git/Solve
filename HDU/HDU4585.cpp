@@ -18,15 +18,7 @@ struct Treap {
     if (ch[0] != NULL) size += ch[0]->size;
     if (ch[1] != NULL) size += ch[1]->size;
   }
-};
-bool fnd(Treap* o, int x) {
-  while (o != NULL) {
-    int d = o->comp(x);
-    if (d == -1) return true;
-    o = o->ch[d];
-  }
-  return false;
-}
+} *treap;
 void rotate(Treap* &o, int d) {
   Treap* k = o->ch[d ^ 1];
   o->ch[d ^ 1] = k->ch[d];
@@ -40,7 +32,6 @@ void insert(Treap* &o, int x) {
     o = new Treap(x);
   } else {
     int d = o->comp(x);
-    // int d = (x < o->key ? 0 : 1);
     insert(o->ch[d], x);
     if (o->ch[d]->fix > o->fix) rotate(o, d ^ 1);
   }
@@ -51,9 +42,9 @@ void remove(Treap* &o, int x) {
   if (d == -1) {
     Treap* u = o;
     if (o->ch[0] != NULL && o->ch[1] != NULL) {
-      int dd = (o->ch[0]->fix > o->ch[1]->fix ? 1 : 0);
-      rotate(o, dd);
-      remove(o->ch[dd], x);
+      int d2 = (o->ch[0]->fix > o->ch[1]->fix ? 1 : 0);
+      rotate(o, d);
+      remove(o->ch[d], x);
     } else {
       if (o->ch[0] == NULL) o = o->ch[1];
       else o = o->ch[0];
@@ -86,4 +77,37 @@ int Rnk(Treap* o, int x) {
   if (x == o->key) return r + 1;
   if (x < o->key) return Rnk(o->ch[0], x);
   else return r + 1 + Rnk(o->ch[1], x);
+}
+const int maxv = 1e9;
+const int maxn = 1e5;
+map< int, int > info;
+int main() {
+  int n;
+  while (scanf("%d", &n) == 1 && n) {
+    treap = NULL;
+    info.clear();
+    int id, g;
+    scanf("%d%d\n", &id, &g);
+    printf("%d 1\n", id);
+    info[g] = id;
+    insert(treap, g);
+    for (int i = 1; i < n; i++) {
+      scanf("%d%d", &id, &g);
+      info[g] = id;
+      insert(treap, g);
+      int ans;
+      int k = Rnk(treap, g);
+      int g1 = Kth(treap, k - 1);
+      int g2 = Kth(treap, k + 1);
+      if (g1 == -1) ans = g2;
+      else if (g2 == -1) ans = g1;
+      else {
+        if (g - g1 <= g2 - g) ans = g1;
+        else ans = g2;
+      }
+      printf("%d %d\n", id, info[ans]);
+    }
+    clear(treap);
+  }
+  return 0;
 }
