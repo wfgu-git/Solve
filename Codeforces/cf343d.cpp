@@ -1,92 +1,103 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int maxn = 500000 + 200;
-vector< vector< int > > g;
-int st[maxn + 2], ft[maxn + 2];
-int sz[maxn + 2], fa[maxn + 2], depth[maxn + 2], son[maxn + 2], id[maxn + 2], top[maxn + 2];
-int dfs_clock, tot;
-void get_info(int u, int p, int d) {
+#define lson o << 1
+#define rson o << 1 | 1
+const int maxn = 500000 + 20;
+struct Edge {int u, v, next;} edge[maxn << 1];
+int nn;
+int cont, head[maxn];
+void add_edge(int u, int v) {
+  edge[cont] = {u, v, head[u]};
+  head[u] = cont++;
+}
+int in[maxn], out[maxn], arc[maxn], dfs_clock;
+int tot, sz[maxn], son[maxn], top[maxn], fa[maxn], id[maxn], deep[maxn];
+void dfs(int u, int p, int d) {
   sz[u] = 1;
   fa[u] = p;
-  depth[u] = d;
-  for (auto v : g[u]) {
+  deep[u] = d;
+  for (int i = head[u]; i != -1; i = edge[i].next) {
+    int v = edge[i].v;
     if (v == p) continue;
-    get_info(v, u, d + 1);
+    dfs(v, u, d + 1);
     sz[u] += sz[v];
     if (son[u] == -1 || sz[son[u]] < sz[v]) son[u] = v;
   }
 }
-void dfs(int u, int first) {
-  st[u] = ++dfs_clock;
-  id[st[u]] = u;
+void link(int u, int first) {
   top[u] = first;
-  if (son[u] == -1) {
-    ft[u] = dfs_clock + 1;
-    return;
+  in[u] = ++dfs_clock;
+  id[u] = ++tot;
+  arc[in[u]] = u;
+  if (son[u] != -1) link(son[u], first);
+  for (int i = head[u]; i != -1; i = edge[i].next) {
+    int v = edge[i].v;
+    if (v == son[u] || v == fa[u]) continue;
+    link(v, v);
   }
-  dfs(son[u], first);
-  for (auto v : g[u]) {
-    if (v == fa[u] || v == son[u]) continue;
-    dfs(v, v);
-  }
-  ft[u] = dfs_clock + 1;
+  out[u] = dfs_clock;
 }
-int seg[maxn * 4 + 2], lazy[maxn * 4 + 2], nn;
-void maintain(int o) {
-  seg[o] = 0;
-  seg[o] = max(seg[o << 1], seg[o << 1 | 1]);
-  if (lazy[o] >= 0) seg[o] = lazy[o];
-}
-void push_down(int o) {
-  if (lazy[o] == -1) return;
+struct Segtree {
+  struct node {
+    int l, r, v;
+    int lazy;
+  } a[maxn << 2];
+  void push_up(int o) {}
+  void push_down(int o) {
+    if (a[o].lazy == -1) return;
 
-  lazy[o << 1] = lazy[o << 1 | 1] = lazy[o];
-  lazy[o] = -1;
-}
-void update(int ql, int qr, int k, int l = 1, int r = nn + 1, int o = 1) {
-  if (ql <= l && r <= qr) {
-    lazy[o] = k;
-    return;
+    a[lson].lazy = a[rson].lazy = a[o].lazy;
+    a[lson].v = a[rson].v = a[o].lazy;
+    a[o].lazy = -1;
   }
-  push_down(o);
-  int m = l + (r - l) / 2;
-  if (ql < m) update(ql, qr, k, l, m, o << 1);
-  if (qr > m) update(ql, qr, k, m, r, o << 1 | 1);
-  maintain(o);
-}
-int query(int p, int l = 1, int r = nn + 1, int o = 1) {
-  if (lazy[o] >= 0) return lazy[o];
-  if (p == l && r - l == 1) {
-    return seg[o];
+  void build(int l = 1, int r = nn + 1, int o = 1) {
+    a[o].l = l, a[o].r = r, a[o].v = 0, a[o].lazy = -1;
+    if (r - l == 1) return;
+    int m = l + (r - l) / 2;
+    build(l, m, lson);
+    build(m, r, rson);
+    push_up(o);
   }
-  push_down(o);
-  int m = l + (r - l) / 2;
-  if (p < m) return query(p, l, m, o << 1);
-  else return query(p, m, r, o << 1 | 1);
-}
-void modify(int u, int k, int v = 1) {
-  int top1 = top[u], top2 = top[v];
-  while (top1 != top2) {
-    if (depth[top1] < depth[top2]) {
-      swap(top1, top2);
-      swap(u, v);
+  void update(int l, int r, int k, int o = 1) {
+    if (l <= a[o].l && r <= a[o].r) {
+      a[o].v = k;
+      a[o].lazy = k;
+      return;
     }
-    update(id[top1], id[u] + 1, k);
-    u = fa[top1];
-    top1 = top[u];
+    push_down(o);
+    int m = a[o].l + (a[o].r - a[o].l) / 2;
+    if (l < m) update(l, r, lson);
+    if (r > m) update(l, r, rson);
+    push_up(o);
   }
-  if (depth[u] > depth[v]) swap(u, v);
-  update(id[u], id[v] + 1, k);
+  int query(int p, int o = 1) {
+    if (p == a[o].l && a[o].r - a[o].l == 1) {
+      return a[o].v;
+    }
+    push_down(o);
+    int m = a[o].l + (a[o].r - a[o].l) / 2;
+    if (p < m) query(p, lson);
+    else query(p, rson);
+  }
+} st;
+void solve(int u, int v, int k) {
+  while (top[u] != top[v]) {
+    if (deep[top[u]] < deep[top[v]]) swap(u, v);
+    st.update(id[top[u]], id[u] + 1, k);
+    u = fa[top[u]];
+  }
+  if (u == v) return;
+  if (deep[u] > deep[v]) swap(u, v);
+  st.update(id[u], id[v] + 1, k);
 }
 void init(int n) {
   nn = n;
-  dfs_clock = tot = 0;
+  tot = dfs_clock = 0;
+  cont = 1;
+  memset(head, -1, sizeof(head));
   memset(son, -1, sizeof(son));
-  memset(seg, 0, sizeof(seg));
-  memset(lazy, 0, sizeof(lazy));
-  g.resize(n + 2);
-  g.clear();
 }
+void debug() {printf("!!!!!!!!!\n");}
 int main() {
   int n;
   scanf("%d", &n);
@@ -94,22 +105,24 @@ int main() {
   for (int i = 1; i < n; i++) {
     int u, v;
     scanf("%d%d", &u, &v);
-    g[u].push_back(v);
-    g[v].push_back(u);
+    add_edge(u, v);
+    add_edge(v, u);
   }
-  get_info(1, 0, 0);
-  dfs(1, 1);
+  dfs(1, 0, 0);
+  link(1, 1);
+  st.build();
   int m;
   scanf("%d", &m);
   for (int i = 0; i < m; i++) {
-    int op, k;
-    scanf("%d%d", &op, &k);
+    int op, v;
+    scanf("%d%d", &op, &v);
     if (op == 1) {
-      update(st[k], ft[k], 1);
+      st.update(id[v], id[arc[out[v]]] + 1, 1);
     } else if (op == 2) {
-      modify(k, 0);
+      solve(v, 1, 0);
     } else {
-      printf("%d\n", query(k));
+      debug();
+      printf("%d\n", st.query(id[v]));
     }
   }
   return 0;
