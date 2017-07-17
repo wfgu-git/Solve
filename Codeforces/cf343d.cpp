@@ -3,6 +3,7 @@ using namespace std;
 #define lson o << 1
 #define rson o << 1 | 1
 const int maxn = 500000 + 20;
+void debug() {printf("!!!!!!!!!\n");}
 struct Edge {int u, v, next;} edge[maxn << 1];
 int nn;
 int cont, head[maxn];
@@ -59,15 +60,15 @@ struct Segtree {
     push_up(o);
   }
   void update(int l, int r, int k, int o = 1) {
-    if (l <= a[o].l && r <= a[o].r) {
+    if (l <= a[o].l && a[o].r <= r) {
       a[o].v = k;
       a[o].lazy = k;
       return;
     }
     push_down(o);
     int m = a[o].l + (a[o].r - a[o].l) / 2;
-    if (l < m) update(l, r, lson);
-    if (r > m) update(l, r, rson);
+    if (l < m) update(l, r, k, lson);
+    if (r > m) update(l, r, k, rson);
     push_up(o);
   }
   int query(int p, int o = 1) {
@@ -80,15 +81,16 @@ struct Segtree {
     else query(p, rson);
   }
 } st;
-void solve(int u, int v, int k) {
+void solve(int u) {
+  int v = 1;
   while (top[u] != top[v]) {
     if (deep[top[u]] < deep[top[v]]) swap(u, v);
-    st.update(id[top[u]], id[u] + 1, k);
+    st.update(id[top[u]], id[u] + 1, 0);
     u = fa[top[u]];
   }
-  if (u == v) return;
+  // if (u == v) return;
   if (deep[u] > deep[v]) swap(u, v);
-  st.update(id[u], id[v] + 1, k);
+  st.update(id[u], id[v] + 1, 0);
 }
 void init(int n) {
   nn = n;
@@ -97,7 +99,6 @@ void init(int n) {
   memset(head, -1, sizeof(head));
   memset(son, -1, sizeof(son));
 }
-void debug() {printf("!!!!!!!!!\n");}
 int main() {
   int n;
   scanf("%d", &n);
@@ -119,11 +120,30 @@ int main() {
     if (op == 1) {
       st.update(id[v], id[arc[out[v]]] + 1, 1);
     } else if (op == 2) {
-      solve(v, 1, 0);
+      solve(v);
     } else {
-      debug();
       printf("%d\n", st.query(id[v]));
     }
   }
   return 0;
 }
+/*
+5
+1 2
+5 1
+2 3
+4 2
+12
+1 1
+2 3
+3 1
+3 2
+3 3
+3 4
+1 2
+2 4
+3 1
+3 3
+3 4
+3 5
+*/
