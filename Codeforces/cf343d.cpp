@@ -88,7 +88,6 @@ void solve(int u) {
     st.update(id[top[u]], id[u] + 1, 0);
     u = fa[top[u]];
   }
-  // if (u == v) return;
   if (deep[u] > deep[v]) swap(u, v);
   st.update(id[u], id[v] + 1, 0);
 }
