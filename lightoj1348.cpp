@@ -4,81 +4,71 @@
 #include <utility>
 #include <algorithm>
 using namespace std;
-const int maxn = 500000 + 20;
+const int inf = 0x3f3f3f3f;
+const int maxn = 30000 + 20;
 #define lson o << 1
 #define rson o << 1 | 1
 int nn, cont, head[maxn];
 struct Edge {int u, v, next;} edge[maxn << 1];
 void add_edge(int u, int v) {
-  edge[cont].u = u;
-  edge[cont].v = v;
-  edge[cont].next = head[u];
-  head[u] = cont++;
+  edge[cont] = {u, v, head[u]};
+  edge[cont + nn] = {v, u, head[v]};
+  head[u] = cont, head[v] = cont + nn;
+  cont++;
 }
 struct Segtree {
   struct node {
     int l, r, sum;
-    int lazy, lc, rc;
+    int max;
   } a[maxn << 2];
   void push_up(int o) {
-    a[o].sum = a[lson].sum + a[rson].sum - (a[lson].rc == a[rson].lc);
-    a[o].lc = a[lson].lc;
-    a[o].rc = a[rson].rc;
+    a[o].sum = a[lson].sum + a[rson].sum;
+    a[o].max = max(a[lson].max, a[rson].max);
   }
-  void push_down(int o) {
-    if (a[o].lazy == -1) return;
-
-    a[lson].lazy = a[rson].lazy = a[o].lazy;
-    a[lson].sum = a[rson].sum = 1;
-    a[lson].lc = a[lson].rc = a[o].lazy;
-    a[rson].lc = a[rson].rc = a[o].lazy;
-    a[o].lazy = -1;
-  }
+  void push_down(int o) {}
   void build(int *val, int *arc, int l = 1, int r = nn + 1, int o = 1) {
-    a[o].l = l, a[o].r = r, a[o].sum = 0;
-    a[o].lazy = a[o].lc = a[o].rc = -1;
-    int m = (l + r) / 2;
+    a[o].l = l, a[o].r = r, a[o].sum = 0, a[o].max = -inf;
     if (r - l == 1) {
-      a[o].sum = 1;
-      a[o].rc = a[o].lc = val[arc[l]];
+      a[o].sum = a[o].max = val[arc[l]];
       return;
     }
+    int m = (l + r) / 2;
     build(val, arc, l, m, lson);
     build(val, arc, m, r, rson);
     push_up(o);
   }
-  void update(int l, int r, int k, int o = 1) {
-    if (l <= a[o].l && a[o].r <= r) {
-      a[o].sum = 1;
-      a[o].lazy = a[o].lc = a[o].rc = k;
+  void update(int p, int k, int o = 1) {
+    if (p == a[o].l && a[o].r - a[o].l == 1) {
+      a[o].sum = a[o].max = k;
       return;
     }
     push_down(o);
     int m = (a[o].l + a[o].r) / 2;
-    if (l < m) update(l, r, k, lson);
-    if (r > m) update(l, r, k, rson);
+    if (p < m) update(p, k, lson);
+    else update(p, k, rson);
     push_up(o);
   }
-  int query(int l, int r, int o = 1) {
+  int querySum(int l, int r, int o = 1) {
     if (l <= a[o].l && a[o].r <= r) {
       return a[o].sum;
     }
     push_down(o);
     int ret = 0;
     int m = (a[o].l + a[o].r) / 2;
-    if (l < m) ret += query(l, r, lson);
-    if (r > m) ret += query(l, r, rson);
-    if (l < m && r > m && a[lson].rc == a[rson].lc) --ret;
+    if (l < m) ret += querySum(l, r, lson);
+    if (r > m) ret += querySum(l, r, rson);
     return ret;
   }
-  int queryc(int p, int o = 1) {
-    if (p == a[o].l && a[o].r - a[o].l == 1) {
-      return a[o].lc;
+  int queryMax(int l, int r, int o = 1) {
+    if (l <= a[o].l && a[o].r <= r) {
+      return a[o].max;
     }
     push_down(o);
+    int ret = -inf;
     int m = (a[o].l + a[o].r) / 2;
-    if (p < m) return queryc(p, lson);
-    else return queryc(p, rson);
+    if (l < m) ret = max(ret, queryMax(l, r, lson));
+    if (r > m) ret = max(ret, queryMax(l, r, rson));
+    return ret;
   }
 } st;
 int tot, fa[maxn], top[maxn], sz[maxn], son[maxn], deep[maxn], tid[maxn], arc[maxn];
@@ -105,25 +95,26 @@ void link(int u, int first) {
     link(v, v);
   }
 }
-void modify(int u, int v, int k) {
-  while (top[u] != top[v]) {
-    if (deep[top[u]] < deep[top[v]]) swap(u, v);
-    st.update(tid[top[u]], tid[u] + 1, k);
-    u = fa[top[u]];
-  }
-  if (deep[u] > deep[v]) swap(u, v);
-  st.update(tid[u], tid[v] + 1, k);
-}
-int solve(int u, int v) {
+int get_sum(int u, int v) {
   int ret = 0;
   while (top[u] != top[v]) {
     if (deep[top[u]] < deep[top[v]]) swap(u, v);
-    ret += st.query(tid[top[u]], tid[u] + 1);
-    if (st.queryc(tid[top[u]]) == st.queryc(tid[fa[top[u]]])) --ret;
+    ret += st.querySum(tid[top[u]], tid[u] + 1);
     u = fa[top[u]];
   }
   if (deep[u] > deep[v]) swap(u, v);
-  ret += st.query(tid[u], tid[v] + 1);
+  ret += st.querySum(tid[u], tid[v] + 1);
+  return ret;
+}
+int get_max(int u, int v) {
+  int ret = -inf;
+  while (top[u] != top[v]) {
+    if (deep[top[u]] < deep[top[v]]) swap(u, v);
+    ret = max(ret, st.queryMax(tid[top[u]], tid[u] + 1));
+    u = fa[top[u]];
+  }
+  if (deep[u] > deep[v]) swap(u, v);
+  ret = max(ret, st.queryMax(tid[u], tid[v] + 1));
   return ret;
 }
 void init(int n) {
@@ -144,8 +135,11 @@ template<class T> inline bool read(T &n){
     return true;
 }
 int main() {
-  int n, m;
-  while (scanf("%d%d", &n, &m) == 2) {
+  int T;
+  read(T);
+  for (int cas = 1; cas <= T; ++cas) {
+    int n;
+    read(n);
     init(n);
     for (int i = 1; i <= n; i++) {
       read(w[i]);
@@ -153,22 +147,22 @@ int main() {
     for (int i = 1; i < n; i++) {
       int u, v;
       read(u);read(v);
+      ++u, ++v;
       add_edge(u, v);
-      add_edge(v, u);
     }
     dfs(1, 0, 0);
     link(1, 1);
     st.build(w, arc);
-    char op[2];
-    for (int i = 0; i < m; i++) {
-      scanf("%s", op);
-      int x, y, z;
-      if (op[0] == 'Q') {
-        read(x);read(y);
-        printf("%d\n", solve(x, y));
+    int m;
+    read(m);
+    printf("Case %d:\n", cas);
+    int op, x, y;
+    for (int i = 0; i < m; ++i) {
+      read(op); read(x); read(y);
+      if (op == 0) {
+        printf("%d\n", get_sum(x + 1, y + 1));
       } else {
-        read(x);read(y);read(z);
-        modify(x, y, z);
+        st.update(tid[x + 1], y);
       }
     }
   }
