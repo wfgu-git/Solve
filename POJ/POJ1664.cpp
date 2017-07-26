@@ -1,7 +1,5 @@
-// 缁勫悎鏁板
 #include<iostream>
 using namespace std;
-//f(m,n)  m涓嫻鏋滄斁鍏涓洏瀛愮殑鏂规硶鏁�
 int solve(int m,int n)
 {
     if(m==0||n==1)    return 1;
@@ -21,4 +19,3 @@ int main(void)
     }
     return 0;
 }
-

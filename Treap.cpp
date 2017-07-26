@@ -7,7 +7,7 @@ struct Treap {
   Treap(int x) : key(x) {
     size = 1;
     fix = rand();
-    ch[0] = ch[1] = NULL;
+    ch[0] = ch[1] = nullptr;
   }
   int comp(int x) const {
     if (x == key) return -1;
@@ -15,12 +15,12 @@ struct Treap {
   }
   void maintain() {
     size = 1;
-    if (ch[0] != NULL) size += ch[0]->size;
-    if (ch[1] != NULL) size += ch[1]->size;
+    if (ch[0] != nullptr) size += ch[0]->size;
+    if (ch[1] != nullptr) size += ch[1]->size;
   }
 };
 bool fnd(Treap* o, int x) {
-  while (o != NULL) {
+  while (o != nullptr) {
     int d = o->comp(x);
     if (d == -1) return true;
     o = o->ch[d];
@@ -35,8 +35,8 @@ void rotate(Treap* &o, int d) {
   k->maintain();
   o = k;
 }
-void insert(Treap* &o, int x) {
-  if (o == NULL) {
+void insert(Treap* &o, int x) {;
+  if (o == nullptr) {
     o = new Treap(x);
   } else {
     int d = o->comp(x);
@@ -50,38 +50,38 @@ void remove(Treap* &o, int x) {
   int d = o->comp(x);
   if (d == -1) {
     Treap* u = o;
-    if (o->ch[0] != NULL && o->ch[1] != NULL) {
+    if (o->ch[0] != nullptr && o->ch[1] != nullptr) {
       int dd = (o->ch[0]->fix > o->ch[1]->fix ? 1 : 0);
       rotate(o, dd);
       remove(o->ch[dd], x);
     } else {
-      if (o->ch[0] == NULL) o = o->ch[1];
+      if (o->ch[0] == nullptr) o = o->ch[1];
       else o = o->ch[0];
       delete u;
-      u = NULL;
+      u = nullptr;
     }
   } else {
     remove(o->ch[d], x);
   }
-  if (o != NULL) o->maintain();
+  if (o != nullptr) o->maintain();
 }
 void clear(Treap* &o) {
-  if (o->ch[0] != NULL) clear(o->ch[0]);
-  if (o->ch[1] != NULL) clear(o->ch[1]);
+  if (o->ch[0] != nullptr) clear(o->ch[0]);
+  if (o->ch[1] != nullptr) clear(o->ch[1]);
   delete o;
-  o = NULL;
+  o = nullptr;
 }
 int Kth(Treap* o, int k) {
-  if (o == NULL || k <= 0 || k > o->size) return -1;
-  int s = o->ch[0] == NULL ? 0 : o->ch[0]->size;
+  if (o == nullptr || k <= 0 || k > o->size) return -1;
+  int s = o->ch[0] == nullptr ? 0 : o->ch[0]->size;
   if (s + 1 == k) return o->key;
   else if (s >= k) return Kth(o->ch[0], k);
   else return Kth(o->ch[1], k - s - 1);
 }
 int Rnk(Treap* o, int x) {
   int r;
-  if (o == NULL) return 0;
-  if (o->ch[0] == NULL) r = 0;
+  if (o == nullptr) return 0;
+  if (o->ch[0] == nullptr) r = 0;
   else r = o->ch[0]->size;
   if (x == o->key) return r + 1;
   if (x < o->key) return Rnk(o->ch[0], x);
