@@ -4,27 +4,29 @@ const int inf = INT_MAX;
 const int maxn = 100000 + 20;
 int a[maxn];
 int b[maxn];
-bool check(int k, int n, int limit) {
-  int nowp, allq, nowq;
-  nowp = allq = nowq = 0;
-  int cntk = 0;
-  int tot = 0, now = 0;
-  while (true) {
-    if (nowp == n && nowq + 1 == allq) break;
-    while (cntk < k) {
-      if ((allq == nowq || (allq - nowp >= 1 && a[nowp] < b[nowq])) && nowp < n) {
-        now += a[nowp++];
-        cntk++;
-      } else {
-        now += b[nowq++];
-        cntk++;
-      }
+bool check(int mid, int n, int up) {
+  int p = 0;
+  int cost = 0;
+  int head = 1, tail = 1;
+  int x = (n - 1) % (mid - 1) + 1;
+  if ((n - 1) % (mid - 1) != 0) {
+    for (int i = 0; i < x; ++i) {
+      cost += a[i];
     }
-    b[allq++] = now;
-    tot += now;
-    cntk = now = 0;
+    p = x;
+    if (cost) b[tail++] = cost;
   }
-  return (tot <= limit) ? true : false;
+  while (true) {
+    int temp = 0;
+    for (int i = 0; i < mid; i++) {
+      if (p < n && (head >= tail || a[p] <= b[head])) temp += a[p++];
+      else if (head < tail && (p >= n || a[p] >= b[head])) temp += b[head++];
+    }
+    cost += temp;
+    if (p >= n && head >= tail) break;
+    b[tail++] = temp;
+  }
+  return cost <= up;
 }
 int main() {
   int T;
@@ -32,19 +34,20 @@ int main() {
   int n, up;
   for (int cas = 1; cas <= T; ++cas) {
     scanf("%d%d", &n, &up);
-  }
-  for_each(a, a + n, [](int &x){scanf("%d", &x);});
-  int ans;
-  int lb = 2, ub = n;
-  while (lb <= ub) {
-    int mid = (lb + ub) >> 1;
-    if (check(mid, n, up)) {
-      ans = mid;
-      ub = mid - 1;
-    } else {
-      lb = mid + 1;
+    for_each(a, a + n, [](int &x){scanf("%d", &x);});
+    sort(a, a + n);
+    int ans;
+    int lb = 2, ub = n;
+    while (lb <= ub) {
+      int mid = (lb + ub) >> 1;
+      if (check(mid, n, up)) {
+        ans = mid;
+        ub = mid - 1;
+      } else {
+        lb = mid + 1;
+      }
     }
+    printf("%d\n", ans);
   }
-  printf("%d\n", ans);
   return 0;
 }

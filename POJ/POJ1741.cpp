@@ -75,12 +75,21 @@ void dfs(int u, int p, int d) {
     int w = edge[i].d;
     if (v == p) continue;
     dfs(v, u, d + w);
-    if (root[u]->size < root[v]->size) swap(root[u], root[v]);
+    // printf("at node %d\n", u);
+    if (root[u]->size < root[v]->size) {
+      swap(root[u], root[v]);
+      // printf("root %d->size < root %d->size\nswap(%d, %d)\n", u, v, u, v);
+    }
     ans += cnt(root[u], root[v], k + 2 * d);
+    // printf("ans += cnt %d  k+2*d = %d\n", cnt(root[u], root[v], k + 2 * d), k + 2 * d);
     merge(root[u], root[v]);
+    // printf("merge(root[%d], root[%d])\n", u, v);
   }
+  printf("\n\n");
   ans += rnk(root[u], d + k);
+  // printf("ans += rnk %d  k+d = %d\n", rnk(root[u], d + k), d + k);
   insert(root[u], d, 1);
+  // printf("insert(root[%d], d = %d, num = %d)\n", u, d, 1);
 }
 void init(int n) {
   nn = n;
