@@ -1,21 +1,23 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int maxn = 100000 + 20;
+const int maxn = 30000 + 20;
+const int maxq = 100000 + 20;
+using ll = long long;
 int n, q;
 struct BIT {
-  int a[maxn];
+  ll a[maxq];
   void init() {
     memset(a, 0, sizeof(a));
   }
   inline int lowbit(int x) {return x & (-x);}
-  void update(int x, int k) {
+  void update(int x, ll k) {
     while (x <= n) {
       a[x] += k;
       x += lowbit(x);
     }
   }
-  int query(int x) {
-    int res = 0;
+  ll query(int x) {
+    ll res = 0;
     while (x) {
       res += a[x];
       x -= lowbit(x);
@@ -25,40 +27,43 @@ struct BIT {
 } bit;
 using pii = pair<int, int>;
 map<int, vector<pii> > Qs;
-map<int, int> last;
-int a[maxn], ans[maxn];
+map<ll, int> last;
+int a[maxn];
+ll ans[maxq];
 int main() {
-  while (scanf("%d%d", &n, &q) != EOF) {
+  int T;
+  scanf("%d", &T);
+  for (int cas = 1; cas <= T; ++cas) {
+    bit.init();
+    Qs.clear();
+    scanf("%d", &n);
     for (int i = 1; i <= n; i++) {
       scanf("%d", a + i);
     }
-    bit.init();
-    Qs.clear();
+    scanf("%d", &q);
     for (int i = 0; i < q; i++) {
       static int l, r;
       scanf("%d%d", &l, &r);
       Qs[r].push_back({l, i});
     }
     last.clear();
-    map<int, int> pre, now;
+    map<ll, int> pre, now;
     for (int i = 1; i <= n; i++) {
       now.clear();
-      for (pii x : pre) {
-        now[__gcd(x.first, a[i])] = x.second;
-      }
       now[a[i]] = i;
       for (pii x : now) {
-        if (last[x.first]) bit.update(last[x.first], -1);
+        if (last[x.first]) bit.update(last[x.first], -a[i]);
         last[x.first] = x.second;
-        bit.update(last[x.first], 1);
+        bit.update(last[x.first], a[i]);
       }
-      pre = now;
+      // pre = now;
+      swap(pre, now);
       for (pii x : Qs[i]) {
         ans[x.second] = bit.query(i) - bit.query(x.first - 1);
       }
     }
     for (int i = 0; i < q; i++) {
-      printf("%d\n", ans[i]);
+      printf("%lld\n", ans[i]);
     }
   }
   return 0;
