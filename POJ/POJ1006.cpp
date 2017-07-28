@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <cstring>
 using namespace std;
 static int moder[3] = {23, 28, 33};
 int a[3], d;
@@ -34,15 +35,10 @@ void solve(int kase) {
   printf("Case %d: the next triple peak occurs in %d days.\n", kase, ans - d);
 }
 int main() {
-  int T;
-  while (scanf("%d", &T) != EOF) {
-    for (int cas = 1; cas <= T; ++cas) {
-      int kase = 0;
-      while (~scanf("%d%d%d%d", a + 0, a + 1, a + 2, &d)) {
-        if (a[0] == -1 && a[1] == -1 && a[2] == -1) break;
-        solve(++kase);
-      }
-    }
+  int kase = 0;
+  while (~scanf("%d%d%d%d", a + 0, a + 1, a + 2, &d)) {
+    if (a[0] == -1 && a[1] == -1 && a[2] == -1) break;
+    solve(++kase);
   }
   return 0;
 }
