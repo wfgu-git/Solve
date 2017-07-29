@@ -85,6 +85,7 @@ int main(void)
     for(int i=1; i<=n; i++){
         sc(color[i]);    
         pos[i]=(i-1)/block_size;
+        //[Li,Ri]在第几块
     }
 
     for(int i=0; i<m; i++){
@@ -127,7 +128,7 @@ int main(void)
         }
         pl = qry[i].l;
         //用组合数来计算概率
-        aa = ans - (qry[i].r - qry[i].l + 1);
+        aa = ans - qry[i].r + qry[i].l - 1;
         bb = (ll)(qry[i].r - qry[i].l + 1) *(qry[i].r - qry[i].l);
         cc = gcd(aa,bb); //cc用来成 最简分数
         aa /= cc, bb /= cc;
