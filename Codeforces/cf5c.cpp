@@ -1,30 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 1e6 + 20;
-int ans[maxn] = {1};
-stack<char> st;
 int main() {
-  static char s[maxn];
-  scanf("%s", s);
-  int n = strlen(s);
-  int p, mxlen, cnt;
-  p = cnt = mxlen = 0;
-  while (p < n) {
-    if (st.empty()) cnt = 0;
-    if (s[p] == '(') {
-      st.push('(');
+  static int dp[maxn];
+  static char str[maxn];
+  scanf("%s", str + 1);
+  int slen = strlen(str + 1);
+  stack<int> st;
+  int cnt, ans;
+  ans = cnt = 0;
+  for (int i = 1; i <= slen; ++i) {
+    if (str[i] == '(') {
+      st.push(i);
     } else {
-      if (st.empty()) {
-        cnt = 0;
-      } else {
+      if (!st.empty()) {
+        int l = st.top();
         st.pop();
-        cnt++;
-        ans[cnt * 2]++;
-        mxlen = max(mxlen, cnt * 2);
+        dp[i] = dp[l - 1] + (i - l + 1);
+        if (ans < dp[i]) {ans = dp[i]; cnt = 1;}
+        else if (dp[i] == ans) ++cnt;
       }
     }
-    ++p;
   }
-  printf("%d %d\n", mxlen, ans[mxlen]);
+  if (ans == 0) cnt = 1;
+  printf("%d %d\n", ans, cnt);
   return 0;
 }

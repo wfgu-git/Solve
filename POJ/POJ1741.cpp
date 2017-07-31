@@ -75,13 +75,10 @@ void dfs(int u, int p, int d) {
     int w = edge[i].d;
     if (v == p) continue;
     dfs(v, u, d + w);
-    if (root[u]->size < root[v]->size) {
-      swap(root[u], root[v]);
-    }
+    if (root[u]->size < root[v]->size) swap(root[u], root[v]);
     ans += cnt(root[u], root[v], k + 2 * d);
     merge(root[u], root[v]);
   }
-  printf("\n\n");
   ans += rnk(root[u], d + k);
   insert(root[u], d, 1);
 }

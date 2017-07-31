@@ -6,7 +6,6 @@ bool vis[maxn];
 int prime[maxn];
 int notprime[maxn] = {1, 1};
 void init() {
-  memset(vis, 0, sizeof(vis));
   int tot = 0;
   for (int i = 2; i <= maxn; ++i) {
     if (!notprime[i]) prime[++tot] = i;
@@ -26,6 +25,7 @@ void dfs(int deep) {
       else printf(" %d", x);
     }
     printf("\n");
+    return;
   }
 
   for (int i = 1; i <= n; ++i) {
