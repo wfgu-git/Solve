@@ -4,8 +4,7 @@ using ll = long long;
 const int maxn = 50000 + 20;
 const int maxp = 30 + 20;
 int n, k;
-ll p[maxp], w[maxn];
-ll sum[maxn];
+ll p[maxp], w[maxn], dis[maxn];
 ll ans;
 int tot;
 int tid[maxn], son[maxn], sz[maxn], fa[maxn];
@@ -59,18 +58,26 @@ void dfs(int u, int p) {
   fa[u] = p;
   for (int v : g[u]) {
     if (v == p) continue;
+    dis[v] = dis[u] + w[v];
     dfs(v, u);
     sz[u] += sz[v];
     if (son[u] == -1 || sz[son[u]] < sz[v]) {
       son[u] = v;
     }
   }
-}
-void dsu(int u) {
 
+  if (sz[u] == 1) {
+    if (w[u] == 0) ++ans;
+    tid[u] = ++tot;
+    root[tid[u]][arc(dis[p], dis[u])] = 1;
+  } else {
+    if (w[u] == 0) ++ans;
+    
+  }
 }
 void init(int _n) {
-  memset(sum, 0, sizeof(sum));
+  ans = tot = 0;
+  memset(dis, 0, sizeof(dis));
   memset(son, -1, sizeof(son));
   for (int i = 1; i <= _n; ++i) {
     g[i].clear();
@@ -81,11 +88,11 @@ int main() {
     init(n);
     scanf("%d", &k);
     for (int i = 0; i < k; ++i) {
-      scanf("%lld", p + i);
+      scanf("%I64d", p + i);
     }
     for (int i = 1; i <= n; ++i) {
       ll x;
-      scanf("%lld", &x);
+      scanf("%I64d", &x);
       get_w(i, x);
       root[i].clear();
     }
@@ -94,11 +101,9 @@ int main() {
       scanf("%d%d", &u, &v);
       add_edge(u, v);
     }
-    ans = 0;
-    tot = 0;
+    dis[1] = w[1];
     dfs(1, 0);
-    dsu(1);
-    printf("%lld\n", ans);
+    printf("%I64d\n", ans);
   }
   return 0;
 }
