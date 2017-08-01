@@ -8,7 +8,7 @@ ll p[maxp], w[maxn];
 ll sum[maxn];
 ll ans;
 int tot;
-int tid[maxn], son[maxn], sz[maxn];
+int tid[maxn], son[maxn], sz[maxn], fa[maxn];
 vector<int> g[maxn];
 map<ll, int> root[maxn];
 void add_edge(int u, int v) {
@@ -55,7 +55,9 @@ ll arc(ll a, ll b) {
   return ret;
 }
 void dfs(int u, int p) {
-  for (const int &v : g[u]) {
+  sz[u] = 1;
+  fa[u] = p;
+  for (int v : g[u]) {
     if (v == p) continue;
     dfs(v, u);
     sz[u] += sz[v];
@@ -63,37 +65,11 @@ void dfs(int u, int p) {
       son[u] = v;
     }
   }
-  if (sz[u] == 1) {
-    if (w[u] == 0) ++ans;
-    tid[u] = ++tot;
-    root[tid[u]][0] = 1;
-    sum[u] = w[u];
-  } else {
-    int temp = w[u];
-    if (w[u] == 0) ++ans;
-    sum[u] = add(temp, sum[son[u]]);
-    int id = tid[u] = tid[son[u]];
-    ans += root[id][arc(0, sum[u])];
-    ++root[id][arc(0, sum[son[u]])];
-    for (const int &v : g[u]) {
-      if (v == p || v == son[u]) continue;
-      id = tid[v];
-      for (const auto &x : root[id]) {
-        temp = add(sum[u], sum[v]);
-        temp = add(temp, x.first);
-        temp = arc(0, temp);
-        ans += (ll)x.second * root[id][temp];
-      }
-      for (const auto &x : root[id]) {
-        temp = add(sum[v], x.first);
-        temp = arc(temp, sum[son[u]]);
-        root[id][temp] += x.second;
-      }
-    }
-  }
+}
+void dsu(int u) {
+
 }
 void init(int _n) {
-  cout << "I'm here" << endl;
   memset(sum, 0, sizeof(sum));
   memset(son, -1, sizeof(son));
   for (int i = 1; i <= _n; ++i) {
@@ -121,6 +97,7 @@ int main() {
     ans = 0;
     tot = 0;
     dfs(1, 0);
+    dsu(1);
     printf("%lld\n", ans);
   }
   return 0;
