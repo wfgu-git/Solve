@@ -1,115 +1,135 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
-const int maxp = 30 + 5;
 const int maxn = 50000 + 20;
-void debug() {cout << "!!!!" << endl;}
+const int maxp = 30 + 20;
+int n, k;
+ll p[maxp], w[maxn];
+ll sum[maxn];
+ll ans;
+int tot;
+int tid[maxn], son[maxn], sz[maxn];
 vector<int> g[maxn];
+map<ll, int> root[maxn];
 void add_edge(int u, int v) {
   g[u].push_back(v);
   g[v].push_back(u);
 }
-int n, k;
-map<long long, int> root[maxn];
-ll p[maxp], w[maxn];
-ll ans;
-inline void init(int n) {
-  ans = 0;
-  for (int i = 1; i <= n; ++i) {
-    g[i].clear();
-    root[i].clear();
-  }
-}
-inline void getw(int now, ll val) {
+void get_w(int now, long long v) {
   ll ret = 0;
-  for (int i = 1; i <= k; ++i) {
+  for (int i = 0; i < k; ++i) {
     int temp = 0;
-    while (val && val % p[i] == 0) {
+    while (true) {
+      if (v % p[i]) break;
+      v /= p[i];
       ++temp;
-      val /= p[i];
     }
     temp %= 3;
     ret = ret * 3 + temp;
   }
   w[now] = ret;
 }
-static int temp[maxp];
+int _temp[maxp];
 ll add(ll a, ll b) {
-  for (int i = k; i >= 1; --i) {
-    temp[i] = (a + b) % 3;
+  for (int i = k - 1; i >= 0; --i) {
+    _temp[i] = (a + b) % 3;
     a /= 3;
     b /= 3;
   }
   ll ret = 0;
-  for (int i = 1; i <= k; ++i) {
-    ret = ret * 3 + temp[i];
+  for (int i = 0; i < k; ++i) {
+    ret = ret * 3 + _temp[i];
   }
   return ret;
 }
 ll arc(ll a, ll b) {
-  for (int i = k; i >= 1; --i) {
-    temp[i] = ((a - b) % 3 + 3) % 3;
+  for (int i = k - 1; i >= 0; --i) {
+    _temp[i] = ((a - b) % 3 + 3) % 3;
     a /= 3;
     b /= 3;
   }
   ll ret = 0;
-  for (int i = 1; i <=k; ++i) {
-    ret = ret * 3 + temp[i];
-  }
-  return ret;
-}
-int merge(map<ll, int> &a, map<ll, int> b) {
-  int ret = 0;
-  map<ll, int> t;
-  for (auto x : a) {
-    for (auto y : b) {
-      ret += x.second * b[arc(0, x.first)];
-      t[add(x.first, y.first)] += x.second * y.second;
-    }
-  }
-  for (auto x : t) {
-    a[x.first] += x.second;
+  for (int i = 0; i < k; ++i) {
+    ret = ret * 3 + _temp[i];
   }
   return ret;
 }
 void dfs(int u, int p) {
-  for (int v : g[u]) {
+  for (const int &v : g[u]) {
     if (v == p) continue;
     dfs(v, u);
-    if (root[u].size() < root[v].size()) swap(root[u], root[v]);
-    ans += merge(root[u], root[v]);
+    sz[u] += sz[v];
+    if (son[u] == -1 || sz[son[u]] < sz[v]) {
+      son[u] = v;
+    }
   }
-  if (w[u] == 0) ++ans;
-  if (root[u].size() == 0) {
-    (root[u])[w[u]] = 1;
+  if (sz[u] == 1) {
+    if (w[u] == 0) ++ans;
+    tid[u] = ++tot;
+    root[tid[u]][0] = 1;
+    sum[u] = w[u];
   } else {
-    map<ll, int> t;
-    for (auto x : root[u]) {
-      t[add(x.first, w[u])] = x.second;
+    int temp = w[u];
+    if (w[u] == 0) ++ans;
+    sum[u] = add(temp, sum[son[u]]);
+    int id = tid[u] = tid[son[u]];
+    ans += root[id][arc(0, sum[u])];
+    ++root[id][arc(0, sum[son[u]])];
+    for (const int &v : g[u]) {
+      if (v == p || v == son[u]) continue;
+      id = tid[v];
+      for (const auto &x : root[id]) {
+        temp = add(sum[u], sum[v]);
+        temp = add(temp, x.first);
+        temp = arc(0, temp);
+        ans += (ll)x.second * root[id][temp];
+      }
+      for (const auto &x : root[id]) {
+        temp = add(sum[v], x.first);
+        temp = arc(temp, sum[son[u]]);
+        root[id][temp] += x.second;
+      }
     }
-    for (auto x : t) {
-      (root[u])[x.first] += x.second;
-    }
+  }
+}
+void init(int _n) {
+  cout << "I'm here" << endl;
+  memset(sum, 0, sizeof(sum));
+  memset(son, -1, sizeof(son));
+  for (int i = 1; i <= _n; ++i) {
+    g[i].clear();
   }
 }
 int main() {
   while (scanf("%d", &n) != EOF) {
     init(n);
     scanf("%d", &k);
-    for (int i = 1; i <= k; ++i) {
+    for (int i = 0; i < k; ++i) {
       scanf("%lld", p + i);
     }
     for (int i = 1; i <= n; ++i) {
       ll x;
       scanf("%lld", &x);
-      getw(i, x);
+      get_w(i, x);
+      root[i].clear();
     }
     for (int i = 1; i < n; ++i) {
-      static int u, v;
+      int u, v;
       scanf("%d%d", &u, &v);
       add_edge(u, v);
     }
+    ans = 0;
+    tot = 0;
     dfs(1, 0);
     printf("%lld\n", ans);
   }
+  return 0;
 }
+/*
+3
+2
+2 3
+6 27 36
+1 3
+2 3
+*/
