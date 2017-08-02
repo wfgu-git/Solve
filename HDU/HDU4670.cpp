@@ -72,7 +72,7 @@ void dfs(int u, int p) {
     root[tid[u]][arc(dis[p], dis[u])] = 1;
   } else {
     if (w[u] == 0) ++ans;
-    
+
   }
 }
 void init(int _n) {
