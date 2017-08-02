@@ -1,22 +1,30 @@
 #include <cstdio>
 #include <cstring>
+#include <vector>
 #include <algorithm>
 using namespace std;
 const int maxn = 1000 + 20;
 int ans;
 int k, n;
-int g[maxn][maxn];
 int match[maxn];
 bool used[maxn];
-void init() {
-  ans = 0;
-  memset(g, 0, sizeof(g));
+vector<int> g[maxn];
+void add_edge(int u, int v) {
+  g[u].push_back(v);
+  g[v].push_back(u);
 }
-bool dfs(int v) {
-  for (int i = 1; i <= n; i++) if (g[v][i] && !used[i]) {
-    used[i] = 1;
-    if (match[i] < 0 || dfs(match[i])) {
-      match[i] = v;
+void init(int n) {
+  ans = 0;
+  for (int i = 1; i <= n; ++i) g[i].clear();
+}
+bool dfs(int u) {
+  used[u] = true;
+  for (int i = 0; i < g[u].size(); ++i) {
+    int v = g[u][i];
+    int w = match[v];
+    if (w < 0 || (!used[w] && dfs(w))) {
+      match[u] = v;
+      match[v] = u;
       return true;
     }
   }
@@ -26,18 +34,20 @@ void solve() {
   ans = 0;
   memset(match, -1, sizeof(match));
   for (int i = 1; i <= n; i++) {
-    memset(used, 0, sizeof(used));
-    if (dfs(i))
-      ++ans;
+    if (match[i] < 0) {
+      memset(used, 0, sizeof(used));
+      if (dfs(i))
+        ++ans;
+    }
   }
 }
 int main() {
   while (~scanf("%d%d", &n, &k)) {
-    init();
+    init(n);
     for (int i = 0; i < k; i++) {
       int u, v;
       scanf("%d%d", &u, &v);
-      g[u][v] = 1;
+      add_edge(u, v + n);
     }
     solve();
     printf("%d\n", ans);

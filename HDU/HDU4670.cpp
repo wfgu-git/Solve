@@ -68,7 +68,7 @@ void dfs(int u, int p) {
 
   if (sz[u] == 1) {
     tid[u] = ++tot;
-    root[tid[u]][w[u]] = 1;
+    root[tid[u]][0] = 1;
     sum[u] = w[u];
   } else {
     ll temp = w[u];
