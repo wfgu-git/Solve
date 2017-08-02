@@ -4,10 +4,11 @@ using ll = long long;
 const int maxn = 50000 + 20;
 const int maxp = 30 + 20;
 int n, k;
-ll p[maxp], w[maxn], dis[maxn];
+ll p[maxp], w[maxn];
+ll sum[maxn];
 ll ans;
 int tot;
-int tid[maxn], son[maxn], sz[maxn], fa[maxn];
+int tid[maxn], son[maxn], sz[maxn];
 vector<int> g[maxn];
 map<ll, int> root[maxn];
 void add_edge(int u, int v) {
@@ -55,29 +56,45 @@ ll arc(ll a, ll b) {
 }
 void dfs(int u, int p) {
   sz[u] = 1;
-  fa[u] = p;
-  for (int v : g[u]) {
+  for (const int &v : g[u]) {
     if (v == p) continue;
-    dis[v] = dis[u] + w[v];
     dfs(v, u);
     sz[u] += sz[v];
     if (son[u] == -1 || sz[son[u]] < sz[v]) {
       son[u] = v;
     }
   }
+  if (w[u] == 0) ++ans;
 
   if (sz[u] == 1) {
-    if (w[u] == 0) ++ans;
     tid[u] = ++tot;
-    root[tid[u]][arc(dis[p], dis[u])] = 1;
+    root[tid[u]][w[u]] = 1;
+    sum[u] = w[u];
   } else {
-    if (w[u] == 0) ++ans;
-
+    ll temp = w[u];
+    sum[u] = add(temp, sum[son[u]]);
+    int t = tid[u] = tid[son[u]];
+    ans += root[t][arc(0, sum[u])];
+    ++root[t][arc(0, sum[son[u]])];
+    for (const int &v : g[u]) {
+      if (v == p || v == son[u]) continue;
+      int tt = tid[v];
+      for (const auto &x : root[tt]) {
+        temp = add(sum[u], sum[v]);
+        temp = add(temp, x.first);
+        temp = arc(0, temp);
+        ans += (ll)x.second * root[t][temp];
+      }
+      for (const auto &x : root[tt]) {
+        temp = add(sum[v], x.first);
+        temp = arc(temp, sum[son[u]]);
+        root[t][temp] += x.second;
+      }
+    }
   }
 }
 void init(int _n) {
-  ans = tot = 0;
-  memset(dis, 0, sizeof(dis));
+  memset(sum, 0, sizeof(sum));
   memset(son, -1, sizeof(son));
   for (int i = 1; i <= _n; ++i) {
     g[i].clear();
@@ -88,11 +105,11 @@ int main() {
     init(n);
     scanf("%d", &k);
     for (int i = 0; i < k; ++i) {
-      scanf("%I64d", p + i);
+      scanf("%lld", p + i);
     }
     for (int i = 1; i <= n; ++i) {
       ll x;
-      scanf("%I64d", &x);
+      scanf("%lld", &x);
       get_w(i, x);
       root[i].clear();
     }
@@ -101,9 +118,10 @@ int main() {
       scanf("%d%d", &u, &v);
       add_edge(u, v);
     }
-    dis[1] = w[1];
+    ans = 0;
+    tot = 0;
     dfs(1, 0);
-    printf("%I64d\n", ans);
+    printf("%lld\n", ans);
   }
   return 0;
 }

@@ -127,10 +127,10 @@ int main(){
     while(scanf("%d",&n)!=EOF){
         scanf("%d",&k);
         for(i=1;i<=k;++i){
-            scanf("%I64d",&pp[i]);
+            scanf("%lld",&pp[i]);
         }
         for(i=1;i<=n;++i){
-            scanf("%I64d",&la);
+            scanf("%lld",&la);
             getpr(i,la);
             mp[i].clear();
         }
@@ -144,7 +144,7 @@ int main(){
         ans=0;
         tr=0;
         dfs(1,-1);
-        printf("%I64d\n",ans);
+        printf("%lld\n",ans);
     }
     return 0;
 }
