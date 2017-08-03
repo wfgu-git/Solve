@@ -1,4 +1,7 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
 using namespace std;
 const int maxn = 50 + 5;
 int grid[maxn][maxn];
