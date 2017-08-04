@@ -1,10 +1,11 @@
+#include <iostream>
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
 #include <vector>
 using namespace std;
 const int inf = 0x3f3f3f3f;
-const int maxn = 50 + 5;
+const int maxn = 100 + 20;
 int love[maxn][maxn];
 int ex_girl[maxn];
 int ex_boy[maxn];
@@ -12,7 +13,7 @@ bool vis_girl[maxn];
 bool vis_boy[maxn];
 int match[maxn];
 int slack[maxn];
-int n, m, T;
+int n;
 bool dfs(int girl) {
   vis_girl[girl] = true;
   for (int boy = 0; boy < n; ++boy) {
@@ -30,12 +31,12 @@ bool dfs(int girl) {
   }
   return false;
 }
-int KM() {
+void KM() {
   memset(match, -1, sizeof(match));
   memset(ex_boy, 0, sizeof(ex_boy));
   for (int i = 0; i < n; ++i) {
     ex_girl[i] = love[i][0];
-    for (int j = 1; i < m; ++j) {
+    for (int j = 1; j < n; ++j) {
       ex_girl[i] = max(ex_girl[i], love[i][j]);
     }
   }
@@ -56,24 +57,41 @@ int KM() {
       }
     }
   }
+  /*
   int ret = 0;
   for (int i = 0; i < n; ++i) {
     ret += love[match[i]][i];
   }
   return ret;
+  */
 }
-double ans;
+pair<int, int> px[maxn];
+pair<int, int> py[maxn];
+void read(pair<int, int> *p) {
+  for (int i = 0; i < n; ++i) {
+    static int x, y;
+    scanf("%d%d", &x, &y);
+    p[i] = {x, y};
+  }
+}
+int square(int a) {return a * a;}
+int calc_dis(pair<int, int> &a, pair<int, int> &b) {
+  return square(a.first - b.first) + square(a.second - b.second);
+}
 int main() {
-  scanf("%d", &T);
-  for (int cas = 1; cas <= T; ++cas) {
-    scanf("%d%d", &n, &m);
+  while (scanf("%d", &n) != EOF) {
+    read(px);
+    read(py);
     for (int i = 0; i < n; ++i) {
-      for (int j = 0; j < m; ++j) {
-        scanf("%d", &love[i][j]);
+      for (int j = 0; j < n; ++j) {
+        love[j][i] = -1 * calc_dis(px[i], py[j]);
       }
     }
-
-    printf("%.f\n", ans);
+    KM();
+    // cout << "!!!" << endl;
+    for (int i = 0; i < n; ++i) {
+      printf("%d\n", match[i] + 1);
+    }
   }
   return 0;
 }
