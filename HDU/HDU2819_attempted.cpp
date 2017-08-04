@@ -35,6 +35,11 @@ struct Max_Match
   }
 } MM;
 int main() {
+  int n;
+  while (scanf("%d", &n) != EOF) {
+    for (int i = 1; i <= n; ++i) {
 
+    }
+  }
   return 0;
 }
