@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 500;
+bool used[maxn];
+int match[maxn];
 vector<int> g[maxn];
 void add_edge(int u, int v) {
   g[u].push_back(v);
