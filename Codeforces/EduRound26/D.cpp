@@ -1,43 +1,43 @@
 #include <bits/stdc++.h>
 using namespace std;
-using ll = long long;
-const int inf = 0x3f3f3f3f;
-int dp[205][8080];
-int two[205], five[205];
+const int maxn = 200 + 20;
+const int maxf = 6080;
+int two[maxn], five[maxn];
+int dp[maxn][maxf];
 int main() {
   int N, K;
   while (scanf("%d%d", &N, &K) != EOF) {
-    for (int i = 0; i < N; ++i) {
-      ll x;
+    for (int i = 1; i <= N; ++i) {
+      long long x;
       scanf("%lld", &x);
-      int t = 0, f = 0;
-      while (x % 2 == 0) {
-        ++t; x /= 2;
+      static int cnt;
+      cnt = 0;
+      while (x % 2LL == 0LL) {
+        ++cnt; x /= 2;
       }
-      while (x % 5 == 0) {
-        ++f; x /= 5;
+      two[i] = cnt;
+      cnt = 0;
+      while (x % 5LL == 0LL) {
+        ++cnt; x /= 5;
       }
-      two[i] = t; five[i] = f;
+      five[i] = cnt;
     }
     memset(dp, -0x3f, sizeof(dp));
     dp[0][0] = 0;
-    for (int i = 0; i < N; ++i) {
-      for (int j = 0; j <= K; ++j) {
-        for (int k = 0; k <= 8000; ++k) {
-          tdp[j][k] = dp[j][k];
-        }
-      }
-      for (int j = 0; j < K; ++j) {
-        for (int k = 0; k <= 8000; ++k) {
-          int tmp = k + five[i];
-          if (temp <= 8000) {
-            tdp[j + 1][tmp] = max(tdp[j + 1][tmp], dp[j][k] + two[i]);
-          }
+    for (int i = 1; i <= N; ++i) {
+      for (int j = K; j >= 1; --j) {
+        for (int k = 6000; k >= five[i]; --k) {
+          dp[j][k] = max(dp[j][k], dp[j - 1][k - five[i]] + two[i]);
         }
       }
     }
     int ans = 0;
-    for (int i = 0; i < )
+    for (int j = 0; j <= K; ++j) {
+      for (int k = 0; k <= 6000; ++k) {
+        ans = max(ans, min(dp[K][k], k));
+      }
+    }
+    printf("%d\n", ans);
   }
   return 0;
 }
