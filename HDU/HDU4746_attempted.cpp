@@ -1,5 +1,6 @@
-#include <cstring>
-const int maxn = 50000;
+#include <bits/stdc++.h>
+using namespace std;
+const int maxn = 500000 + 20;
 int vis[maxn], mu[maxn], prime[maxn], tot;
 void Mobius () {
   memset(vis, 0, sizeof(vis));
@@ -20,4 +21,17 @@ void Mobius () {
       }
     }
   }
+}
+int n, m, P;
+void work() {
+  scanf("%d%d%d", &n, &m, &P);
+  if (n < m) swap(n, m);
+}
+int main() {
+  int T;
+  scanf("%d", &T);
+  for (int cas = 1; cas <= T; ++cas) {
+    work();
+  }
+  return 0;
 }

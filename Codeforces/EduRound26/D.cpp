@@ -32,11 +32,11 @@ int main() {
       }
     }
     int ans = 0;
-    for (int j = 0; j <= K; ++j) {
+    // for (int j = 0; j <= K; ++j) {
       for (int k = 0; k <= 6000; ++k) {
         ans = max(ans, min(dp[K][k], k));
       }
-    }
+    // }
     printf("%d\n", ans);
   }
   return 0;
