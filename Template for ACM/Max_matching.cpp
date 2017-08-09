@@ -1,6 +1,9 @@
 // looks better
-struct Max_Match
-{
+#include <iostream>
+#include <cstring>
+using namespace std;
+const int maxn = 500;
+struct Max_Match {
   int n;
   bool g[maxn][maxn];
   bool vis[maxn];
@@ -13,7 +16,7 @@ struct Max_Match
    }
 
   bool dfs(int u) {
-    for (int v = 1; v <= n; v++) if(g[u][v] && !vis[v]) {
+    for (int v = n + 1; v <= 2 * n; ++v) if(g[u][v] && !vis[v]) {
       vis[v] = true;
       if (left[v] == -1 || dfs(left[v])) {
         left[v] = u;
@@ -24,15 +27,14 @@ struct Max_Match
   }
 
   int solve() {
-    int ans=0;
-    for (int i = 1; i <= n; i++) {
+    int ans = 0;
+    for (int i = 1; i <= n; ++i) {
       memset(vis,0,sizeof(vis));
-      if(dfs(i)) ++ans;
+      if (dfs(i)) ++ans;
     }
     return ans;
   }
 } MM;
-
 
 // 挑战
 bool used[maxn];
