@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-// 加强版
+
 const int MAXBUF = 10000;
 char buf[MAXBUF], *ps = buf, *pe = buf + 1;
 inline void rnext() {
@@ -59,40 +59,40 @@ inline void out_int(T x) {
   for (int i = 0, j = len - 1; i < j; i++, j--) swap(outtmp[i], outtmp[j]);
   out_str(outtmp);
 }
-// how to use
+
+struct Point {
+	double x, y;
+} ;
+double get_dis(Point& a, Point& b) {
+	return hypot(a.x - b.x, a.y - b.y);
+}
+int R, px, py, qx, qy;
+void work() {
+	in(R); in(px); in(py); in(qx); in(qy);
+	Point P = {1.0 * px, 1.0 * py};
+	Point Q = {1.0 * qx, 1.0 * qy};
+	Point O = {0, 0};
+	Point M = {(P.x + Q.x) * 0.5, (P.y + Q.y) * 0.5};
+	double PQ = get_dis(P, Q);
+	double d = get_dis(O, M);
+	double c = get_dis(M, P);
+	double b = get_dis(O, P);
+
+	double ans;
+	if (R * d < b * b) {
+		ans = 2.0 * c *R / b;
+	} else {
+		ans = 2.0 * sqrt(c * c + (R - d) * (R - d));
+	}
+	out_str(to_string(ans).c_str());
+	out_str("\n");
+}
 int main() {
-  int t, ca = 1;
-  in(t);
-  while (t--) {
-    int n;
-    in(n);
-
-    out_str("Case #");
-    out_int(ca++);
-    out_str(": ");
-    out_int(n), out_char('\n');
-  }
-  write();  // 一定要记得 write()啊！！！！！
-  return 0;
-}
-
-
-
-// 普通版
-template<class T> inline bool read(T &n){
-    T x = 0, tmp = 1;
-    char c = getchar();
-    while((c < '0' || c > '9') && c != '-' && c != EOF) c = getchar();
-    if(c == EOF) return false;
-    if(c == '-') c = getchar(), tmp = -1;
-    while(c >= '0' && c <= '9') x *= 10, x += (c - '0'),c = getchar();
-    n = x*tmp;
-    return true;
-}
-template <class T> inline void write(T n){
-    if(n < 0){putchar('-');n = -n;}
-    int len = 0,data[20];
-    while(n){data[len++] = n%10;n /= 10;}
-    if(!len) data[len++] = 0;
-    while(len--) putchar(data[len]+48);
+	int T;
+	scanf("%d", &T);
+	for (int cas = 1; cas <= T; ++cas) {
+		work();
+	}
+	write();
+	return 0;
 }
