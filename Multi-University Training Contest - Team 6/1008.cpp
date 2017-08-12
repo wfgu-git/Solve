@@ -17,7 +17,7 @@ inline int two_pointer(int d) {
       ++pr; ++qr;
       ret = max(ret, pr - pl);
     }
-    if (qr >= n) break;
+    if (|| qr >= n) break;
     sum -= abs(a[pl] - b[ql]);
     ++pl; ++ql;
   }

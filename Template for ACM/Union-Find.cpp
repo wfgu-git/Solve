@@ -16,22 +16,27 @@ struct UFset {
     }
     return fa[x];
   }
-  inline int unite(int a, int b) {
-    if ((a = find(a)) == (b = find(b))) return 0;
 
-    if (rank[a] < rank[b]) {
-      fa[a] = b;
+  inline bool same(int x, int y) {
+    return find(x) == find(y);
+  }
+  
+  inline int unite(int x, int y) {
+    x = find(x);
+    y = find(y);
+
+    if (x == y) return 0;
+
+    if (rank[x] < rank[y]) {
+      fa[x] = y;
     } else {
-      fa[b] = a;
-      if (rank[a] == rank[b]) ++rank[a];
+      fa[y] = x;
+      if (rank[x] == rank[y]) ++rank[x];
     }
     /* 统计某个为祖先有几个元素
-    fa[b] = a;
-    rank[a] += rank[b];
+    fa[y] = x;
+    rank[x] += rank[y];
     */
     return 1;
-  }
-  inline bool same(int a, int b) {
-    return find(a) == find(b);
   }
 } ufst;
