@@ -1,43 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 5000 + 20;
-int n, m;
+int M;
+int n;
 char s[maxn];
+int a[maxn], b[maxn];
+inline int two_pointer(int d) {
+  int ret = 0;
+  int sum = 0;
+  int pl, pr, ql, qr;
+  pl = pr = 0;
+  ql = qr = pl + d;
+  while (true) {
+    while (qr < n / 2 && sum + abs(a[pr] - b[qr]) <= M) {
+      sum += abs(a[pr] - b[qr]);
+      ++pr; ++qr;
+      ret = max(ret, pr - pl);
+    }
+    if (qr >= n) break;
+    sum -= abs(a[pl] - b[ql]);
+    ++pl; ++ql;
+  }
+  return ret;
+}
 inline void work() {
-  scanf("%d", &m);
+  scanf("%d", &M);
   scanf("%s", s);
   n = strlen(s);
-  int mx;
-  for (int o = 1; o <= (n - 1) * 2 - 1; ++o) {
-    int l = 0, r = n - 1;
-    if (o & 1) {
-      if (o < n) r = o;
-      else l = o - n + 1;
-    } else {
-      int mid = o / 2;
-      if (mid <= (n - 1) / 2) r = mid * 2;
-      else l = mid * 2 - r;
+  int ans = 0;
+  for (int rev = 0; rev < 2; ++rev) {
+    if (rev) reverse(s, s + n);
+    for (int i = 0; i < n; ++i) {
+      a[i] = s[i] - 'a';
+      b[i] = s[n - i - 1] - 'a';
     }
-    mx = -1;
-    int len = 1;
-    int sum = abs(s[r] - s[l]);
-    int nowl = l, nowr = r;
-    while (true) {
-      if (len > m) {
-        sum -= abs(s[r] - s[l]);
-        --r; ++l;
-        --nowr; ++nowl;
-        sum += abs(s[nowr] - s[nowl]);
-      } else {
-        mx = max(mx, len);
-        --nowr; ++nowl;
-        if (nowr <= nowl) break;
-        sum += abs(s[nowr] - s[nowl]);
-        ++len;
-      }
+    for (int d = 0; d <= n; ++d) {
+      ans = max(ans, two_pointer(d));
     }
   }
-  printf("%d\n", mx);
+  printf("%d\n", ans);
 }
 int main() {
   int T;

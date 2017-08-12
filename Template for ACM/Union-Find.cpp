@@ -31,4 +31,7 @@ struct UFset {
     */
     return 1;
   }
+  inline bool same(int a, int b) {
+    return find(a) == find(b);
+  }
 } ufst;
