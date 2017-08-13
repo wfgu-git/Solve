@@ -62,7 +62,7 @@ inline void out_int(T x) {
 
 #define lson o << 1
 #define rson o << 1 | 1
-typedef pair<int, int> pii;
+typedef pair<int, long long> pii;
 const int maxn = 500000 + 20;
 const int mxlg = 30;
 vector<pii> G[maxn];
@@ -80,7 +80,7 @@ void dfs(int u, int p, int d) {
   depth[u] = d;
   for (const pii& x : G[u]) {
     int v = x.first;
-    int w = x.second;
+    long long w = x.second;
     if (v != p) {
       dist[v] = dist[u] + w;
       dfs(v, u, d + 1);
@@ -125,9 +125,9 @@ Path Merge(Path x, Path y) {
   tmp[2] = lca(x.v, y.u);
   tmp[3] = lca(x.v, y.v);
   sort(tmp, tmp + 4, comp);
-  int max_dep = max(depth[x.lca], depth[y.lca]);
-  int min_dep = min(depth[x.lca], depth[y.lca]);
-  if(depth[tmp[0]] < min_dep || depth[tmp[2]] < max_dep) return (Path){0, 0, 0};
+  int upper = max(depth[x.lca], depth[y.lca]);
+  int lower = min(depth[x.lca], depth[y.lca]);
+  if(depth[tmp[0]] < lower || depth[tmp[2]] < upper) return (Path){0, 0, 0};
   else return (Path){tmp[2], tmp[3], lca(tmp[2], tmp[3])};
 }
 int nn;
@@ -156,8 +156,15 @@ struct Segtree {
     }
     int m = (l + r) / 2;
     Path ret = {0, 0, 0};
-    if (l < m) ret = query(l, r, lson);
-    if (r > m) ret = Merge(ret, query(l, r, rson));
+    bool flag = false;
+    if (l < m) {
+      flag = true;
+      ret = query(l, r, lson);
+    }
+    if (r > m) {
+      if (flag) ret = Merge(ret, query(l, r, rson));
+      else ret = query(l, r, rson);
+    }
     return ret;
   }
 } st;
@@ -190,7 +197,7 @@ inline void work() {
   }
 }
 int main() {
-  // freopen("data.in", "r", stdin);
+  freopen("data.in", "r", stdin);
   while (in(N)) {
     work();
   }
