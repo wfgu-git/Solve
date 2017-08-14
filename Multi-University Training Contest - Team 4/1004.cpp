@@ -1,90 +1,166 @@
 #include <bits/stdc++.h>
 using namespace std;
+
+const int MAXBUF = 10000;
+char buf[MAXBUF], *ps = buf, *pe = buf + 1;
+inline void rnext() {
+  if (++ps == pe)
+    pe = (ps = buf) +
+         fread(buf, sizeof(char), sizeof(buf) / sizeof(char), stdin);
+}
+
+template <class T>
+inline bool in(T &ans) {
+  ans = 0;
+  T f = 1;
+  if (ps == pe) return false;  // EOF
+  do {
+    rnext();
+    if ('-' == *ps) f = -1;
+  } while (!isdigit(*ps) && ps != pe);
+  if (ps == pe) return false;  // EOF
+  do {
+    ans = (ans << 1) + (ans << 3) + *ps - 48;
+    rnext();
+  } while (isdigit(*ps) && ps != pe);
+  ans *= f;
+  return true;
+}
+
+const int MAXOUT = 10000;
+char bufout[MAXOUT], outtmp[50], *pout = bufout, *pend = bufout + MAXOUT;
+inline void write() {
+  fwrite(bufout, sizeof(char), pout - bufout, stdout);
+  pout = bufout;
+}
+inline void out_char(char c) {
+  *(pout++) = c;
+  if (pout == pend) write();
+}
+inline void out_str(const char *s) {
+  while (*s) {
+    *(pout++) = *(s++);
+    if (pout == pend) write();
+  }
+}
+template <class T>
+inline void out_int(T x) {
+  if (!x) {
+    out_char('0');
+    return;
+  }
+  if (x < 0) x = -x, out_char('-');
+  int len = 0;
+  while (x) {
+    outtmp[len++] = x % 10 + 48;
+    x /= 10;
+  }
+  outtmp[len] = 0;
+  for (int i = 0, j = len - 1; i < j; i++, j--) swap(outtmp[i], outtmp[j]);
+  out_str(outtmp);
+}
+
+
 #define lson o << 1
 #define rson o << 1 | 1
 const int maxn = 60000 + 20;
-// const int inf = 100000;
-int val[maxn];
-int nn;
+int N;
 struct Segtree {
   struct node {
-    int l, r, cnt;
-    int lv, rv;
-    double ret;
+    int l, r;
+    double v, lazy;
   } a[maxn << 2];
-  void push_up(int o) {
-    a[o].lv = a[lson].lv;
-    a[o].rv = a[rson].rv;
-    a[o].cnt = a[lson].cnt + a[rson].cnt - (a[lson].rv == a[rson].lv);
-    printf("%d == %d ==> %d\n", a[lson].rv, a[rson].lv, a[lson].rv == a[rson].lv);
-    a[o].ret = (double)a[o].cnt / (double)(a[o].r - a[o].l);
-    a[o].ret = min(a[o].ret, min(a[lson].ret, a[rson].ret));
-    printf("%d, (%d, %d)\n", a[o].cnt, a[o].l, a[o].r);
+
+  inline void push_down(int o) {
+    if (a[o].lazy) {
+      a[lson].lazy += a[o].lazy;
+      a[rson].lazy += a[o].lazy;
+      a[lson].v += a[o].lazy;
+      a[rson].v += a[o].lazy;
+      a[o].lazy = 0;
+    }
   }
-  void build(int *val, int l = 1, int r = nn + 1, int o = 1) {
-    a[o].l = l, a[o].r = r;
-    a[o].lv = a[o].rv = -1;
-    a[o].cnt = 0;
-    a[o].ret = 1;
-    if (r - l == 1) {
-      a[o].ret = 1;
-      a[o].cnt = 1;
-      a[o].lv = a[o].rv = val[l];
+
+  inline void push_up(int o) {
+    a[o].v = min(a[lson].v, a[rson].v);
+  }
+
+  void build(int l = 1, int r = N + 1, int o = 1) {
+    a[o].l = l; a[o].r = r; a[o].lazy = 0; a[o].v = 0;
+    if (l + 1 == r) {
       return;
     }
     int m = (l + r) / 2;
-    build(val, l, m, lson);
-    build(val, m, r, rson);
+    build(l, m, lson);
+    build(m, r, rson);
     push_up(o);
   }
-  void update(int p, int k, int o = 1) {
-    if (p == a[o].l && a[o].r - a[o].l == 1) {
-      a[o].ret = 1;
-      a[o].cnt = 1;
-      a[o].lv = a[o].rv = k;
+
+  void update(int l, int r, double k, int o = 1) {
+    if (l <= a[o].l && a[o].r <= r) {
+      a[o].lazy += k;
+      a[o].v += k;
       return;
     }
+    push_down(o);
     int m = (a[o].l + a[o].r) / 2;
-    if (p < m) update(p, k, lson);
-    else update(p, k, rson);
+    if (l < m) update(l, r, k, lson);
+    if (r > m) update(l, r, k, rson);
     push_up(o);
   }
+
   double query(int l, int r, int o = 1) {
     if (l <= a[o].l && a[o].r <= r) {
-      return a[o].ret;
+      return a[o].v;
     }
-    double ret = 1000;
+    push_down(o);
     int m = (a[o].l + a[o].r) / 2;
-    if (l < m) ret = min(ret, query(l, m, lson));
-    if (r > m) ret = min(ret, query(m, r, rson));
-    double temp = (double)(a[lson].cnt + a[rson].cnt - (a[lson].rv == a[rson].lv)) / (double)(a[o].r - a[o].l);
-    return min(ret, temp);
+    double ret = 0x3f3f3f3f;
+    if (l < m) ret = query(l, r, lson);
+    if (r > m) ret = min(ret, query(l, r, rson));
+    push_up(o);
+    return ret;
   }
 } st;
-int main() {
-
-/*
-沪上有个蔡盛梁,脸长腿长**长
-魔表爸爸sub4,空中飞人正面肛
-天天指点刘艾文,能把WK虐出翔
-十月北京亚锦赛,亚洲冠军不用讲
-麻将桥牌15p,多才多艺痴情郎
-最爱魔友孙啦啦,撸管射老师脸上
-全校第一无卵用,实事求是装逼强
-世界魔友齐膜拜,毕竟上海全能王
-*/
-
-  int T;
-  scanf("%d", &T);
-  for (int cas = 1; cas <= T; ++cas) {
-    int n;
-    scanf("%d", &n);
-    nn = n;
-    for (int i = 1; i <= n; ++i) {
-      scanf("%d", val + i);
-    }
-    st.build(val);
-    printf("%.10lf\n", st.query(1, n));
+int pre[maxn], last[maxn];
+bool check(double x) {
+  st.build(x);
+  for (int i = 1; i <= N; ++i) {
+    st.update(pre[i] + 1, i + 1, 1);
+    st.update(1, i + 1, -x);
+    if (st.query(1, i + 1) <= 0) return true;
   }
+  return false;
+}
+inline void work() {
+  in(N);
+  memset(pre, 0, sizeof(pre));
+  memset(last, 0, sizeof(last));
+  for (int i = 1; i <= N; ++i) {
+    int x;
+    in(x);
+    pre[i] = last[x];
+    last[x] = i;
+  }
+  double l = 0, r = 1;
+  for (int i = 0; i < 20; ++i) {
+    double mid = (l + r) / 2.0;
+    if (check(mid)) {
+      r = mid;
+    } else {
+      l = mid;
+    }
+  }
+  out_str(to_string(r).c_str());
+  out_char('\n');
+}
+int main() {
+  // freopen("data.in", "r", stdin);
+  int T;
+  in(T);
+  for (int cas = 1; cas <= T; ++cas) {
+    work();
+  }
+  write();
   return 0;
 }

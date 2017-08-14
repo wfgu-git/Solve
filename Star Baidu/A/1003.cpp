@@ -1,3 +1,4 @@
+#pragma comment(linker, "/STACK:102400000,102400000")
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -118,17 +119,13 @@ int lca(int u, int v) {
 struct Path {int u, v, lca;} path[maxn];
 bool comp(int x, int y) {return depth[x] < depth[y];}
 Path Merge(Path x, Path y) {
-  static int tmp[10];
-  if (x.lca == -1 || y.lca == -1) return (Path){0, 0, 0};
+  static int tmp[4];
   tmp[0] = lca(x.u, y.u);
   tmp[1] = lca(x.u, y.v);
   tmp[2] = lca(x.v, y.u);
   tmp[3] = lca(x.v, y.v);
   sort(tmp, tmp + 4, comp);
-  int upper = max(depth[x.lca], depth[y.lca]);
-  int lower = min(depth[x.lca], depth[y.lca]);
-  if(depth[tmp[0]] < lower || depth[tmp[2]] < upper) return (Path){0, 0, 0};
-  else return (Path){tmp[2], tmp[3], lca(tmp[2], tmp[3])};
+  return (Path){tmp[2], tmp[3], lca(tmp[2], tmp[3])};
 }
 int nn;
 struct Segtree {
@@ -143,6 +140,7 @@ struct Segtree {
     a[o].l = l; a[o].r = r;
     if (l + 1 == r) {
       a[o].p = path[l];
+      // cout << path[l].u << "  " << path[l].v << " " << path[l].lca << endl;
       return;
     }
     int m = (l + r) / 2;
@@ -154,7 +152,7 @@ struct Segtree {
     if (l <= a[o].l && a[o].r <= r) {
       return a[o].p;
     }
-    int m = (l + r) / 2;
+    int m = (a[o].l + a[o].r) / 2;
     Path ret = {0, 0, 0};
     bool flag = false;
     if (l < m) {
@@ -197,7 +195,7 @@ inline void work() {
   }
 }
 int main() {
-  freopen("data.in", "r", stdin);
+  // freopen("data.in", "r", stdin);
   while (in(N)) {
     work();
   }
