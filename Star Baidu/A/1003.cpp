@@ -195,7 +195,7 @@ inline void work() {
   }
 }
 int main() {
-  // freopen("data.in", "r", stdin);
+  freopen("data.in", "r", stdin);
   while (in(N)) {
     work();
   }
