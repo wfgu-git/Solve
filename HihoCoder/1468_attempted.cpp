@@ -12,7 +12,7 @@ struct Two_Sat {
   void init(int V) {
     flag = true;
     this->V = 2 * V;
-    for (int i = 1; i <= this->V; ++i) {
+    for (int i = 0; i < this->V; ++i) {
       G[i].clear();
       rG[i].clear();
     }
@@ -47,7 +47,7 @@ struct Two_Sat {
   int scc() {
     memset(used, 0, sizeof(used));
     vs.clear();
-    for (int v = 1; v <= V; ++v) {
+    for (int v = 0; v < V; ++v) {
       if (!used[v]) dfs(v);
     }
     memset(used, 0, sizeof(used));
@@ -60,7 +60,7 @@ struct Two_Sat {
   }
   void run() {
     scc();
-    for (int i = 1; i <= V; i += 2) {
+    for (int i = 0; i < V; i += 2) {
       if (comp[i] == comp[i + 1]) {
         flag = false;
         return;
@@ -73,10 +73,17 @@ void work() {
   sat.init(N);
   for (int u, v, i = 0; i < M; ++i) {
     scanf("%d%d", &u, &v);
-    sat.add_edge(u, v);
-    sat.add_edge(v, u);
+    --u; --v;
+    sat.add_edge(u ^ 1, v);
+    sat.add_edge(v ^ 1, u);
   }
   sat.run();
+  if (!sat.flag) {
+    printf("NIE\n");
+    return;
+  } else {
+
+  }
 }
 int main() {
   freopen("data.in", "r", stdin);

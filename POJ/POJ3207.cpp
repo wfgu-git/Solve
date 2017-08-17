@@ -1,4 +1,7 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
 using namespace std;
 const int maxn = 5000;
 struct Two_Sat {
@@ -65,9 +68,47 @@ struct Two_Sat {
     }
     return k;
   }
-
-
-  void run() {
+  bool run() {
     // ...
+    scc();
+    int n = V / 2;
+    // for (int i = 1; i <= n; ++i) {
+    //   printf("comp[%d] = %d  comp[%d] = %d\n", i, comp[i], i + n, comp[i + n]);
+    // }
+    for (int i = 1; i <= n; ++i) {
+      if (comp[i] == comp[i + n]) {
+        return false;
+      }
+    }
+    return true;
   }
 } tsat;
+int N, M;
+int x[maxn], y[maxn];
+void work() {
+  tsat.init(M);
+  for (int i = 1; i <= M; ++i) {
+    scanf("%d%d", &x[i], &y[i]);
+    ++x[i]; ++y[i];
+    if (x[i] > y[i]) swap(x[i], y[i]);
+  }
+  for (int i = 1; i <= M; ++i) {
+    for (int j = i + 1; j <= M; ++j) {
+      if ( (x[i] <= x[j] && y[i] <= y[j] && y[i] >= x[j])
+        || (x[i] >= x[j] && y[i] >= y[j] && x[i] <= y[j])) {
+        tsat.add_edge(i, j + M);
+        tsat.add_edge(j, i + M);
+        tsat.add_edge(i + M, j);
+        tsat.add_edge(j + M, i);
+      }
+    }
+  }
+  printf("%s\n", tsat.run() == true ? "panda is telling the truth..." : "the evil panda is lying again");
+}
+int main() {
+  // freopen("data.in", "r", stdin);
+  while (scanf("%d%d", &N, &M) != EOF) {
+    work();
+  }
+  return 0;
+}
