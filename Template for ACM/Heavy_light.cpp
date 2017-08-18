@@ -1,3 +1,4 @@
+// with Segtree or splay...
 void dfs(int u, int p, int d) {
   sz[u] = 1;
   fa[u] = p;

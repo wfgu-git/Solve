@@ -30,7 +30,7 @@ struct Dijkstra {
     for (int i = 0; i < n; i++) G[i].clear();
     edges.clear();
   }
-  void AddEdge(int from, int to, int dist) {
+  void add_edge(int from, int to, int dist) {
     edges.push_back(Edge{from, to, dist});
     m = edges.size();
     G[from].push_back(m-1);
