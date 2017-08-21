@@ -59,19 +59,20 @@ struct EdmondsKarp {
     return flow;
   }
 
-} EK;
+} max_flow;
 
 int N, M;
 void work() {
-  EK.init(N);
+  max_flow.init(N);
   for (int i = 0; i < M; ++i) {
     int u, v, c;
     scanf("%d%d%d", &u, &v, &c);
-    EK.add_edge(u, v, c);
+    max_flow.add_edge(u, v, c);
   }
-  printf("%d\n", EK.run(1, N));
+  printf("%d\n", max_flow.run(1, N));
 }
 int main() {
+  freopen("/home/wfgu/solve/data.in", "r", stdin);
   while (scanf("%d%d", &M, &N) != EOF) {
     work();
   }

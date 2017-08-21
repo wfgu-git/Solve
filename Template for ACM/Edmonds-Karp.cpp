@@ -18,11 +18,11 @@ struct EdmondsKarp {
   int p[maxn];  // 最短路树上p的入弧编号
 
   void init(int n) {
-    for (int i = 0; i < n; ++i)  G[i].clear();
+    for (int i = 0; i <= n; ++i)  G[i].clear();
     edges.clear();
   }
 
-  void AddEdge(int from, int to, int cap) {
+  void add_edge(int from, int to, int cap) {
     edges.push_back(Edge(from, to, cap, 0));
     edges.push_back(Edge(to, from, 0, 0));
     m = edges.size();
@@ -59,19 +59,18 @@ struct EdmondsKarp {
     return flow;
   }
 
-} ;
+} max_flow;
 
 int main() {
   int n, m;
   scanf("%d%d", &n, &m);
-  EdmondsKarp ac;
-  ac.init(n);
+  max_flow.init(n);
   for (int i = 0; i < m; ++i) {
     int u, v, c;
     scanf("%d%d%d", &u, &v, &c);
-    ac.AddEdge(u, v, c);
+    max_flow.add_edge(u, v, c);
   }
-  cout << ac.Maxflow(0, 5) << endl;
+  cout << max_flow.Maxflow(0, 5) << endl;
 }
 /*
 6 10
