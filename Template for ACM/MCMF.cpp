@@ -72,24 +72,3 @@ struct MCMF {
   }
 
 } mcmf;
-int N, M;
-void work() {
-  mcmf.init(2 * N + 5);
-  for (int i = 0; i < M; ++i) {
-    int u, v, c;
-    scanf("%d%d%d", &u, &v, &c);
-    mcmf.add_edge(u + N, v, 1, c);
-  }
-  for (int i = 2; i <= N; ++i) {
-    mcmf.add_edge(i, i + N, 1, 0);
-  }
-  mcmf.add_edge(1, 1 + N, 2, 0);
-  mcmf.add_edge(N, N + N, 2, 0);
-  printf("%d\n", mcmf.run(1, N + N));
-}
-int main() {
-  while (scanf("%d%d", &N, &M) != EOF) {
-    work();
-  }
-  return 0;
-}

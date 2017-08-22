@@ -72,7 +72,7 @@ struct ISAP {
     return a;
   }
   int run(int s, int t) {
-    this->s = s; this->t = t; 
+    this->s = s; this->t = t;
     int flow = 0;
     RevBFS();
     memset(num, 0, sizeof(num));
@@ -112,3 +112,49 @@ struct ISAP {
     return flow;
   }
 } max_flow;
+int N, F, D;
+void work() {
+  /*
+
+  s->food->cow->cow`->drink->t
+
+  cow 0 ~ N - 1
+  cow` N ~ 2 * N - 1
+  food 2 * N ~ 2 * N + F
+  drink 2 * N + F ~ 2 * N + F + D - 1
+  */
+  max_flow.init(N * 2 + F + D + 5);
+  int s = N * 2 + F + D + 1;
+  int t = s + 1;
+  for (int i = 0; i < F; ++i) {
+    max_flow.add_edge(s, 2 * N + i, 1);
+  }
+  for (int i = 0; i < D; ++i) {
+    max_flow.add_edge(2 * N + F + i, t, 1);
+  }
+  for (int i = 0; i < N; ++i) {
+    max_flow.add_edge(i, i + N, 1);
+    int fi, di;
+    scanf("%d%d", &fi, &di);
+    int tmp;
+    for (int j = 0; j < fi; ++j) {
+      scanf("%d", &tmp);
+      --tmp;
+      max_flow.add_edge(2 * N + tmp, i, 1);
+    }
+    for (int j = 0; j < di; ++j) {
+      scanf("%d", &tmp);
+      --tmp;
+      // max_flow.add_edge(2 * N + F + tmp, i, 1);
+      max_flow.add_edge(i + N, 2 * N + F + tmp, 1);
+    }
+  }
+  printf("%d\n", max_flow.run(s, t));
+}
+int main() {
+  // freopen("/home/wfgu/solve/data.in", "r", stdin);
+  while (scanf("%d%d%d", &N, &F, &D) != EOF) {
+    work();
+  }
+  return 0;
+}

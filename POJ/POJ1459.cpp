@@ -72,7 +72,7 @@ struct ISAP {
     return a;
   }
   int run(int s, int t) {
-    this->s = s; this->t = t; 
+    this->s = s; this->t = t;
     int flow = 0;
     RevBFS();
     memset(num, 0, sizeof(num));
@@ -112,3 +112,7 @@ struct ISAP {
     return flow;
   }
 } max_flow;
+
+int main() {
+  return 0;
+}
