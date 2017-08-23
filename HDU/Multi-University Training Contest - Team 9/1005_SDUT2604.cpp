@@ -38,7 +38,8 @@ void bfs(int x) {
 }
 
 int main() {
-  // freopen("/home/wfgu/solve/data.in", "r", stdin);
+  freopen("/home/wfgu/solve/data.in", "r", stdin);
+  // freopen("/home/wfgu/solve/true_data.out", "w", stdout);
   int n, m, i, j, k, cla, a, b;
   while (~scanf("%d", &cla)) {
     for (int zu = 1; zu <= cla; ++zu) {

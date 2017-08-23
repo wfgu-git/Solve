@@ -8,42 +8,36 @@ typedef long long ll;
 typedef long double ld;
 
 const int inf = 0x3f3f3f3f;
+const int maxn = 2500 + 20;
 
+char s[maxn];
+char t[maxn];
+int dp[maxn][maxn];
 void work() {
-  string s, t, tmp;
-  cin >> s >> t;
-  int tlen = t.size();
-  int cont = 0;
-  for (int i = 0; i < tlen; ++i) {
-    if (i + 1 < tlen && t[i] == '.' && t[i + 1] == '*') {
-      cont++;
-      tmp.push_back('(');
-      tmp.push_back(t[i]);
-      tmp.push_back(')');
-      tmp.push_back('\\');
-      tmp.push_back('0' + cont);
-      tmp.push_back('*');
-      ++i;
-    } else {
-      tmp.push_back(t[i]);
+  memset(dp, 0, sizeof(dp));
+  scanf("%s", s + 1); scanf("%s", t + 1);
+  int slen = strlen(s + 1);
+  int tlen = strlen(t + 1);
+  dp[0][0] = 1;
+  for (int i = 1; i <= tlen; ++i) {
+    if (i == 2 && t[i] == '*') dp[i][0] = 1;
+    for (int j = 1; j <= slen; ++j) {
+      if (t[i] == '.' || t[i] == s[j]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else if (t[i] == '*') {
+        dp[i][j] = dp[i - 1][j] | dp[i - 2][j];
+        if (s[j] == s[j - 1] && (dp[i - 1][j - 1] || dp[i][j - 1])) {
+          dp[i][j] = 1;
+        }
+      }
     }
   }
-  t = tmp;
-  regex expr(t);
-  bool ret = regex_match(s, expr);
-  if (ret) {
-    cout << "yes" << endl;
-  } else {
-    cout << "no" << endl;
-  }
-
+  puts(dp[tlen][slen] ? "yes" : "no");
 }
 int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(0);
-
+  // freopen("/home/wfgu/solve/data.in", "r", stdin);
   int T;
-  cin >> T;
+  scanf("%d", &T);
   for (int cas = 1; cas <= T; ++cas) {
     work();
   }

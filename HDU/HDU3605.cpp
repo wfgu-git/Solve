@@ -1,16 +1,14 @@
-#include <cstdio>
-#include <cstring>
-#include <iostream>
-#include <queue>
-#include <string>
-#include <vector>
+/*
+教练我要打ACM!
+*/
+#include <bits/stdc++.h>
 using namespace std;
 
 typedef long long ll;
 typedef long double ld;
 
-const int maxn = 5000;
 const int inf = 0x3f3f3f3f;
+const int maxn = 100000 + 20;
 
 struct Edge {
   int from, to, cap, flow;
@@ -26,7 +24,7 @@ struct ISAP {
   int num[maxn];
   void init(int n) {
     this->n = n;
-    for (int i = 0; i < n; ++i) G[i].clear();
+    for (int i = 0; i <= n; ++i) G[i].clear();
     edges.clear();
   }
   void add_edge(int from, int to, int cap) {
@@ -112,32 +110,41 @@ struct ISAP {
     return flow;
   }
 } max_flow;
-
-int n, np, nc, m;
+int choose[1025];
+int n, m;
 void work() {
-  max_flow.init(n + 2);
-  int s = n;
+  max_flow.init(n + m + 5);
+  int s = n + m + 1;
   int t = s + 1;
+  // for (int i = 0; i < n; ++i) {
+  //   max_flow.add_edge(s, i, 1);
+  //   for (int j = 0; j < m; ++j) {
+  //     int x;
+  //     scanf("%d", &x);
+  //     if (x) max_flow.add_edge(i, j + n, inf);
+  //   }
+  // }
+  memset(choose, 0, sizeof(choose));
+  for (int i = 0; i < n; ++i) {
+    int tmp = 0;
+    for (int j = 0; j < m; ++j) {
+      int x;
+      scanf("%d", &x);
+      if (x) tmp |= (1 << j);
+    }
+    ++choose[tmp];
+  }
   for (int i = 0; i < m; ++i) {
-    int u, v, c;
-    scanf(" (%d,%d)%d", &u, &v, &c);
-    max_flow.add_edge(u, v, c);
+    int x;
+    scanf("%d", &x);
+    max_flow.add_edge(i + n, t, x);
   }
-  for (int i = 0; i < np; ++i) {
-    int u, c;
-    scanf(" (%d)%d", &u, &c);
-    max_flow.add_edge(s, u, c);
-  }
-  for (int i = 0; i < nc; ++i) {
-    int u, c;
-    scanf(" (%d)%d", &u, &c);
-    max_flow.add_edge(u, t, c);
-  }
-  printf("%d\n", max_flow.run(s, t));
+  int ret = max_flow.run(s, t);
+  printf("%s\n", (ret == n ? "YES" : "NO"));
 }
 int main() {
   // freopen("/home/wfgu/solve/data.in", "r", stdin);
-  while (scanf("%d%d%d%d", &n, &np, &nc, &m) != EOF) {
+  while (scanf("%d%d", &n, &m) != EOF) {
     work();
   }
   return 0;

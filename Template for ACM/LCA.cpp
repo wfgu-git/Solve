@@ -21,7 +21,7 @@ void init(int V) {
   for (int k = 0; k + 1 < mxlg; ++k) {
     for (int v = 0; v < V; ++v) {
       if (fa[k][v] < 0) fa[v][k + 1] = -1;
-      else fa[k + 1][v] = fa[k][fa[v][k]];
+      else fa[k + 1][v] = fa[k][fa[k][v]];
     }
   }
 }
