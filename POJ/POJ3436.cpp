@@ -1,14 +1,17 @@
-/*
-教练我要打ACM!
-*/
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+#include <queue>
+#include <string>
+#include <vector>
 using namespace std;
 
 typedef long long ll;
 typedef long double ld;
 
+const int maxn = 200;
+const int maxp = 10 + 5;
 const int inf = 0x3f3f3f3f;
-const int maxn = 100000 + 20;
 
 struct Edge {
   int from, to, cap, flow;
@@ -110,44 +113,31 @@ struct ISAP {
     return flow;
   }
 } max_flow;
-int cont[1025];
-int n, m;
+
+struct INFO {
+  int a[maxp];
+} need[maxn], supply[maxn];
+int cap[maxn];
+int p, n;
 void work() {
-  max_flow.init(3000);
-  int s = 2 * 1024 + 10 + 2;
+  max_flow.init(n * 3);
+  int s = n;
   int t = s + 1;
-  memset(cont, 0, sizeof(cont));
   for (int i = 0; i < n; ++i) {
-    int t = 0;
-    for (int j = 0; j < m; ++j) {
-      int x;
-      scanf("%d", &x);
-      if (x) t |= (1 << j);
+    scanf("%d", &cap[i]);
+    for (int j = 0; j < p; ++j) {
+      scanf("%d", &(need[i]).a[i]);
     }
-    ++cont[t];
-  }
-  int mx = (1 << m);
-  for (int i = 0; i < mx; ++i) {
-    if (cont[i]) {
-      max_flow.add_edge(s, i, cont[i]);
-      for (int j = 0; j < m; ++j) {
-        if (i & (1 << j)) {
-          max_flow.add_edge(i, (1 << m) + j, cont[i]);
-        }
-      }
+    for (int j = 0; j < p; ++j) {
+      scanf("%d", &(supply[i]).a[i]);
     }
   }
-  for (int i = 0; i < m; ++i) {
-    int c;
-    scanf("%d", &c);
-    max_flow.add_edge((1 << m) + i , t, c);
-  }
-  int ret = max_flow.run(s, t);
-  printf("%s\n", (ret == n ? "YES" : "NO"));
+  // build
+
+  
 }
 int main() {
-  // freopen("/home/wfgu/solve/data.in", "r", stdin);
-  while (scanf("%d%d", &n, &m) != EOF) {
+  while (scanf("%d%d", &p, &n) != EOF) {
     work();
   }
   return 0;
