@@ -114,27 +114,27 @@ struct ISAP {
   }
 } max_flow;
 
-struct INFO {
-  int a[maxp];
-} need[maxn], supply[maxn];
+int in[maxn][maxn], out[maxn][maxn];
 int cap[maxn];
 int p, n;
 void work() {
   max_flow.init(n * 3);
-  int s = n;
-  int t = s + 1;
-  for (int i = 0; i < n; ++i) {
+  int s = 0;
+  int t = n * 2 + 1;
+  for (int i = 1; i <= n; ++i) {
     scanf("%d", &cap[i]);
     for (int j = 0; j < p; ++j) {
-      scanf("%d", &(need[i]).a[i]);
+      scanf("%d", &in[i][j]);
     }
     for (int j = 0; j < p; ++j) {
-      scanf("%d", &(supply[i]).a[i]);
+      scanf("%d", &out[i][j]);
     }
   }
   // build
+  for (int i = 1; i <= n; ++i) {
+    
+  }
 
-  
 }
 int main() {
   while (scanf("%d%d", &p, &n) != EOF) {

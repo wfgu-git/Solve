@@ -132,7 +132,7 @@ bool check(double x) {
   }
   return false;
 }
-inline void work() {
+void work() {
   in(N);
   memset(pre, 0, sizeof(pre));
   memset(last, 0, sizeof(last));

@@ -6,7 +6,9 @@ struct Matrix
 {
   int n;
   long long mat[maxn][maxn];
-  Matrix(int _n) : n(_n) {}
+  Matrix(int _n) : n(_n) {
+    clear();
+  }
   inline void clear() {memset(mat, 0, sizeof(mat));}
   inline void unit() {
     clear();
@@ -15,9 +17,27 @@ struct Matrix
     }
   }
 
+  Matrix operator + (const Matrix &rhs) {
+    Matrix ret(n);
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        ret.mat[i][j] = (mat[i][j] + rhs.mat[i][j]) % moder;
+      }
+    }
+    return ret;
+  }
+  Matrix operator - (const Matrix &rhs) {
+    Matrix ret(n);
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        ret.mat[i][j] = (mat[i][j] - rhs.mat[i][j]) % moder;
+      }
+    }
+    return ret;
+  }
+
   Matrix operator * (const Matrix &rhs) {
     Matrix ret(n);
-    ret.clear();
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) if (mat[i][j]) {
         for (int k = 0; k < n; k++) {

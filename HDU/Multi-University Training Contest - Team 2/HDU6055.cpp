@@ -43,16 +43,16 @@ int main() {
     sort(edge, edge + tot);
     ans = 0;
     int l = 0, r = 0;
-    int val, zhong;
-    val = edge[l].val, zhong = edge[l].mid.first * 1000 + edge[l].mid.second;
+    int val, mm;
+    val = edge[l].val, mm = edge[l].mid.first * 1000 + edge[l].mid.second;
     while (r < tot) {
       // cout << r << endl;
-      if(edge[r].val == val && edge[r].mid.first * 1000 + edge[r].mid.second == zhong){
+      if(edge[r].val == val && edge[r].mid.first * 1000 + edge[r].mid.second == mm){
         r++;
       }else{
         if(r - 1 > l) solve(l, r);
         l = r;
-        val = edge[l].val, zhong = edge[l].mid.first * 1000 + edge[l].mid.second;
+        val = edge[l].val, mm = edge[l].mid.first * 1000 + edge[l].mid.second;
       }
     }
     printf("%d\n", ans);
