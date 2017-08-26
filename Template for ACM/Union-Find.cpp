@@ -3,25 +3,25 @@ const int maxn = 100000 + 20;
 struct UFset {
   int n;
   int fa[maxn], rank[maxn];
-  inline void init(int n) {
+  void init(int n) {
     this->n = n;
     for (int i = 0; i < maxn; ++i) {
       rank[i] = 0;
       fa[i] = i;
     }
   }
-  inline int find(int x) {
+  int find(int x) {
     if (x != fa[x]) {
       fa[x] = find(fa[x]);
     }
     return fa[x];
   }
 
-  inline bool same(int x, int y) {
+  bool same(int x, int y) {
     return find(x) == find(y);
   }
-  
-  inline int unite(int x, int y) {
+
+  int unite(int x, int y) {
     x = find(x);
     y = find(y);
 

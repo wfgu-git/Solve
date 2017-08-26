@@ -45,7 +45,7 @@ void work() {
         if (Min[i][last[i]] > Min[i][j]) {
 
         } else {
-          Min[i][j] = 
+          Min[i][j] =
         }
       }
     }

@@ -1,6 +1,8 @@
 // looks better
-#include <iostream>
 #include <cstring>
+#include <cstdio>
+#include <iostream>
+#include <vector>
 using namespace std;
 const int maxn = 500;
 struct Max_Match {
@@ -14,9 +16,8 @@ struct Max_Match {
     memset(g, 0, sizeof(g));
     memset(left, -1, sizeof(left));
    }
-
   bool dfs(int u) {
-    for (int v = n + 1; v <= 2 * n; ++v) if(g[u][v] && !vis[v]) {
+    for (int v = n; v < 2 * n; ++v) if(g[u][v] && !vis[v]) {
       vis[v] = true;
       if (left[v] == -1 || dfs(left[v])) {
         left[v] = u;
@@ -25,10 +26,9 @@ struct Max_Match {
     }
     return false;
   }
-
   int solve() {
     int ans = 0;
-    for (int i = 1; i <= n; ++i) {
+    for (int i = 0; i < n; ++i) {
       memset(vis,0,sizeof(vis));
       if (dfs(i)) ++ans;
     }
