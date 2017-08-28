@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <cstring>
 using namespace std;
 // 加强版
 const int MAXBUF = 10000;
@@ -37,7 +38,7 @@ inline void out_char(char c) {
   *(pout++) = c;
   if (pout == pend) write();
 }
-inline void out_str(char *s) {
+inline void out_str(const char *s) {
   while (*s) {
     *(pout++) = *(s++);
     if (pout == pend) write();
