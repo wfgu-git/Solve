@@ -7,6 +7,11 @@ struct TwoSAT {
   bool mark[maxn * 2];
   int S[maxn * 2], c;
 
+  void init(int n) {
+    this->n = n;
+    for (int i = 0; i < n * 2; ++i) G[i].clear();
+    memset(mark, 0, sizeof(mark));
+  }
   bool dfs(int x) {
     if (mark[x ^ 1]) return false;
     if (mark[x]) return true;
@@ -17,21 +22,17 @@ struct TwoSAT {
     }
     return true;
   }
-
-  void init(int n) {
-    this->n = n;
-    for (int i = 0; i < n * 2; ++i) G[i].clear();
-    memset(mark, 0, sizeof(mark));
-  }
-
-  // x = xval or y = yval
+  /*
+  2i : false
+  2i + 1: true
+  xval/yval --> 0 / 1
+  */
   void add_clause(int x, int xval, int y, int yval) {
     x = x * 2 + xval;
     y = y * 2 + yval;
     G[x ^ 1].push_back(y);
     G[y ^ 1].push_back(x);
   }
-
   bool run() {
     for (int i = 0; i < n * 2; i += 2) {
       if (!mark[i] && !mark[i + 1]) {
