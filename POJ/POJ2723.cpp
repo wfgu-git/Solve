@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cmath>
+#include <map>
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -14,7 +15,7 @@ typedef long long ll;
 typedef long double ld;
 
 const int inf = 0x3f3f3f3f;
-const int maxn = 1000 + 20;
+const int maxn = 10000 + 20;
 
 struct TwoSAT {
   int n;
@@ -56,30 +57,35 @@ struct TwoSAT {
   }
 } tsat;
 int N, M;
-int x[maxn], y[maxn];
+int keys[maxn][2];
+int door[maxn][2];
 void work() {
-  /*
-  0 --> in circle
-  1 --> out circle
-  */
-  tsat.init(N);
-  for (int i = 0; i < M; ++i) {
-    scanf("%d%d", x + i, y + i);
-    if (x[i] > y[i]) swap(x[i], y[i]);
+  tsat.init(N * 2);
+  int x, y;
+  for (int i = 0; i < N; ++i) {
+    cin >> x >> y;
+    tsat.add_clause(x, 1 ^ 1, y, 1 ^ 1);
   }
   for (int i = 0; i < M; ++i) {
-    for (int j = i + 1; j < M; ++j) {
-      if ( (x[i] <= x[j] && y[i] <= y[j] && y[i] >= x[j])
-        || (x[i] >= x[j] && y[i] >= y[j] && x[i] <= y[j])) {
-        tsat.add_clause(i, 0 ^ 1, j, 0 ^ 1);
-        tsat.add_clause(i, 1 ^ 1, j, 1 ^ 1);
-      }
-    }
+    cin >> x >> y;
+    door[i][0] = x;
+    door[i][1] = y;
   }
-  printf("%s\n", tsat.run() == true ? "panda is telling the truth..." : "the evil panda is lying again");
+  int ans = 0;
+  for (ans = 0; ans < M; ++ans) {
+    memset(tsat.mark, 0, sizeof(tsat.mark));
+    tsat.add_clause(door[ans][0], 0 ^ 1, door[ans][1], 0 ^ 1);
+    if (!tsat.run()) break;
+  }
+  cout << ans << endl;
 }
 int main() {
-  while (scanf("%d%d", &N, &M) != EOF) {
+  // freopen("/home/wfgu/solve/data.in", "r", stdin);
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+
+  while (cin >> N >> M && N + M) {
     work();
   }
+  return 0;
 }

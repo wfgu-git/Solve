@@ -3,6 +3,7 @@
    Life has never been fucking so easy...
 */
 #include <iostream>
+#include <cstdio>
 #include <string>
 #include <cstring>
 #include <algorithm>
@@ -57,38 +58,44 @@ struct TwoSAT {
   }
 } tsat;
 void work() {
+  tsat.init(N);
   /*
-    2i --> wife
-    2i + 1 --> husband
-    0 -->
-    1 -->
+  xval = 0 --> x husband opposite 0 (x * 2)
+  xval = 1 --> x wife opposite 0 (x * 2 + 1)
   */
-
   int x, y;
-  char dx, dy;
-  tsat.init(N * 2);
+  char dx[2], dy[2];
+  tsat.add_clause(0, 1 ^ 1, 0, 1 ^ 1);
   for (int i = 0; i < M; ++i) {
-    scanf("%d%c %d%c", &x, &dx, &y, &dy);
-    x = 2 * x + hus(dx);
-    y = 2 * y + hus(dy);
-
-  }
-  for (int i = 1; i < N; ++i) {
+    scanf("%d%s %d%s", &x, dx, &y, dy);
+    if (dx[0] == 'h' && dy[0] == 'h') {
+      tsat.add_clause(x, 0 ^ 1, y, 0 ^ 1);
+    }
+    if (dx[0] == 'h' && dy[0] == 'w') {
+      tsat.add_clause(x, 0 ^ 1, y, 1 ^ 1);
+    }
+    if (dx[0] == 'w' && dy[0] == 'h') {
+      tsat.add_clause(x, 1 ^ 1, y, 0 ^ 1);
+    }
+    if (dx[0] == 'w' && dy[0] == 'w') {
+      tsat.add_clause(x, 1 ^ 1, y, 1 ^ 1);
+    }
   }
   if (tsat.run()) {
-    for (int i = 2; i < 2 * N; i += 2) {
-      if (tsat.mark[]) {
-        printf("%dw", i / 2);
+    for (int i = 1; i < N; ++i) {
+      if (tsat.mark[i * 2]) {
+        printf("%dw", i);
       } else {
-        printf("%dh", i / 2);
+        printf("%dh", i);
       }
-      printf("%s", i < 2 * N - 2 ? " " : "\n");
+      printf("%s", i <  N - 1 ? " " : "\n");
     }
   } else {
     puts("bad luck");
   }
 }
 int main() {
+  // freopen("/home/wfgu/solve/data.in", "r", stdin);
   while (scanf("%d%d", &N, &M) != EOF && N + M) {
     work();
   }
