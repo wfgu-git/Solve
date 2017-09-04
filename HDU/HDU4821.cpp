@@ -97,7 +97,7 @@ int main() {
       if (mep.size() == M) ++ans;
 
       unsigned long long tmp;
-      for (int j = i + M * L; j + L <= n; j += L) {
+      for (int j = i + M * L; j + L - 1 < n; j += L) {
         tmp = get(j - M * L + 1, j - (M - 1) * L);
         mep[tmp]--;
         if (mep[tmp] == 0) mep.erase(tmp);
