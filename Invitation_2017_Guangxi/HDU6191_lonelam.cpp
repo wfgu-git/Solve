@@ -118,6 +118,7 @@ int dfs(int u)
 }
 int main()
 {
+  freopen("/home/wfgu/solve/data.in", "r", stdin);
   int n, q;
   while(~scanf("%d%d", &n, &q))
   {
