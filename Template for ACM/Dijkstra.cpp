@@ -35,7 +35,7 @@ struct Dijkstra {
     m = edges.size();
     G[from].push_back(m-1);
   }
-  void dijkstra(int s) {
+  void run(int s) {
     priority_queue<HeapNode> Q;
     for (int i = 0; i < n; i++) d[i] = inf;
     d[s] = 0;

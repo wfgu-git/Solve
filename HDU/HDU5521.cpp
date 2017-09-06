@@ -10,7 +10,7 @@ using namespace std;
 // #define max(a,b)  ((a)>(b)?(a):(b))
 // #define min(a,b)  ((a)<(b)?(a):(b))
 typedef long long ll;
-const ll INF = INT_MAX;
+const ll INF = 0x3f3f3f3f;
 const int maxn = 2e5 + 50;
 typedef pair<ll, int> PII;
 struct Edge
@@ -65,8 +65,10 @@ struct Dijkstra
 	}
 };
 
-int main(int argc, char const * argv[])
+int main()
 {
+	freopen("/home/wfgu/solve/data.in", "r", stdin);
+	freopen("/home/wfgu/solve/data.out", "w", stdout);
 	// freopen("data.in", "r", stdin);
 	// freopen("data.out", "w", stdout);
 	int T, n, m, kase = 0;
@@ -77,7 +79,7 @@ int main(int argc, char const * argv[])
 		Bessie.init(n + m);
 		Elsie.init(n + m);
 		for (int i = 1; i <= m; i++) {
-			int k, d;
+			int k; ll d;
 			scanf("%lld%d", &d, &k);
 			for (int j = 0; j < k; j++) {
 				int v;
