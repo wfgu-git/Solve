@@ -1,85 +1,55 @@
-#include <cmath>
-#include <cstdio>
-#include <cstring>
-#include <iostream>
+#include<bits/stdc++.h>
+typedef long long ll;
 using namespace std;
-#define MAXN 3005
-
-int a[MAXN], res, n;
-int mi[MAXN][MAXN], mx[MAXN][MAXN];
-// mi[i][j]表示从i到j的最小值，mx[i][j]表示从i到j的最大值
-int f[MAXN][MAXN], r[MAXN];
-// f[i][j]表示从i到j可以分成的区间数，r[i]表示最近一次从i开始的区间的右端（方便更新）
-
-void init()  //第一步，分块
-{
-  memset(mi, 0, sizeof(mi));
-  memset(mx, 0, sizeof(mx));
-  memset(f, 0, sizeof(f));
-  memset(r, 0, sizeof(r));
-  for (int i = 1; i <= n; i++) {
-    mi[i][i] = a[i];
-    mx[i][i] = a[i];
-    f[i][i] = 1;
-    r[i] = i;
-  }
-  //为mi,mx赋值
-  for (int i = 1; i <= n; i++)
-    for (int j = i + 1; j <= n; j++) {
-      mx[i][j] = max(a[j], mx[i][j - 1]);
-      mi[i][j] = min(a[j], mi[i][j - 1]);
-    }
-  //为f数组赋值
-  for (int t = 2; t <= n; t++)  // t在枚举区间长度
-    for (int i = 1; i + t - 1 <= n; i++) {
-      int j = i + t - 1;
-      //不是连续的一段无法分区间
-      if (mx[i][j] - mi[i][j] != t - 1)
-        f[i][j] = 0;
-      else {
-        // j一定大于r[i]
-        if (mi[i][r[i]] > mi[i][j])
-          f[i][j] = 1;
-        else
-          f[i][j] = f[i][r[i]] + f[r[i] + 1][j];
-        r[i] = j;  //这个r数组很精华
-      }
-    }
-}
-
-void solve()  //第二步，枚举找交换区间
-{
-  int k;
-  res = max(1, f[1][n]);  // WA点，一开始写成res=1就WA了
-  //先枚举seg_a
-  for (int i = 1; i <= n; i++)
-    for (int j = i; j <= n; j++) {
-      //满足条件才能继续枚举seg_b
-      if (i == 1 || (f[1][i - 1] != 0 && mi[1][i - 1] == 1)) {
-        k = mx[i][j];
-        if (f[i][j] && (k == n || (f[k + 1][n] != 0 && mx[k + 1][n] == n))) {
-          for (int t = j + 1; t <= k; t++) {
-            if (f[t][k] && mi[t][k] == i) {
-              // printf("%d %d %d %d
-              // %d\n",i,j,t,k,f[1][i-1]+1+f[j+1][t-1]+1+f[k+1][n]);
-              res =
-                  max(res, f[1][i - 1] + 1 + f[j + 1][t - 1] + 1 + f[k + 1][n]);
-            }
-          }
+const int MAXN = 3e3 + 10;
+int n;
+int mx[MAXN][MAXN], mn[MAXN][MAXN];
+int a[MAXN], f[MAXN][MAXN]; // f[i][j] : [i, j] 最多能分成多少块
+void init() {
+    for(int i = 1; i <= n; i++) {
+        mx[i][i] = mn[i][i] = a[i];
+        for(int j = i + 1; j <= n; j++) {
+            mx[i][j] = max(mx[i][j - 1], a[j]);
+            mn[i][j] = min(mn[i][j - 1], a[j]);
         }
-      }
+    }
+    for(int i = 1; i <= n; i++) {
+        int cnt = 1;
+        f[i][i] = 1;
+        for(int j = i + 1; j <= n; j++) {
+            if(mn[i][j - 1] != mn[i][j]) cnt = 0;
+            if(j - i == mx[i][j] - mn[i][j]) f[i][j] = ++cnt;
+        }
     }
 }
-
 int main() {
-  int T;
-  scanf("%d", &T);
-  while (T--) {
-    scanf("%d", &n);
-    for (int i = 1; i <= n; i++) scanf("%d", &a[i]);
-    init();
-    solve();
-    printf("%d\n", res);
-  }
-  return 0;
+    int T;
+    scanf("%d", &T);
+    while(T--) {
+        memset(f, 0, sizeof f);
+        scanf("%d", &n);
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &a[i]);
+        }
+        init();
+        int ans = f[1][n];
+        for(int i = 1; i <= n; i++) { // 枚举要交换的左端 [i, j]，判断合法并寻找交换的右端
+            for(int j = i; j <= n; j++) {
+                if(f[i][j]) {
+                    if(i == 1 || (mn[1][i - 1] == 1 && mx[1][i - 1] - mn[1][i - 1] == i - 2)) {
+                        int x = mx[i][j];
+                        if(x == n || (mx[x + 1][n] == n && mx[x + 1][n] - mn[x + 1][n] == n - x - 1)) {
+                            for(int k = x; k > j; k--) {
+                                if(f[k][x] && mn[k][x] == i) {
+                                    ans = max(ans, f[1][i - 1] + 1 + f[j + 1][k - 1] + 1 + f[x + 1][n]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
 }

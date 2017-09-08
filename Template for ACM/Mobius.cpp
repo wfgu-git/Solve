@@ -21,3 +21,14 @@ void Mobius () {
     }
   }
 }
+
+// easy
+void mobius(ll mn)
+{
+    mu[1]=1;
+    for(ll i=1;i<=mn;i++){
+        for(ll j=i+i;j<=mn;j+=i){
+            mu[j]-=mu[i];
+        }
+    }
+}
