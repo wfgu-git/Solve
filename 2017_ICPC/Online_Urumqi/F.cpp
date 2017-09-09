@@ -1,14 +1,7 @@
 /*
 教练我要打ACM!
 */
-#include <cstdio>
-#include <cstring>
-#include <cmath>
-#include <iostream>
-#include <map>
-#include <algorithm>
-#include <vector>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
 
 typedef long long ll;
@@ -26,14 +19,15 @@ struct DAG {
   vector<pair<int, int> > edges;
   bool used[maxn];
   int sccno[maxn], scc_tot;
-  vector<int> ideg, odeg;
+  int ideg[maxn];
+  int odeg[maxn];
   void init(int n) {
     this->n = n;
     edges.clear();
     for (int i = 0; i < n; ++i) {
       G[i].clear();
       rG[i].clear();
-      nG[i].clear();
+      // nG[i].clear();
     }
   }
   void add_edge(int from, int to) {
@@ -70,49 +64,52 @@ struct DAG {
   }
   void run() {
     scc();
-    ideg.resize(scc_tot);
-    ideg.clear();
-    odeg.resize(scc_tot);
-    odeg.clear();
+    memset(ideg, 0, sizeof(ideg));
+    memset(odeg, 0, sizeof(odeg));
     map<pair<int, int>, bool> S;
     for (int i = 0; i < edges.size(); ++i) {
       int u = sccno[edges[i].first];
       int v = sccno[edges[i].second];
       if (u != v) {
-        if (S.count(make_pair(u, v))) continue;
-        S[make_pair(u, v)] = 1; // 无向图双边
+        // if (S.count(make_pair(u, v))) continue;
+        // S[make_pair(u, v)] = 1; // 无向图双边
         ++odeg[u]; ++ideg[v];
-        nG[u].push_back(v);
+        // nG[u].push_back(v);
       }
     }
   }
 } scc;
 
-int N;
 void work() {
+  int N, M;
+  cin >> N >> M;
   scc.init(N);
-  for (int i = 0; i < N; ++i) {
-    int x;
-    while (cin >> x && x) {
-      --x; scc.add_edge(i, x);
-    }
+  int u, v;
+  for (int i = 0; i < M; ++i) {
+    cin >> u >> v;
+    scc.add_edge(u - 1, v - 1);
   }
   scc.run();
   if (scc.scc_tot == 1) {
-    cout << "1\n0" << endl;
+    cout << "0" << endl;
     return;
   }
-  int tot = 0;
-  int tmp = 0;
+  int ans1 = 0;
+  int ans2 = 0;
   for (int i = 0; i < scc.scc_tot; ++i) {
-    if (!scc.ideg[i]) ++tot;
-    if (!scc.odeg[i]) ++tmp;
+    if (!scc.ideg[i]) ++ans1;
+    if (!scc.odeg[i]) ++ans2;
   }
-  cout << tot << "\n" << max(tot, tmp) << endl;
+  cout << max(ans1, ans2) << endl;
 }
 int main() {
   // freopen("/home/wfgu/solve/data.in", "r", stdin);
-  while (cin >> N) {
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+
+  int T;
+  cin >> T;
+  while (T--) {
     work();
   }
 }
