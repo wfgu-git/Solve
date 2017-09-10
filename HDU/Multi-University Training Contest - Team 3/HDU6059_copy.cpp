@@ -46,7 +46,7 @@ ll query(int x){
 }
 int main()
 {
-  freopen("/home/wfgu/Documents/solve/data.in", "r", stdin);
+  // freopen("/home/wfgu/solve/data.in", "r", stdin);
     int T;scanf("%d",&T);
     while(T--){
         memset(ans0,0,sizeof(ans0));
