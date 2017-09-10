@@ -1,5 +1,5 @@
 /*
-教练我要打ACM!
+教练我想打ACM！
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -14,9 +14,8 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
 
-  int k;
-  while (cin >> k) {
-
+  ll m, k;
+  while (cin >> m >> k) {
+    cout << (m - k + 1) * k << endl;
   }
-  return 0;
 }
