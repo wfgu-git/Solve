@@ -20,7 +20,7 @@ void init(int V) {
   dfs(root, -1, 0);
   for (int k = 0; k + 1 < mxlg; ++k) {
     for (int v = 0; v < V; ++v) {
-      if (fa[k][v] < 0) fa[v][k + 1] = -1;
+      if (fa[k][v] < 0) fa[k + 1][v] = -1;
       else fa[k + 1][v] = fa[k][fa[k][v]];
     }
   }
