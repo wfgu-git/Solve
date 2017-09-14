@@ -23,10 +23,10 @@ int newnode() {
   return tot++;
 }
 void init() {
+  tot = 0;
   root = newnode();
   ch[0][0] = ch[0][1]= -1;
   cntr[0] = cntl[0] = 0;
-  tot = 1;
 }
 void insert(int x) {
   int now = root;
