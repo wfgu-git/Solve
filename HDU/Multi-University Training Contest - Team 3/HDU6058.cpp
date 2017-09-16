@@ -13,58 +13,44 @@ const int maxn = 500000 + 20;
 int T;
 int n, k;
 int a[maxn];
-int lef[maxn], rig[maxn];
-list<int>::iterator iter[maxn], p;
-list<int> L;
+int pre[maxn], nxt[maxn], pos[maxn];
+int rig[maxn];
 int main() {
-  freopen("/home/wfgu/solve/data.in", "r", stdin);
+  // freopen("/home/wfgu/solve/data.in", "r", stdin);
   ios::sync_with_stdio(false);
   cin.tie(0);
 
   cin >> T;
   for (int cas = 1; cas <= T; ++cas) {
     cin >> n >> k;
-    L.clear();
-    p = L.begin();
     for (int i = 1; i <= n; ++i) {
       cin >> a[i];
-      L.push_back(a[i]);
-      iter[a[i]] = ++p;
+      pos[a[i]] = i;
+      pre[i] = i - 1;
+      nxt[i] = i + 1;
     }
+    pre[0] = 0;
+    nxt[n + 1] = n + 1;
 
     ll ans = 0;
-    int lcont, rcont;
-    for (int i = 1; i <= n; ++i) {
-      lcont = rcont = 1;
-      int j;
-      for (j = i + 1; j <= n; ++j) {
-        if (rcont > k) {
-          break;
-        }
-        if (a[j] > a[i]) {
-          rig[rcont++] = j - i;
-        }
+    for (int v = 1; v <= n; ++v) {
+      int x = pos[v];
+      int lcont = 0, rcont = 0;
+      for (int i = x; i <= n && rcont < k; i = nxt[i]) {
+        rig[++rcont] = nxt[i] - i;
       }
-      if (j > n) {
-        rig[rcont] = n - i;
-      }
-      for (j = i - 1; j >= 0; --j) {
-        if (lcont > k) {
-          break;
-        }
-        if (a[j] > a[i]) {
-          lef[lcont++] = i - j;
-        }
-      }
-      if (j <= 1) {
-        lef[lcont] = i + 1;
-      }
-      for (j = 0; j < lcont; ++j) {
-        if (k - j - 1 >= rcont) {
+      ll tmp = 0;
+      for (int i = x; i > 0 && lcont < k; i = pre[i]) {
+        lcont++;
+        int r = k - lcont + 1;
+        if (r > rcont) {
           continue;
         }
-        ans += 1L * a[i] * (ll)(lef[j + 1] - lef[j]) * (ll)(rig[k - j] * rig[k - j - 1]);
+        tmp += (i - pre[i]) * rig[r];
       }
+      ans += tmp * v;
+      pre[nxt[x]] = pre[x];
+      nxt[pre[x]] = nxt[x];
     }
     cout << ans << endl;
   }
