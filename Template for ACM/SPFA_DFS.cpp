@@ -5,51 +5,31 @@
 using namespace std;
 const int maxn = 1010;
 struct Edge {
-  int from, to, cost;
-  Edge() {}
-  Edge(int u, int v, int d) : from(u), to(v), cost(d) {}
-} ;
-struct DFS_SPFA {
-  int m;
-  vector<Edge> edges;
-  vector<int> g[maxn];
-  bool flag;
-  bool used[maxn];
-  int dist[maxn];
-  void init(int n) {
-    for (int i = 0; i <= n; ++i) {
-      g[i].clear();
-    }
-    edges.clear();
-  }
-  void add_edge(int u, int v, int d) {
-    edges.push_back(Edge(u, v, d));
-    m = edges.size();
-    g[u].push_back(m - 1);
-  }
-  void spfa(int u) {
-    used[u] = true;
-    for (int i = 0; i < g[u].size(); ++i) {
-      Edge& e = edges[g[u][i]];
-      int v = e.to;
-      int d = e.cost;
-      if (dist[u] + d < dist[v]) {
-        if (used[v]) {
-          flag = true;
-          return;
-        } else {
-          dist[v] = dist[u] + d;
-          spfa(v);
-        }
+  int u, v, c, next;
+} edge[2010];
+int head[maxn], p[maxn], d[maxn];
+bool vis[maxn], flag;
+int tot;
+void add_edge(int u, int v, int c) {
+  edge[tot] = {u, v, c, head[u]};
+  head[u] = tot++;
+}
+
+void spfa(int u) {
+  int v;
+
+  for (int i = head[u]; i != -1; i = edge[i].next) {
+    v = edge[i].v;
+
+    if (d[u] + edge[i].c < d[v]) {
+      if (vis[v]) {  //存在一点在一条路径上出现多次
+        flag = true;
+        return;
+      } else {
+        d[v] = d[u] + edge[i].c;
+        vis[v] = true;
+        spfa(v);
       }
     }
-    used[u] = false;
   }
-  void run(int start) {
-    memset(used, 0, sizeof(used));
-    memset(dist, 0x3f, sizeof(dist));
-    flag = false;
-    dist[1] = 0;
-    spfa(1);
-  }
-} spfa;
+}
