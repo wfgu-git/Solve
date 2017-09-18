@@ -10,7 +10,7 @@ typedef long double ld;
 const int inf = 0x3f3f3f3f;
 const int maxn = 100000 + 20;
 struct SuffixArray {
-  int s[maxn];
+  char s[maxn];
   int sa[maxn];
   int rank[maxn];
   int height[maxn];
@@ -59,62 +59,40 @@ struct SuffixArray {
       height[rank[i]] = k;
     }
   }
-  // int cmp_suffix(char* P, int p, int m) {
-  //   return strncmp(P, s+sa[p], m);
-  // }
-  // int find(char* P) {
-  //   int m = strlen(P);
-  //   if(cmp_suffix(P, 0, m) < 0) return -1;
-  //   if(cmp_suffix(P, n-1, m) > 0) return -1;
-  //   int L = 0, R = n-1;
-  //   while(R >= L) {
-  //     int M = L + (R-L)/2;
-  //     int res = cmp_suffix(P, M, m);
-  //     if(!res) return M;
-  //     if(res < 0) R = M-1; else L = M+1;
-  //   }
-  //   return -1;
-  // }
-} SA;
-int n, k;
-int raw[maxn];
-bool check(int up) {
-  int tmp = 1;
-  int i = 1;
-  int j;
-  while (i < n) {
-    j = i + 1;
-    int cont = 1;
-    while (SA.height[j] >= up && j <= n) {
-      j++;
-      cont++;
-    }
-    tmp = max(tmp, cont);
-    i = j;
+  int cmp_suffix(char* P, int p, int m) {
+    return strncmp(P, s+sa[p], m);
   }
-  return tmp >= k;
-}
-int main() {
-  while (scanf("%d%d", &n, &k) != EOF) {
-    SA.clear();
-    for (int i = 0; i < n; ++i) {
-      scanf("%d", &SA.s[i]);
+  int find(char* P) {
+    int m = strlen(P);
+    if(cmp_suffix(P, 0, m) < 0) return -1;
+    if(cmp_suffix(P, n-1, m) > 0) return -1;
+    int L = 0, R = n-1;
+    while(R >= L) {
+      int M = L + (R-L)/2;
+      int res = cmp_suffix(P, M, m);
+      if(!res) return M;
+      if(res < 0) R = M-1; else L = M+1;
     }
-    SA.n = n + 1;
-    SA.build_sa(256);
-    SA.build_height();
-    int lb = 0, ub = n;
-    int ans = 0;
-    while (lb <= ub) {
-      int mid = (lb + ub) / 2;
-      if (check(mid)) {
-        ans = mid;
-        lb = mid + 1;
+    return -1;
+  }
+} SA;
+char buf[maxn];
+int main() {
+  int T, Q;
+  scanf("%d", &T);
+  while (T--) {
+    scanf("%s", SA.s);
+    SA.n = strlen(SA.s) + 1;
+    SA.build_sa('z' + 1);
+    scanf("%d", &Q);
+    while (Q--) {
+      scanf("%s", buf);
+      if (SA.find(buf) >= 0) {
+        puts("y");
       } else {
-        ub = mid - 1;
+        puts("n");
       }
     }
-    printf("%d\n", ans);
   }
   return 0;
 }

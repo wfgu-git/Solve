@@ -10,7 +10,7 @@ struct Node { // you need to modify a lot ... before using it
   int end[maxn]; // the cont of the word
 
   inline int getid(const char& c) {}
-  inline int newnode() {
+  int newnode() {
     for (int i = 0; i < charsize; ++i) {
       next[tot][i] = -1;
     }
@@ -18,12 +18,12 @@ struct Node { // you need to modify a lot ... before using it
     return tot - 1;
   }
 
-  inline void init() {
+  void init() {
     tot = 0;
     root = newnode();
   }
 
-  inline void insert(const char* str) {
+  void insert(const char* str) {
     int now = root;
     while(*str) {
       int charid = getid(*str);
@@ -34,7 +34,7 @@ struct Node { // you need to modify a lot ... before using it
     ++end[now];
   }
 
-  inline void build() {
+  void build() {
     queue<int> q;
     fail[root] = root;
     for (int i = 0; i < charsize; ++i) {

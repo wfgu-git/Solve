@@ -67,12 +67,13 @@ struct DAG {
     memset(ideg, 0, sizeof(ideg));
     memset(odeg, 0, sizeof(odeg));
     map<pair<int, int>, bool> S;
+    S.clear();
     for (int i = 0; i < edges.size(); ++i) {
       int u = sccno[edges[i].first];
       int v = sccno[edges[i].second];
       if (u != v) {
-        // if (S.count(make_pair(u, v))) continue;
-        // S[make_pair(u, v)] = 1; // 无向图双边
+        if (S.count(make_pair(u, v))) continue;
+        S[make_pair(u, v)] = 1; // 无向图双边
         ++odeg[u]; ++ideg[v];
         // nG[u].push_back(v);
       }
