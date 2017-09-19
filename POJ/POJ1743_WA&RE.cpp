@@ -22,12 +22,12 @@ struct SuffixArray {
   int rank[maxn];
   int height[maxn];
   int t[maxn], t2[maxn], c[maxn];
-  int n;
+  // int n;
   void clear() {
-    n = 0;
+    // n = 0;
     memset(sa, 0, sizeof(sa));
   }
-  void build_sa(int m) {
+  void build_sa(int n, int m) {
     int i, *x = t, *y = t2;
     for (i = 0; i < m; ++i) c[i] = 0;
     for (i = 0; i < n; ++i) c[x[i] = s[i]]++;
@@ -50,7 +50,7 @@ struct SuffixArray {
       m = p;
     }
   }
-  void build_height() {
+  void build_height(int n) {
     int i, j, k = 0;
     for (i = 0; i < n; ++i) rank[sa[i]] = i;
     for (i = 0; i < n; ++i) {
@@ -66,7 +66,7 @@ int n;
 bool check(int x) {
   int l = 0;
   int r = 0;
-  for (int i = 1; i <= n - 1; ++i) {
+  for (int i = 1; i <= n; ++i) {
     if (sa.height[i] < x) {
       l = sa.sa[i];
       r = sa.sa[i];
@@ -81,7 +81,7 @@ bool check(int x) {
   return 0;
 }
 int main() {
-  // freopen("/home/wfgu/solve/data.in", "r", stdin);
+  // freopen("/home/wfgu/Documents/solve/data.in", "r", stdin);
   while (scanf("%d", &n) != EOF && n) {
     if (n == 1) {
       puts(0); continue;
@@ -95,9 +95,8 @@ int main() {
       p = q;
     }
     sa.s[--n] = 0;
-    sa.n = n + 1;
-    sa.build_sa(200);
-    sa.build_height();
+    sa.build_sa(n + 1, 200);
+    sa.build_height(n);
     int ans = 0;
     int lb = 0, ub = n;
     while (lb <= ub) {

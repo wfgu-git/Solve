@@ -1,14 +1,16 @@
-// 输入文本串T，预处理后接受子串查询
-// 预处理时计算T的后缀数组
-// 查询时进行二分查找+字符串比较，时间复杂度为O(|P|*log|T|)
-// 利用height数组，可以把单组查询的时间复杂度降为O(|P|+log|T|)
-// 可提交到UVa10679 "I love Strings!!!"
-#include<cstdio>
-#include<cstring>
-#include<algorithm>
+/*
+教练我想打ACM！
+*/
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
 using namespace std;
 
-const int maxn = 100000 + 10;
+typedef long long ll;
+typedef long double ld;
+
+const int inf = 0x3f3f3f3f;
+const int maxn = 200000 + 20;
 
 struct SuffixArray {
   char s[maxn];     // 原始字符数组（最后一个字符应必须是0，而前面的字符必须非0）
@@ -69,23 +71,24 @@ struct SuffixArray {
     }
     return -1;
   }
-};
+} ;
 
-SuffixArray sa;
-char P[maxn];
-
+char s1[maxn], s2[maxn], str[maxn];
 int main() {
-  int T, q;
-  scanf("%d", &T);
-  while(T--) {
-    scanf("%s", sa.s);
-    sa.n = strlen(sa.s) + 1;
-    sa.build_sa('z' + 1);
-    scanf("%d", &q);
-    while(q--) {
-      scanf("%s", P);
-      if(sa.find(P) >= 0) printf("y\n"); else printf("n\n");
+  SuffixArray S;
+  scanf("%s%s", s1, s2);
+  int n = snprintf(S.s, sizeof(S.s), "%s%s", s1, s2);
+  // assert(n >= 0);
+  S.n = n + 1;
+  S.build_sa(128);
+  S.build_height();
+  int ans = 0;
+  int p = strlen(s1);
+  // int q = strlen(s2);
+  for (int i = 2; i <= n; ++i) {
+    if ((S.sa[i - 1] < p && S.sa[i] >= p) || (S.sa[i - 1] >= p && S.sa[i] < p)) {
+      ans = max(ans, S.height[i]);
     }
   }
-  return 0;
+  printf("%d\n", ans);
 }
