@@ -43,11 +43,19 @@ struct SuffixArray {
       m = p;
     }
   }
-
+  void build_height() {
+    int i, j, k = 0;
+    for (i = 0; i < n; ++i) rank[sa[i]] = i;
+    for (i = 0; i < n; ++i) {
+      if (k) k--;
+      int j = sa[rank[i] - 1];
+      while (s[i + k] == s[j + k]) k++;
+      height[rank[i]] = k;
+    }
+  }
   int cmp_suffix(char* P, int p, int m) {
     return strncmp(P, s+sa[p], m);
   }
-
   int find(char* P) {
     int m = strlen(P);
     if(cmp_suffix(P, 0, m) < 0) return -1;
