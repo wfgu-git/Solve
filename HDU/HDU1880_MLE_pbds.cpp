@@ -20,10 +20,12 @@ int gethash(const std::string &str) {
   return res;
 }
 string str[2][maxn];
-map<int, int> mep[2];
+// gp_hash_table<int, int> mep[2];
+cc_hash_table<int, int> mep[2];
 void solve(const string& s, int t) {
   int val = gethash(s);
-  if (!mep[t].count(val)) {
+  auto it = mep[t].find(val);
+  if (it == mep[t].end()) {
     cout << "what?" << endl;
   } else {
     cout << str[t ^ 1][mep[t][val]] << endl;

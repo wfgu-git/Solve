@@ -20,56 +20,63 @@ int read() {
 }
 rope<char> a, b, tmp;
 int main() {
-  freopen("/home/wfgu/solve/data.in", "r", stdin);
+  // freopen("/home/wfgu/solve/data.in", "r", stdin);
   char opt[20];
   static char ch[1 << 22];
   static char rch[1 << 22];
-  int n, x, pos = 0;
+  int n, x, now = 0;
   int length;
   n = read();
   for (int q = 0; q < n; ++q) {
     scanf("%s", opt);
     switch (opt[0]) {
       case 'M':
-        pos= read();
+        now= read();
         break;
       case 'P':
-        pos--;
+        --now;
         break;
       case 'N':
-        ++pos;
+        ++now;
         break;
       case 'G':
-        putchar(a[pos]);
+        putchar(a[now]);
         putchar('\n');
         break;
       case 'I':
+      {
         x = read();
         length = a.size();
         for (int i = 0; i < x; ++i) {
-          do {
+          ch[i] = getchar();
+          while (ch[i] == '\n') {
             ch[i] = getchar();
-          } while (ch[i] == '\n');
+          }
           rch[x - i - 1] = ch[i];
         }
-        ch[x] = rch[x] = '\0';
-        a.insert(pos, ch);
-        b.insert(length - pos, rch);
+        rch[x] = ch[x] = '\0';
+        a.insert(now, ch);
+        b.insert(length - now, rch);
         break;
+      }
       case 'D':
+      {
         x = read();
         length = a.size();
-        a.erase(pos, x);
-        b.erase(length - pos - x, x);
+        a.erase(now, x);
+        b.erase(length - now - x, x);
         break;
+      }
       case 'R':
+      {
         x = read();
         length = a.size();
-        tmp = a.substr(pos, x);
-        a = a.substr(0, pos) + b.substr(length - pos - x, x) +
-            a.substr(pos + x, length - pos - x);
-        b = b.substr(0, length - pos - x) + tmp + b.substr(length - pos, pos);
+        tmp = a.substr(now, x);
+        a = a.substr(0, now) + b.substr(length - now - x, x) +
+            a.substr(now + x, length - now - x);
+        b = b.substr(0, length - now - x) + tmp + b.substr(length - now, now);
         break;
+      }
     }
   }
   return 0;

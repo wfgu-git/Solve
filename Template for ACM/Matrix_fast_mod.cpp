@@ -9,15 +9,15 @@ struct Matrix
   Matrix(int _n) : n(_n) {
     clear();
   }
-  inline void clear() {memset(mat, 0, sizeof(mat));}
-  inline void unit() {
+  void clear() {memset(mat, 0, sizeof(mat));}
+  void unit() {
     clear();
     for (int i = 0; i < n; i++) {
       mat[i][i] = 1;
     }
   }
 
-  Matrix operator + (const Matrix &rhs) {
+  Matrix operator + (const Matrix &rhs) const {
     Matrix ret(n);
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < n; ++j) {
@@ -26,7 +26,7 @@ struct Matrix
     }
     return ret;
   }
-  Matrix operator - (const Matrix &rhs) {
+  Matrix operator - (const Matrix &rhs) const {
     Matrix ret(n);
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < n; ++j) {
@@ -41,7 +41,7 @@ struct Matrix
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) if (mat[i][j]) {
         for (int k = 0; k < n; k++) {
-          ret.mat[i][k] = (1LL * ret.mat[i][k] + (mat[i][j] * rhs.mat[j][k]) % moder) % moder;
+          ret.mat[i][k] = (1LL * ret.mat[i][k] + mat[i][j] * rhs.mat[j][k] % moder) % moder;
         }
       }
     }
