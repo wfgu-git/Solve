@@ -19,8 +19,8 @@ struct node {
 struct path {
   int pre, dir;
 } fa[maxn];
-string dir_go = "durl";
-string dir_back = "udlr";
+string dir_go = "udlr";
+string dir_back = "durl";
 const int dx[] = {-1, 1, 0, 0};
 const int dy[] = {0, 0, -1, 1};
 char buf[2];
@@ -56,7 +56,7 @@ void decantor(int state) {
   for (int i = 1; i <= 9; ++i) {
     left.push_back(i);
   }
-  --state;
+  // --state;
   for (int i = 0; i < 9; ++i) {
     int r = state % fact[9 - i -  1];
     int t = state / fact[9 - i - 1];
@@ -93,11 +93,10 @@ void BFS(queue<node>& Q, int k) {
     }
     tp = 3 * tx + ty;
     swap(str[tp], str[now.pos]);
-    ts = cantor();
-    if (mark[ts] == k) {
+    if (mark[cantor()] == k) {
       swap(str[tp], str[now.pos]);
       continue;
-    } else if (mark[ts] != -1) {
+    } else if (mark[cantor()] != -1) {
       flag = 1;
       if (k == 0) {
         S.push(i);
@@ -126,6 +125,7 @@ void BFS(queue<node>& Q, int k) {
       }
       return;
     } else {
+      ts = cantor();
       mark[ts] = k;
       fa[ts] = {now.state, i};
       Q.push({ts, tp});
@@ -174,7 +174,7 @@ void init() {
   }
 }
 int main() {
-  freopen("/home/wfgu/solve/data.in", "r", stdin);
+  // freopen("/home/wfgu/solve/data.in", "r", stdin);
   init();
   while (~scanf("%s", buf)) {
     read();

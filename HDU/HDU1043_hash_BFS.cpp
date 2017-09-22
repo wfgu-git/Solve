@@ -71,6 +71,7 @@ void decantor(int state) {
     str[i] = '0' + ret[i];
     str[i] = (str[i] == '9' ? 'x' : str[i]);
   }
+  puts(str);
 }
 bool check(int x, int y) {
   if (x < 0 || x >  2 || y < 0 || y > 2) return 0;
@@ -124,7 +125,6 @@ void BFS(int state, int pos) {
   for (vector<int>::reverse_iterator it = ret.rbegin(); it != ret.rend(); ++it) {
     putchar(dir[*it]);
   }
-  puts("");
 }
 void read() {
   str[0] = raw[0];
@@ -134,7 +134,7 @@ void read() {
   }
 }
 int main() {
-  // freopen("/home/wfgu/solve/data.in", "r", stdin);
+  freopen("/home/wfgu/solve/data.in", "r", stdin);
   // ios::sync_with_stdio(false);
   // cin.tie(0);
 

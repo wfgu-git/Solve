@@ -92,6 +92,7 @@ void bfs(int now) {
           u = path[u].from;
         }
       } else {
+        printf("%d   %d\n", h.s, getnum());
         Q.push(i);
         int u = h.s;
         while (path[u].from != -1) {
@@ -167,7 +168,6 @@ int main() {
       continue;
     }
     init();
-    printf("%d\n", getnum());
     for (int i = 0; i < 9; i++)
       if (input[i] == 'x') {
         work(getnum(), i);
