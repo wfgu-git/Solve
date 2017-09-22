@@ -1,13 +1,14 @@
 /*
 教练我要打ACM!
 */
-#include <bits/stdc++.h>
-#include <ext/rope>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
+// #include <bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <cstdio>
+#include <vector>
+#include <queue>
 using namespace std;
-using namespace __gnu_cxx;
-using namespace __gnu_pbds;
 
 typedef long long ll;
 typedef long double ld;
@@ -21,7 +22,8 @@ const int maxn = 500000 + 20;
 // tree<pii, null_type, greater<pii>, splay_tree_tag, tree_order_statistics_node_update> trees[maxn];
 // tree<pii, null_type, greater<pii>, ov_tree_tag, tree_order_statistics_node_update> trees[maxn];
 
-char str[1000];
+char raw[2];
+char str[20];
 int fact[10];
 bool vis[maxn];
 string dir = "udlr";
@@ -38,37 +40,36 @@ struct path {
 
 int cantor() {
   int ret = 0;
-  for (int i = 0; i < str[i]; ++i) {
-    for (int j = i + 1; str[j]; ++j) {
+  for (int i = 0; i < 9; ++i) {
+    int cont = 0;
+    for (int j = i + 1; j < 9; ++j) {
       if (str[j] < str[i]) {
-        ret += fact[8 - i];
+        cont++;
       }
     }
+    ret += cont * fact[9 - i - 1];
   }
   return ret;
 }
+
 void decantor(int state) {
-  int tmp[10], flag[10];
-  memset(flag, 0, sizeof(flag));
-  for (int i = 0; i < 9; ++i) {
-    tmp[i] = state / fact[8 - i];
-    state %= fact[8 - i];
+  vector<int> left;
+  vector<int> ret;
+  for (int i = 1; i <= 9; ++i) {
+    left.push_back(i);
   }
-  for (int i = 0; i < 9; ++i) {
-    int num = 0;
-    for (int j = 0; j < 9; ++j) {
-      if (flag[j] == 0) {
-        num++;
-      }
-      if (num == tmp[i] + 1) {
-        str[i] = '1' + j + 1;
-        if (str[i] == '9') {
-          str[i] = 'x';
-        }
-        flag[j] = 1;
-        break;
-      }
-    }
+  --state;
+  for (int i = 9; i >= 1; --i) {
+    int r = state % fact[i - 1];
+    int t = state / fact[i - 1];
+    state = r;
+    sort(left.begin(), left.end());
+    ret.push_back(left[t]);
+    left.erase(left.begin() + t);
+  }
+  for (int i = 0; i < ret.size(); ++i) {
+    str[i] = '0' + ret[i];
+    str[i] = (str[i] == '9' ? 'x' : str[i]);
   }
 }
 bool check(int x, int y) {
@@ -121,27 +122,37 @@ void BFS(int state, int pos) {
   }
 
   for (vector<int>::reverse_iterator it = ret.rbegin(); it != ret.rend(); ++it) {
-    cout << dir[*it];
+    putchar(dir[*it]);
   }
-  cout << endl;
+  puts("");
+}
+void read() {
+  str[0] = raw[0];
+  for (int i = 1; i < 9; ++i) {
+    scanf("%s", raw);
+    str[i] = raw[0];
+  }
 }
 int main() {
   // freopen("/home/wfgu/solve/data.in", "r", stdin);
-  ios::sync_with_stdio(false);
-  cin.tie(0);
+  // ios::sync_with_stdio(false);
+  // cin.tie(0);
 
   fact[0] = 1;
   for (int i = 1; i < 9; ++i) {
     fact[i] = fact[i - 1] * i;
   }
-  string raw;
-  while (getline(cin, raw)) {
-    raw.erase(remove(raw.begin(), raw.end(), ' '), raw.end());
-    for (int i = 0; i < 9; ++i) {
-      str[i] = raw[i];
-    }
+  while (~scanf("%s", raw)) {
+    read();
     int state = cantor();
-    int pos = raw.find('x');
+    int pos;
+    for (int i = 0; i < 9; ++i) {
+      if (str[i] == 'x') {
+        pos = i;
+        break;
+      }
+    }
+    // int pos = raw.find('x');
 
     // special judge
     int sum = 0;
@@ -158,8 +169,9 @@ int main() {
         }
       }
     }
+
     if (sum % 2 == 1) {
-      cout << "unsolvable" << endl;
+      printf("%s\n", "unsolvable");
       continue;
     }
 
