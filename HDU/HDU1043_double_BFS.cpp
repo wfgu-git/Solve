@@ -174,7 +174,7 @@ void init() {
   }
 }
 int main() {
-  // freopen("/home/wfgu/solve/data.in", "r", stdin);
+  freopen("/home/wfgu/solve/data.in", "r", stdin);
   init();
   while (~scanf("%s", buf)) {
     read();
