@@ -10,10 +10,12 @@ struct RMQ {
       }
     }
   }
+
+  // [l, r]
   int query(int l, int r) {
-    // int k = log(r - l + 1) / log(2.0);
-    int k = 0;
-    while ((1 << k + 1) <= r - l + 1) ++k;
+    // // int k = 0;
+    // while ((1 << k + 1) <= r - l + 1) ++k;
+    int k = log(r - l + 1) / log(2.0);
     return min(dp[l][k], dp[r - (1 << k) + 1][k]);
   }
 } rmq;
