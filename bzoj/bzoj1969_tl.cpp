@@ -81,12 +81,12 @@ void Create_Tree(int n)
     for (int i = 1; i <= n; i++)
         if (!dfn[i])
             tarjan(i, i);
-    for (int i = 0; i != edges.size(); i ++)
-        if (!is_cut[i] && !is_del.count(make_pair(edges[i].first, edges[i].second)))
+    for (int i = 0; i != edges.size(); i ++) { 
+        if (!is_cut[i] && !is_del.count(edges[i]))
             merge(edges[i].first, edges[i].second);
-    for (int i = 0; i != edges.size(); i++)
-        if (is_cut[i] && !is_del.count(make_pair(edges[i].first, edges[i].second)))
+        if (is_cut[i] && !is_del.count(edges[i]))
             g[find(edges[i].first)].push_back(find(edges[i].second));
+    }
     for (int i = 1; i <= n; i++)
     {
         sort(g[i].begin(), g[i].end());
@@ -206,6 +206,7 @@ vector<pair<bool, pair<int, int> > > Q;
 vector<int> ac;
 int main()
 {
+freopen("/home/wfgu/solve/data.in", "r", stdin);
     int n, m;
     while (scanf("%d%d", &n, &m) == 2)
     {
