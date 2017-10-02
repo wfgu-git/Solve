@@ -23,6 +23,22 @@ const int inf = 0x3f3f3f3f;
 const int maxn = 100000 + 20;
 
 ll n, x, y, c;
+bool check(ll d) {
+  ll now = 2LL * d * d + 2LL * d + 1LL;
+  if (x + d > n) {
+    now -= 2LL * (x + d - n) - 1LL;
+  }
+  if (y + d > n) {
+    now -= 2LL * (x + d - n) - 1LL;
+  }
+  if (x - d < 0) {
+    now -= 2LL * (d - x) - 1LL;
+  }
+  if (y - d < 0) {
+    now -= 2LL * (d - y) - 1LL;
+  }
+  if ()
+}
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
