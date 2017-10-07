@@ -73,7 +73,7 @@ bool check(int x) {
     } else {
       l = min(l, sa.sa[i]);
       r = max(r, sa.sa[i]);
-      if (r - l >= x) {
+      if (r - l > x) {
         return 1;
       }
     }

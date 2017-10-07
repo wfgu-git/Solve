@@ -6,6 +6,7 @@
 #include<cstdio>
 #include<cstring>
 #include<algorithm>
+#include <iostream>
 using namespace std;
 
 const int maxn = 100000 + 10;
@@ -28,13 +29,28 @@ struct SuffixArray {
     for(i = 1; i < m; i++) c[i] += c[i-1];
     for(i = n-1; i >= 0; i--) sa[--c[x[i]]] = i;
     for(int k = 1; k <= n; k <<= 1) {
+      cout << "sa[i] : ";
+      for (i = 0; i < n; ++i) {
+        cout << sa[i] << "  ";
+      }
+      cout << endl;
       int p = 0;
       for(i = n-k; i < n; i++) y[p++] = i;
       for(i = 0; i < n; i++) if(sa[i] >= k) y[p++] = sa[i]-k;
+      cout << "y[i]: ";
+      for (int i = 0; i < p; ++i) {
+        cout << y[i] << "  ";
+      }
+      cout << endl;
       for(i = 0; i < m; i++) c[i] = 0;
       for(i = 0; i < n; i++) c[x[y[i]]]++;
       for(i = 1; i < m; i++) c[i] += c[i-1];
       for(i = n-1; i >= 0; i--) sa[--c[x[y[i]]]] = y[i];
+      cout << "after xxx:";
+      for (i = 0; i < n; ++i) {
+        cout << " " << sa[i];
+      }
+      cout << endl;
       swap(x, y);
       p = 1; x[sa[0]] = 0;
       for(i = 1; i < n; i++)
@@ -45,10 +61,10 @@ struct SuffixArray {
   }
   void build_height() {
     int i, j, k = 0;
-    for (i = 0; i < n; ++i) rank[sa[i]] = i;
+    for (i = 1; i <= n; ++i) rank[sa[i]] = i;
     for (i = 0; i < n; ++i) {
       if (k) k--;
-      int j = sa[rank[i] - 1];
+      j = sa[rank[i] - 1];
       while (s[i + k] == s[j + k]) k++;
       height[rank[i]] = k;
     }
@@ -75,17 +91,7 @@ SuffixArray sa;
 char P[maxn];
 
 int main() {
-  int T, q;
-  scanf("%d", &T);
-  while(T--) {
-    scanf("%s", sa.s);
-    sa.n = strlen(sa.s) + 1;
-    sa.build_sa('z' + 1);
-    scanf("%d", &q);
-    while(q--) {
-      scanf("%s", P);
-      if(sa.find(P) >= 0) printf("y\n"); else printf("n\n");
-    }
-  }
-  return 0;
+  cin >> sa.s;
+  sa.n = strlen(sa.s) + 1;
+  sa.build_sa(128);
 }
