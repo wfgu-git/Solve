@@ -37,7 +37,6 @@ bool check(ll d) {
   if (y - d < 0) {
     now -= 2LL * (d - y) - 1LL;
   }
-  if ()
 }
 int main() {
   ios::sync_with_stdio(false);
