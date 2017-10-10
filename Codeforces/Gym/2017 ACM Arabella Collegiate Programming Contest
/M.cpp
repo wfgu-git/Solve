@@ -1,4 +1,16 @@
-// 终极版
+/*
+教练我想打ACM！
+*/
+#include <map>
+#include <string>
+#include <ctype.h>
+#include <math.h>
+#include <stdio.h>
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+
 namespace fastIO{
     #define BUF_SIZE 100000
     #define OUT_SIZE 100000
@@ -208,101 +220,36 @@ namespace fastIO{
     #undef OUT_SIZE
     #undef BUF_SIZE
 };
-using namespace fastIO;
+// using namespace fastIO;
 
-// 加强版
-const int MAXBUF = 10000;
-char buf[MAXBUF], *ps = buf, *pe = buf + 1;
-inline void rnext() {
-  if (++ps == pe)
-    pe = (ps = buf) +
-         fread(buf, sizeof(char), sizeof(buf) / sizeof(char), stdin);
-}
+const int inf = 0x3f3f3f3f;
+const int maxn = 100000 + 20;
 
-template <class T>
-inline bool in(T &ans) {
-  ans = 0;
-  T f = 1;
-  if (ps == pe) return false;  // EOF
-  do {
-    rnext();
-    if ('-' == *ps) f = -1;
-  } while (!isdigit(*ps) && ps != pe);
-  if (ps == pe) return false;  // EOF
-  do {
-    ans = (ans << 1) + (ans << 3) + *ps - 48;
-    rnext();
-  } while (isdigit(*ps) && ps != pe);
-  ans *= f;
-  return true;
-}
-
-const int MAXOUT = 10000;
-char bufout[MAXOUT], outtmp[50], *pout = bufout, *pend = bufout + MAXOUT;
-inline void write() {
-  fwrite(bufout, sizeof(char), pout - bufout, stdout);
-  pout = bufout;
-}
-inline void out_char(char c) {
-  *(pout++) = c;
-  if (pout == pend) write();
-}
-inline void out_str(const char *s) {
-  while (*s) {
-    *(pout++) = *(s++);
-    if (pout == pend) write();
-  }
-}
-template <class T>
-inline void out_int(T x) {
-  if (!x) {
-    out_char('0');
-    return;
-  }
-  if (x < 0) x = -x, out_char('-');
-  int len = 0;
-  while (x) {
-    outtmp[len++] = x % 10 + 48;
-    x /= 10;
-  }
-  outtmp[len] = 0;
-  for (int i = 0, j = len - 1; i < j; i++, j--) swap(outtmp[i], outtmp[j]);
-  out_str(outtmp);
-}
-// how to use
+char buf[20];
 int main() {
-  int t, ca = 1;
-  in(t);
-  while (t--) {
-    int n;
-    in(n);
+  // freopen("/home/wfgu/Documents/solve/data.in", "r", stdin);
+  // freopen("/home/wfgu/Documents/solve/data.out", "w", stdout);
 
-    out_str("Case #");
-    out_int(ca++);
-    out_str(": ");
-    out_int(n), out_char('\n');
+  int T, C, N;
+  scanf("%d", &T);
+  while (T--) {
+    map<string, double> mep;
+    scanf("%d%d", &C, &N);
+    double c;
+    string tmp;
+    for (int i = 0; i < C; ++i) {
+      scanf("%s %lf", buf, &c);
+      tmp = buf;
+      mep[tmp] = c;
+    }
+    mep["JD"] = 1;
+    double ans = 0;
+    for (int i = 0; i < N; ++i) {
+      scanf("%lf %s", &c, buf);
+      tmp = buf;
+      ans += mep.find(tmp)->second * c;
+    }
+    printf("%.6lf\n", ans);
   }
-  write();  // 一定要记得 write()啊！！！！！
   return 0;
-}
-
-
-
-// 普通版
-template<class T> inline bool read(T &n){
-    T x = 0, tmp = 1;
-    char c = getchar();
-    while((c < '0' || c > '9') && c != '-' && c != EOF) c = getchar();
-    if(c == EOF) return false;
-    if(c == '-') c = getchar(), tmp = -1;
-    while(c >= '0' && c <= '9') x *= 10, x += (c - '0'),c = getchar();
-    n = x*tmp;
-    return true;
-}
-template <class T> inline void write(T n){
-    if(n < 0){putchar('-');n = -n;}
-    int len = 0,data[20];
-    while(n){data[len++] = n%10;n /= 10;}
-    if(!len) data[len++] = 0;
-    while(len--) putchar(data[len]+48);
 }

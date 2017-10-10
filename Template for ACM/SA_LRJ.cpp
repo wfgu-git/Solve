@@ -79,7 +79,7 @@ int main() {
   cin >> sa.s;
   sa.n = strlen(sa.s) + 1;
   sa.build_sa(128);
-  for (int i = 0; i < sa.n - 1; ++i) {
+  for (int i = 1; i < sa.n; ++i) {
     cout << sa.sa[i] << " ";
   }
 }
