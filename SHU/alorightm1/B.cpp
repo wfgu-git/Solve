@@ -11,25 +11,32 @@ const int inf = 0x3f3f3f3f;
 const int maxn = 100 + 20;
 
 int T, n, m;
-int a[maxn], b[maxn];
+char a[maxn], b[maxn];
 int dp[maxn][maxn];
 int main() {
-  scanf("%d", &T);
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+
+  cin >> T;
   for (int cas = 1; cas <= T; ++cas) {
-    scanf("%d%d", &n, &m);
-    for (int i = 1; i <= n; ++i) {
-      scanf("%d", a + i);
+    cin >> n >> m;
+    for (int i = 0; i < n; ++i) {
+      cin >> a[i];
     }
-    for (int i = 1; i <= m; ++i) {
-      scanf("%d", b + i);
+    for (int i = 0; i < m; ++i) {
+      cin >> b[i];
     }
     memset(dp, 0, sizeof(dp));
-    for (int i = 1; i <= n; ++i) {
-      for (int j = 1; j <= m; ++j) {
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < m; ++j) {
         if (a[i] == b[j]) {
-          
+          dp[i + 1][j + 1] = dp[i][j] + 1;
+        } else {
+          dp[i + 1][j + 1] = max(dp[i + 1][j], dp[i][j + 1]);
         }
       }
     }
+    cout << "Case " << cas << '\n';
+    cout << dp[n][m] << endl;
   }
 }

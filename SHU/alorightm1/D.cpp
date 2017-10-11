@@ -20,12 +20,12 @@ int main() {
     memset(vis, 0, sizeof(vis));
     int n;
     scanf("%d", &n);
+    priority_queue<int, vector<int>, greater<int> > Q;
     for (int x, i = 0; i < n; ++i) {
       scanf("%d", &x);
       Q.push(x);
       a[i] = x;
     }
-    priority_queue<int, vector<int>, greater<int> > Q;
 
   }
 }
