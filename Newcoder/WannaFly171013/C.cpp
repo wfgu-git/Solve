@@ -14,6 +14,36 @@ int n, Q;
 vector<int> origin_tree[maxn];
 vector<int> virtual_tree[maxn];
 vector<int> key_node;
+int stk[maxn], top;
+inline bool comp(const int& x, const int& y) {
+  return dfn[x] < dfn[y];
+}
+void build(vector<int>& v, int k) {
+  sort(v.begin(), v.end(), comp);
+
+  stk[top++] = 0;
+  for (int i = 0; i < k; ++i) {
+    int u = v[i]; lca = LCA(u, sta[top - 1]);
+    if (lca == stk[top - 1]) {
+      stk[top++] = u;
+    } else {
+      while (top >= 2 && depth[stk[top - 2]] >= depth[lca]) {
+        add_edge(stk[top - 2], stk[top - 1]);
+        --top;
+      }
+      if (stk[top - 1] != lca) {
+        add_edge(lca, stk[--top]);
+        stk[top++] = lca;
+        v[cont++] = lca;
+      }
+      stk[top++] = u;
+    }
+  }
+
+  for (int i = 0; i < top - 1; ++i) {
+    add_edge(stk[i], stk[i + 1]);
+  }
+}
 int main() {
 #ifndef ONLINE_JUDGE
 freopen("/home/wfgu/Documents/solve/data.in", "r", stdin);
