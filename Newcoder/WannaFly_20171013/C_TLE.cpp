@@ -7,25 +7,39 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-const int inf = 0x3f3f3f3f;
 const int maxn = 3e5 + 20;
 const int mxlg = 20 + 2;
 
+struct Edge {
+  int from, to, next, dist;
+} raw_edge[maxn * 2], virtual_edge[maxn * 2];
+int raw_head[maxn], virtual_head[maxn];
+int raw_cont, virtual_cont;
 int n, Q;
-vector<int> raw_tree[maxn];
-vector<pair<int, int> > virtual_tree[maxn];
-vector<int> key_nodes;
+// vector<int> raw_tree[maxn];
+// vector<pair<int, int> > virtual_tree[maxn];
+int key_nodes[maxn];
+int nowk;
 int S[maxn];
 int dfn[maxn], dfs_clock;
 int fa[mxlg][maxn];
 int depth[maxn];
 int v0;
 int ans;
+void add_raw_edge(int from, int to) {
+  raw_edge[raw_cont] = {from, to, raw_head[from], 0};
+  raw_head[from] = raw_cont++;
+}
+void add_virtual_edge(int from, int to, int dist) {
+  virtual_edge[virtual_cont] = {from, to, virtual_head[from], dist};
+  virtual_head[from] = virtual_cont++;
+}
 void dfs(int u, int p, int d) {
   fa[0][u] = p;
   depth[u] = d;
   dfn[u] = ++dfs_clock;
-  for (int & v : raw_tree[u]) {
+  for (int i = raw_head[u]; i != -1; i = raw_edge[i].next) {
+    int v = raw_edge[i].to;
     if (v != p) {
       dfs(v, u, d + 1);
     }
@@ -57,15 +71,13 @@ int lca(int u, int v) {
   }
   return fa[0][u];
 }
-bool comp(const int & i, const int & j) {
+inline bool comp(const int & i, const int & j) {
   return dfn[i] < dfn[j];
 }
-void add_edge(int x, int y, int w) {
-  virtual_tree[x].push_back({y, w});
-}
-void build(vector<int>& V, int k) {
-  sort(V.begin(), V.begin() + k, comp);
+void build(int* V, int k) {
+  sort(V, V + k, comp);
 
+  nowk = k;
   int top = 0;
   S[top++] = V[0];
   for (int i = 1; i < k; ++i) {
@@ -77,8 +89,8 @@ void build(vector<int>& V, int k) {
         x = S[top - 2];
         y = S[top - 1];
         w = abs(depth[x] - depth[y]);
-        add_edge(x, y, w);
-        add_edge(y, x, w);
+        add_virtual_edge(x, y, w);
+        add_virtual_edge(y, x, w);
         --top;
       }
 
@@ -86,21 +98,22 @@ void build(vector<int>& V, int k) {
         x = p;
         y = S[top - 1];
         w = abs(depth[x] - depth[y]);
-        add_edge(x, y, w);
-        add_edge(y, x, w);
+        add_virtual_edge(x, y, w);
+        add_virtual_edge(y, x, w);
         S[top - 1] = p;
-        V.push_back(p);
+        V[nowk++] = p;
       }
     }
     S[top++] = u;
   }
 
   while (top > 1) {
-    int x = S[top - 1];
-    int y = S[top - 2];
-    int w = abs(depth[x] - depth[y]);
-    add_edge(x, y, w);
-    add_edge(y, x, w);
+    int x, y, w;
+    x = S[top - 1];
+    y = S[top - 2];
+    w = abs(depth[x] - depth[y]);
+    add_virtual_edge(x, y, w);
+    add_virtual_edge(y, x, w);
     --top;
   }
 }
@@ -109,22 +122,23 @@ void dfs1(int x, int p, int val) {
     ans = val;
     v0 = x;
   }
-  for (const pair<int, int>& pii : virtual_tree[x]) {
-    int v = pii.first;
-    int w = pii.second;
+  // for (const pair<int, int>& pii : virtual_tree[x]) {
+  for (int i = virtual_head[x]; i != -1; i = virtual_edge[i].next) {
+    int v = virtual_edge[i].to;
+    int w = virtual_edge[i].dist;
     if (v == p) continue;
     dfs1(v, x, val + w);
   }
 }
 void dfs2(int x, int p, int val) {
   ans = max(ans, val);
-  for (const pair<int, int>& pii : virtual_tree[x]) {
-    int v = pii.first;
-    int w = pii.second;
+  // for (const pair<int, int>& pii : virtual_tree[x]) {
+  for (int i = virtual_head[x]; i != -1; i = virtual_edge[i].next) {
+    int v = virtual_edge[i].to;
+    int w = virtual_edge[i].dist;
     if (v == p) continue;
     dfs2(v, x, val + w);
   }
-  virtual_tree[x].clear();
 }
 int main() {
 #ifndef ONLINE_JUDGE
@@ -133,11 +147,17 @@ freopen("/home/wfgu/Documents/solve/data.out", "w", stdout);
 #endif
 
   scanf("%d", &n);
+  for (int i = 1; i <= n; ++i) {
+    raw_head[i] = -1;
+    virtual_head[i] = -1;
+  }
+  raw_cont = 0;
+  virtual_cont = 0;
   for (int i = 1; i < n; ++i) {
     int u, v;
     scanf("%d%d", &u, &v);
-    raw_tree[u].push_back(v);
-    raw_tree[v].push_back(u);
+    add_raw_edge(u, v);
+    add_raw_edge(v, u);
   }
   lca_init();
   scanf("%d", &Q);
@@ -145,15 +165,16 @@ freopen("/home/wfgu/Documents/solve/data.out", "w", stdout);
     int m;
     scanf("%d", &m);
     for (int j = 0; j < m; ++j) {
-      int x;
-      scanf("%d", &x);
-      key_nodes.push_back(x);
+      scanf("%d", key_nodes + j);
     }
     build(key_nodes, m);
     ans = 0;
     dfs1(key_nodes[0], -1, 0);
     dfs2(v0, -1, 0);
     printf("%d\n", (ans + 1) / 2);
-    key_nodes.clear();
+    for (int j = 0; j < nowk; ++j) {
+      virtual_head[key_nodes[j]] = -1;
+    }
+    virtual_cont = 0;
   }
 }
