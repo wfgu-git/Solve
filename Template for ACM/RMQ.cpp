@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 struct RMQ {
   void init(const vector<int> &a) {
     int n = a.size();

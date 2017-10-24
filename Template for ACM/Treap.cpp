@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 struct Treap {
   Treap* ch[2];
   int key, fix, size;

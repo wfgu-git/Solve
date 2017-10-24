@@ -1,11 +1,3 @@
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-#include <vector>
-#include <queue>
-using namespace std;
-const int inf = 0x3f3f3f3f;
-const int maxn = 5000;
 struct Edge {int from, to, cap, flow;} ;
 struct Dinic {
   int n, m, s, t;

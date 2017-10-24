@@ -1,16 +1,5 @@
-/*
-教练我要打ACM!
-*/
-#include <cstdio>
-#include <cstring>
-#include <cmath>
-#include <algorithm>
-#include <queue>
+#include <bits/stdc++.h>
 using namespace std;
-
-typedef long long ll;
-typedef long double ld;
-
 const int inf = 0x3f3f3f3f;
 const int maxm = 100000 + 20;
 const int maxn = 1000 + 20;

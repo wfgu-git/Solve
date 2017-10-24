@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-const int inf = 0x3f3f3f3f;
-const int maxn = 1000 * 2 + 20;
 struct Edge {
   int from, to, cap, flow, cost;
 } ;

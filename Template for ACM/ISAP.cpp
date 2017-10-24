@@ -1,17 +1,3 @@
-#include <cstdio>
-#include <cstring>
-#include <iostream>
-#include <queue>
-#include <string>
-#include <vector>
-using namespace std;
-
-typedef long long ll;
-typedef long double ld;
-
-const int maxn = 5000;
-const int inf = 0x3f3f3f3f;
-
 struct Edge {
   int from, to, cap, flow;
 };
@@ -72,7 +58,7 @@ struct ISAP {
     return a;
   }
   int run(int s, int t) {
-    this->s = s; this->t = t; 
+    this->s = s; this->t = t;
     int flow = 0;
     RevBFS();
     memset(num, 0, sizeof(num));
