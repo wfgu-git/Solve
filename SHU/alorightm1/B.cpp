@@ -14,8 +14,7 @@ int T, n, m;
 char a[maxn], b[maxn];
 int dp[maxn][maxn];
 int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(0);
+  ios::sync_with_stdio(false); cin.tie(0);
 
   cin >> T;
   for (int cas = 1; cas <= T; ++cas) {

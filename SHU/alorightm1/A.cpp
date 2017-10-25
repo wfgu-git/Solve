@@ -1,13 +1,6 @@
-/*
-教练我想打ACM！
-*/
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef long long ll;
-typedef long double ld;
-
-const int inf = 0x3f3f3f3f;
 const int maxn = 100 + 20;
 
 int n;
@@ -27,12 +20,7 @@ void dfs(int l, int r) {
   }
 }
 int main() {
-#ifndef ONLINE_JUDGE
-  freopen("/home/wfgu/Documents/solve/data.in", "r", stdin);
-  freopen("/home/wfgu/Documents/solve/data.out", "w", stdout);
-#endif
-  ios::sync_with_stdio(false);
-  cin.tie(0);
+  ios::sync_with_stdio(false); cin.tie(0);
 
   int kase = 0;
   while (cin >> n) {
