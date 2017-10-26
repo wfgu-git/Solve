@@ -7,6 +7,7 @@ __int64 cnt[1000005];
 __int64 blksz, blkid, l, r;
 __int64 n, m;
 __int64 ret, ans[maxn];
+
 struct query {
     int l, r;
     int id;
