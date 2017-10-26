@@ -1,11 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<cstring>
-#include<algorithm>
-#include<string>
-#include<queue>
-using namespace std;
-
 const int maxn = 10005;
 bool vis[maxn];
 int dis[maxn];

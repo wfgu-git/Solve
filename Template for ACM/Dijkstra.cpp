@@ -1,11 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <cstring>
-using namespace std;
-typedef pair<int, int> pii;
-const int inf = 0x3f3f3f3f;
-const int maxn = 50000;
 struct Edge {
   int from, to, dist;
   Edge(int u, int v, int d) : from(u), to(v), dist(d) {}

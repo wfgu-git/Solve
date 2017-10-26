@@ -1,9 +1,3 @@
-// looks better
-#include <cstring>
-#include <cstdio>
-#include <iostream>
-#include <vector>
-using namespace std;
 const int maxn = 500;
 struct Max_Match {
   int n;

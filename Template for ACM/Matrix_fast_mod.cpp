@@ -73,26 +73,4 @@ struct Matrix
     return ret;
   }
 } ;
-void work(int n) {
-  Matrix raw(2);
-  raw.mat[0][0] = 1;
-  raw.mat[0][1] = 1;
-  raw.mat[1][0] = 1;
-  raw.mat[1][1] = 0;
-  if (n == 0 || n == 1) {
-    printf("no\n");
-    return;
-  }
-  vector<long long> col{11, 7}, ans;
-  Matrix ret = raw ^ (n - 1);
-  ans = ret * col;
-  long long k = ans[0];
-  if (k % 3 == 0) printf("yes\n");
-  else printf("no\n");
-}
-int main() {
-  int n;
-  while (scanf("%d", &n) != EOF) {
-    work(n);
-  }
-}
+
