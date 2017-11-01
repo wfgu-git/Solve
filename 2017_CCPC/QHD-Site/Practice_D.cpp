@@ -17,10 +17,8 @@ long long power(long long v, long long p, long long m) {
     v = v * v % m;
     p >>= 1;
   }
-
   return r;
 }
-
 bool witness(long long a, long long p) {
   int k = 0;
   long long q = p - 1;
@@ -31,10 +29,8 @@ bool witness(long long a, long long p) {
     v = v * v % p;
     if (v == p - 1) return false;
   }
-
   return true;  // composite number
 }
-
 bool miller_rabin(long long p) {
   if (p == 2) return true;
   if (p % 2 == 0) return false;
@@ -43,31 +39,47 @@ bool miller_rabin(long long p) {
     long long a = std::rand() % (p - 1) + 1;
     if (witness(a, p)) return false;
   }
-
   return true;
 }
-bool vis[10] = {0};
-void dfs(ll x, int depth, int limit) {
-  if (depth == limit) {
-    if (miller_rabin(x)) {
-      printf("%lld\n", x);
+
+int fi, se, L;
+void dfs(string str, int depth) {
+  if (depth == L / 2) {
+    for (char & ch : str) {
+      if (ch == '#') ch = '0' + se;
     }
+    ll x = 0LL;
+    for (char & ch : str) {
+      x = x * 10LL + (ch - '0');
+    }
+    if (miller_rabin(x)) cout << x << '\n';
+    return;
   }
-  for (int i = 1; i <= 9; ++i) {
-    if (vis[i]) continue;
-    vis[i] = 1;
-    dfs(x * 10 + i, depth + 1, limit);
-    vis[i] = 0;
+
+  for (int i = 0; i < L; ++i) {
+    if (str[i] != '#') continue;
+    str[i] = '0' + fi;
+    dfs(str, depth + 1);
+    str[i] = '#';
   }
 }
 void work() {
-  for (int i = 2; i <= 18; i += 2) {
-    if (i % 3 == 0) continue;
-    dfs(0, 0, i);
+  // get list
+  for (int a = 1; a <= 9; ++a) {
+    fi = a;
+    for (int b = 1; b <= 9; ++b) if (a != b && b & 1) {
+      se = b;
+      for (int i = 2; i <= 18; i += 2) {
+        if ((a * i / 2 + b * i / 2) % 3 == 0) continue;
+        if (i % 3 == 0) continue;
+        L = i;
+        dfs(string(L, '#'), 0);
+      }
+    }
   }
 }
 int main() {
   ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-
+  freopen("data.out", "w", stdout);
   work();
 }
