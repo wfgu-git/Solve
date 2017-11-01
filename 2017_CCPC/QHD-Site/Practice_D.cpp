@@ -67,7 +67,7 @@ void work() {
   // get list
   for (int a = 1; a <= 9; ++a) {
     fi = a;
-    for (int b = 1; b <= 9; ++b) if (a != b && b & 1) {
+    for (int b = a + 1; b <= 9; ++b) if (a != b) {
       se = b;
       for (int i = 2; i <= 18; i += 2) {
         if ((a * i / 2 + b * i / 2) % 3 == 0) continue;
