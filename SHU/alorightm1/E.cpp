@@ -9,62 +9,77 @@ typedef long double ld;
 typedef pair<int, int> pii;
 
 const int inf = 0x3f3f3f3f;
-const int maxn = 100 + 20;
+const int maxn = 1000 + 20;
 
-int n;
-vector<pii> G[maxn];
-int dist[maxn];
-bool vis[maxn];
-void SPFA(int s, int n) {
-  for (int i = 0; i < n; ++i) {
-    dist[i] = inf;
-    vis[i] = 0;
-  }
-  queue<int> Q;
-  Q.push(s);
-  dist[s] = 0;
-  vis[s] = 1;
-
-  while (!Q.empty()) {
-    int u = Q.front();
-    Q.pop();
-    vis[u] = 0;
-    for (pii x : G[u]) {
-      int v = x.first;
-      int d = x.second;
-      if (dist[u] + d < dist[v]) {
-        dist[v] = dist[u] + d;
-        if (!vis[v]) {
-          Q.push(v);
-          vis[v] = 1;
-        }
-      }
-    }
-  }
-}
-
-int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(0);
-
+int mep[maxn][maxn];
+pii dist[maxn];
+int inq[maxn];
+vector<int> path[maxn];
+void work() {
+  int n;
   int kase = 0;
   while (cin >> n) {
     for (int i = 0; i < n; ++i) {
-      G[i].clear();
-    }
-    for (int i = 0; i < n; ++i) {
       for (int j = 0; j < n; ++j) {
-        int x;
-        cin >> x;
-        if (x != -1) {
-          G[i].push_back({j, x});
-        }
+        cin >> mep[i][j];
       }
     }
     int s, t;
     cin >> s >> t;
     --s; --t;
-    SPFA(s, n);
-    cout << "Case " << ++kase << '\n' << dist[t] << endl;
+
+    memset(inq, 0, sizeof(inq));
+    for (int i = 0; i < n; ++i) {
+      dist[i].first = inf;
+    }
+    inq[s] = 1;
+    dist[s] = {0, 0};
+    path[s] = {s};
+    priority_queue<int, vector<int>, greater<int> > Q;
+    Q.push(s);
+    while (!Q.empty()) {
+      int x = Q.top(); Q.pop();
+      inq[x] = 0;
+      for (int v = 0; v < n; ++v) {
+        if (mep[x][v] != -1) {
+          if (dist[v].first > dist[x].first + mep[x][v]) {
+            dist[v].first = dist[x].first + mep[x][v];
+            dist[v].second = dist[x].second + 1;
+            path[v] = path[x];
+            path[v].push_back(v);
+            if (!inq[v]) {
+              Q.push(v);
+              inq[v] = 1;
+            }
+          } else if (dist[v].first == dist[x].first + mep[x][v] && dist[v].second > dist[x].second + 1) {
+            dist[v].second = dist[x].second + 1;
+            path[v] = path[x];
+            path[v].push_back(v);
+            if (!inq[v]) {
+              Q.push(v);
+              inq[v] = 1;
+            }
+          }
+        }
+      }
+    }
+    cout << "Case " << ++kase << '\n';
+    cout << "The least distance from" << s + 1 << "->" << t + 1 << " is " << dist[t].first << '\n';
+    cout << "the path is ";
+    int fi = 1;
+    for (int x : path[t]) {
+      if (fi) {
+        fi = 0;
+        cout << x + 1;
+        continue;
+      }
+      cout << "->" << x + 1;
+    }
+    cout << endl;
   }
+}
+int main() {
+  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+  work();
 }
