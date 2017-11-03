@@ -111,7 +111,7 @@ struct bign {
       tb[i] = b.s[i];
     }
     vector<int> tmp = ta * tb;
-    for (int i = 0; i < tmp.size(); ++i) {
+    for (int i = 0; i < (int)tmp.size(); ++i) {
       c.s[i] = tmp[i];
     }
     c.len = tmp.size();
@@ -222,18 +222,16 @@ void work() {
     zero = zero - zero;
     ans = zero;
     while (n > zero) {
-      if (k == 0) {
-        ans += 1;
-        break;
+      while ((po2[k] * m < (n + m)) == 0) --k;
+
+      ans = ans + po2[k];
+
+      if (n < po2[k] * m) {
+        bign t = n / po2[k];
+        n = n - po2[k] * t;
+      } else {
+        n = n - po2[k] * m;
       }
-      // cout << ans << " " << n << " " << k << endl;
-      if (n > m * (po2[k] - 1)) {
-        ans += po2[k];
-        n -= m * po2[k];
-        // while (n < zero) n += po2[k];
-        if (n < zero) n = ((n % po2[k]) + po2[k]);
-      }
-      --k;
     }
     cout << ans << '\n';
   }
@@ -241,7 +239,7 @@ void work() {
 int main() {
   ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-  // freopen("data.in", "r", stdin);
+  freopen("data.in", "r", stdin);
   po2[0] = 1;
   for (int i = 1; i < 3000; ++i) {
     po2[i] = po2[i - 1] * 2;
