@@ -10,26 +10,28 @@ typedef long double ld;
 const int inf = 0x3f3f3f3f;
 const int maxn = 100000 + 20;
 
-int a[maxn];
+ll a[maxn];
 ll t[maxn];
 void work() {
   int T;
   cin >> T;
   while (T--) {
-    int n, m, q;
+    ll n, m, q;
     cin >> n >> m >> q;
     for (int i = 0; i < n; ++i) {
       cin >> a[i];
     }
     ll sum = 0;
     for (int i = 0; i < q; ++i) {
+      ll x, y;
       cin >> x >> y;
       int r = y % m;
-      t[i] = (a[x] - 1 - r + m) % m;
+      t[i] = (a[x - 1] - 1 - r + m) % m;
       sum += t[i];
     }
-    ll ans = LONG_LONG_MAX;
-    for (int i = 0; i < q; ++i) {
+    sort(t, t + q);
+    ll ans = sum;
+    for (ll i = 0; i < q; ++i) {
       ans = min(ans, sum + i * m - t[i] * q);
     }
     cout << ans << '\n';
