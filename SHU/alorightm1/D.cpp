@@ -27,10 +27,6 @@ struct comp {
   }
 } ;
 int main() {
-#ifndef ONLINE_JUDGE
-  freopen("/home/wfgu/Documents/solve/data.in", "r", stdin);
-  freopen("/home/wfgu/Documents/solve/data.out", "w", stdout);
-#endif
   ios::sync_with_stdio(false);
   cin.tie(0);
 
