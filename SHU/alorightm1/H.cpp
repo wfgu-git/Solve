@@ -7,7 +7,6 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-const int inf = 0x3f3f3f3f;
 const int maxn = 100 + 20;
 
 int n;
@@ -33,8 +32,6 @@ void dfs(int pos, int left, int tot) {
   dfs(pos + 1, left, tot);
 }
 int main() {
-  // freopen("/home/wfgu/Documents/solve/data.in", "r", stdin);
-  // freopen("/home/wfgu/Documents/solve/data.out", "w", stdout);
   int kase = 0;
   while (~scanf("%d", &n)) {
     memset(vis, 0, sizeof(vis));
