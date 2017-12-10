@@ -1,59 +1,66 @@
-#include<cstdio>
+/*
+教练我想打ACM！
+*/
+#include <stdio.h>
+using namespace std;
 
-int fa[50000*3+10];
+typedef long long ll;
+typedef long double ld;
 
+const int inf = 0x3f3f3f3f;
+const int maxn = 100000 + 20;
+
+int fa[maxn], rnk[maxn];
+int n, k;
 void init(int n) {
-    for(int i=0; i<=3*n; i++)
-        fa[i]=i;
+  for (int i = 1; i <= n; ++i) {
+    fa[i] = i;
+    rnk[i] = 0;
+  }
 }
-
+/*
+0 同类
+1 吃父结点
+2 被父结点吃
+*/
 int find(int x) {
-    if(x!=fa[x])    fa[x]=find(fa[x]);
-    return fa[x];
+  if (x != fa[x]) {
+    int t = fa[x];
+    fa[x] = find(fa[x]);
+    rnk[x] = (rnk[x] + rnk[t]) % 3;
+  }
+  return fa[x];
 }
-
-void Union(int a,int b) {
-    a=find(a);
-    b=find(b);
-    if(a!=b)
-        fa[a]=b;
+void unite(int x, int y, int r) {
+  int fx = find(x);
+  int fy = find(y);
+  if (fx == fy) return;
+  fa[fx] = fy;
+  rnk[fx] = (r + rnk[y] - rnk[x] + 3) % 3;
 }
-
-bool same(int a,int b) {
-    return find(a)==find(b);
+int check(int x, int y, int r) {
+  if (x > n || y > n) return 0;
+  if (r == 1 && x == y) return 0;
+  int tx = find(x);
+  int ty = find(y);
+  if (tx == ty) {
+    return r == (((rnk[x] - rnk[y]) % 3 + 3) % 3);
+  }
+  return 1;
 }
-
-int N,k;
-
-int main(void) {
-    scanf("%d%d",&N,&k);
-    init(N);
-    int cnt=0,x,y,d;
-    for(int i=1; i<=k; i++) {
-        scanf("%d%d%d",&d,&x,&y);
-        if(x>N||y>N)    {
-            cnt++;
-            continue;
-        }
-        if(d==1) {
-            if(same(x,y+N)||same(x,y+2*N))
-                cnt++;
-            else {
-                Union(x,y);
-                Union(x+N,y+N);
-                Union(x+2*N,y+2*N);
-            }
-        } else {
-            if(same(x,y)||same(x,y+2*N))
-                cnt++;
-            else {
-                Union(x,y+N);
-                Union(x+N,y+2*N);
-                Union(x+2*N,y);
-            }
-        }
-    }
-    printf("%d\n",cnt);
-
-    return 0;
+void work() {
+  scanf("%d%d", &n, &k);
+  init(n);
+  int ans = 0;
+  int r, x, y;
+  for (int i = 0; i < k; ++i) {
+    scanf("%d%d%d", &r, &x, &y);
+    --r;
+    if (check(x, y, r)) unite(x, y, r);
+    else ans++;
+  }
+  printf("%d\n", ans);
+}
+int main() {
+  work();
 }

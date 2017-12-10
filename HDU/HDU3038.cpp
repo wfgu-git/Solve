@@ -8,7 +8,7 @@ typedef long long ll;
 typedef long double ld;
 
 const int inf = 0x3f3f3f3f;
-const int maxn = 100000 + 20;
+const int maxn = 200000 + 20;
 
 int n, m;
 int fa[maxn], rnk[maxn];
@@ -22,7 +22,7 @@ int find(int x) {
   if (x != fa[x]) {
     int t = fa[x];
     fa[x] = find(fa[x]);
-    rnk[x] = (rnk[x] + rnk[t]) % 300;
+    rnk[x] = (rnk[x] + rnk[t]);
   }
   return fa[x];
 }
@@ -31,23 +31,25 @@ void unite(int x, int y, int r) {
   int fy = find(y);
   if (fx == fy) return;
   fa[fx] = fy;
-  rnk[fx] = (r + rnk[y] - rnk[x] + 300) % 300;
+  rnk[fx] = (r + rnk[y] - rnk[x]);
 }
 int check(int x, int y, int r) {
   int fx = find(x);
   int fy = find(y);
   if (fx == fy) {
-    return r == ((rnk[x] - rnk[y]) % 300 + 300) % 300;
+    return r == (rnk[x] - rnk[y]);
   }
   return 1;
 }
 void work() {
   while (scanf("%d%d", &n, &m) != EOF) {
     init();
-    int ans =0;
+    int ans = 0;
     for (int i = 0; i < m; ++i) {
       int x, y, r;
       scanf("%d%d%d", &x, &y, &r);
+      --x;
+      swap(x, y);
       if (check(x, y, r)) {
         unite(x, y, r);
       } else {
@@ -59,7 +61,6 @@ void work() {
 }
 int main() {
   // freopen("data.in", "r", stdin);
-  // ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
   work();
 }

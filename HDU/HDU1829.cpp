@@ -8,8 +8,10 @@ typedef long long ll;
 typedef long double ld;
 
 const int inf = 0x3f3f3f3f;
-const int maxn = 100000 + 20;
+const int maxn = 2000 + 20;
 
+
+char *out[] = {"Suspicious bugs found!\n", "No suspicious bugs found!\n"};
 int n, m;
 int fa[maxn], rnk[maxn];
 void init() {
@@ -22,44 +24,45 @@ int find(int x) {
   if (x != fa[x]) {
     int t = fa[x];
     fa[x] = find(fa[x]);
-    rnk[x] = (rnk[x] + rnk[t]) % 300;
+    rnk[x] = (rnk[x] + rnk[t]) % 2;
   }
   return fa[x];
 }
-void unite(int x, int y, int r) {
+void unite(int x, int y) {
   int fx = find(x);
   int fy = find(y);
   if (fx == fy) return;
   fa[fx] = fy;
-  rnk[fx] = (r + rnk[y] - rnk[x] + 300) % 300;
+  rnk[fx] = (1 + rnk[y] - rnk[x] + 2) % 2;
 }
-int check(int x, int y, int r) {
+int check(int x, int y) {
   int fx = find(x);
   int fy = find(y);
   if (fx == fy) {
-    return r == ((rnk[x] - rnk[y]) % 300 + 300) % 300;
+    return 1 == ((rnk[x] - rnk[y]) % 2 + 2) % 2;
   }
   return 1;
 }
 void work() {
-  while (scanf("%d%d", &n, &m) != EOF) {
+  int t;
+  int kase = 0;
+  scanf("%d", &t);
+  while (t--) {
+    int flag = 1;
+    scanf("%d%d", &n, &m);
     init();
-    int ans =0;
     for (int i = 0; i < m; ++i) {
-      int x, y, r;
-      scanf("%d%d%d", &x, &y, &r);
-      if (check(x, y, r)) {
-        unite(x, y, r);
+      int u, v;
+      scanf("%d%d", &u, &v);
+      if (check(u, v)) {
+        unite(u, v);
       } else {
-        ans++;
+        flag = 0;
       }
     }
-    printf("%d\n", ans);
+    printf("Scenario #%d:\n%s\n", ++kase, out[flag]);
   }
 }
 int main() {
-  // freopen("data.in", "r", stdin);
-  // ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-
   work();
 }
