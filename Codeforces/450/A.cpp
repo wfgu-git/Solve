@@ -11,27 +11,20 @@ const int inf = 0x3f3f3f3f;
 const ll lnf = 0x3f3f3f3f3f3f3f3fLL;
 const int maxn = 100000 + 20;
 
-ll dp[12][12];
 void work() {
   int n;
   cin >> n;
-  int ans = 0;
-  int base = 1;
-  int h = n;
-  while (n > 0) {
-    int b = n % 10;
-    if (b == 1) {
-      ans += (n / 10) * base;
-      ans += (h % base) + 1;
-    } else if (!b) {
-      ans += (n / 10) * base;
-    } else {
-      ans += (n / 10 + 1) * base;
-    }
-    base *= 10;
-    n /= 10;
+  int x, y;
+  int x1(0), x2(0);
+  for (int i = 0; i < n; ++i) {
+    cin >> x >> y;
+    x > 0 ? ++x1 : ++x2;
   }
-  cout << ans << endl;
+  if (x1 <= 1 || x2 <= 1) {
+    cout << "Yes";
+  } else {
+    cout << "No";
+  }
 }
 int main() {
   ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
