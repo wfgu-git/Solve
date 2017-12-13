@@ -7,13 +7,11 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-const int inf = 0x3f3f3f3f;
-const ll lnf = 0x3f3f3f3f3f3f3f3fLL;
-const int maxn = 100000 + 20;
 const int moder = 1e9 + 7;
 
-ll mod_pow(ll b) {
-  ll ret = 1, base = 2;
+map<ll, ll> dp;
+ll mod_pow(ll x, ll b) {
+  ll ret = 1, base = x;
   while (b) {
     if (b & 1) {
       ret = ret * base % moder;
@@ -23,18 +21,38 @@ ll mod_pow(ll b) {
   }
   return ret;
 }
+ll dfs(ll t) {
+  if (dp.find(t) != dp.end()) {
+    return dp[t];
+  }
+  ll ret = mod_pow(2, t - 1);
+  ll tmp = 1;
+  int i;
+  for (i = 2; i * i < t; ++i) {
+    if (t % i == 0) {
+      tmp = (tmp + dfs(i)) % moder;
+      tmp = (tmp + dfs(t / i)) % moder;
+    }
+  }
+  if (i * i == t) {
+    tmp = (tmp + dfs(i)) % moder;
+  }
+  return dp[t] = (ret - tmp + moder) % moder;
+}
 void work() {
-  int n, g;
-  cin >> g >> n;
-  if (n % g != 0) {
+  dp.insert({1, 1});
+  dp.insert({2, 1});
+  int x, y;
+  cin >> x >> y;
+  if (y % x != 0) {
     cout << 0;
     return;
   }
-  int k = n / g;
-  cout << mod_pow(k - 1) - 1 << endl;
+  cout << dfs(y / x) << endl;
 }
 int main() {
-  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
   // freopen("data.in", "r", stdin);
+  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
   work();
 }
