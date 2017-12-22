@@ -1,15 +1,3 @@
-/*
-教练我想打ACM！
-*/
-#include <stdio.h>
-using namespace std;
-
-typedef long long ll;
-typedef long double ld;
-
-const int inf = 0x3f3f3f3f;
-const int maxn = 100000 + 20;
-
 int fa[maxn], rnk[maxn];
 int n, k;
 void init(int n) {
@@ -60,7 +48,4 @@ void work() {
     else ans++;
   }
   printf("%d\n", ans);
-}
-int main() {
-  work();
 }
