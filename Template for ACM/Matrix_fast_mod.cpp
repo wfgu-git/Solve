@@ -59,7 +59,7 @@ struct Matrix
     return ret;
   }
 
-  Matrix operator ^ (int b) {
+  Matrix operator ^ (ll b) {
     Matrix ret(n);
     ret.unit();
     Matrix base = *this;
@@ -73,4 +73,3 @@ struct Matrix
     return ret;
   }
 } ;
-
