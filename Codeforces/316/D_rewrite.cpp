@@ -1,4 +1,5 @@
-/*
+
+ /*
 教练我想打ACM！
 */
 #include <bits/stdc++.h>
@@ -8,16 +9,17 @@ typedef long long ll;
 typedef long double ld;
 
 const int inf = 0x3f3f3f3f;
+const ll lnf = 0x3f3f3f3f3f3f3f3fLL;
 const int maxn = 500000 + 20;
 
 vector<vector<int> > g;
-string ch;
-int dfn, in[maxn], out[maxn], arc[maxn];
 vector<int> state[maxn], depth[maxn];
+int dfn, in[maxn], out[maxn];
+string ch;
 void dfs(int x, int d) {
   in[x] = ++dfn;
-  arc[dfn] = x;
-  int temp = state[d].empty() ? 0 : state[d].back();
+
+  int temp = state[d].back();
   temp ^= 1 << (ch[x] - 'a');
   state[d].push_back(temp);
   depth[d].push_back(dfn);
@@ -25,13 +27,47 @@ void dfs(int x, int d) {
   for (int v : g[x]) {
     dfs(v, d + 1);
   }
-
   out[x] = dfn;
+}
+int find_l(int h, int x) {
+  int lb = 0;
+  int ub = depth[h].size() - 1;
+  int ans = -1;
+  while (lb <= ub) {
+    int mid = (lb + ub) / 2;
+    if (depth[h][mid] >= x) {
+      ans = mid;
+      ub = mid - 1;
+    } else {
+      lb = mid + 1;
+    }
+  }
+  return ans;
+}
+int find_r(int h, int x) {
+  int lb = 0;
+  int ub = depth[h].size() - 1;
+  int ans = -1;
+  while (lb <= ub) {
+    int mid = (lb + ub) / 2;
+    if (depth[h][mid] <= x) {
+      ans = mid;
+      lb = mid + 1;
+    } else {
+      ub = mid - 1;
+    }
+  }
+  return ans;
 }
 void work() {
   int n, m;
   cin >> n >> m;
   g.resize(n);
+
+  for (int i = 0; i < n; ++i) {
+    state[i].push_back(0);
+    depth[i].push_back(0);
+  }
 
   for (int i = 1; i < n; ++i) {
     int fa;
@@ -40,31 +76,20 @@ void work() {
   }
   cin >> ch;
 
-  dfn = 0;
   dfs(0, 0);
 
   for (int i = 0; i < m; ++i) {
     int v, h;
     cin >> v >> h;
-    --v;
-    --h;
-    auto lit = lower_bound(depth[h].begin(), depth[h].end(), in[v]);
-    auto rit = lower_bound(depth[h].begin(), depth[h].end(), out[v]);
-    if (lit == depth[h].end() && rit == depth[h].end()) {
-      cout << "Yes\n";
-      continue;
+    --v; --h;
+    int l = find_l(h, in[v]);
+    int r = find_r(h, out[v]);
+    int ret = 0;
+    if (l != -1 && r != -1) {
+      ret = state[h][r] ^ state[h][l - 1];
     }
-    int l = lit - depth[h].begin();
-    int r = rit - depth[h].begin();
-    if (r && r == depth[h].size()) {
-      r = depth[h].size() - 1;
-    }
-    int ret = state[h][r] ^ state[h][l] ^ (1 << (ch[arc[depth[h][l]]] - 'a'));
-    // cout << "h = " << h + 1 << "   ";
-    // cout << "l = " << l << "  r = " << r << "    ";
-    // cout << ch[arc[depth[h][l]]] << "  " << ch[arc[depth[h][r]]] << endl;
-    int flag = __builtin_popcount(ret);
-    if (flag > 1) {
+    ret = __builtin_popcount(ret);
+    if (ret > 1) {
       cout << "No\n";
     } else {
       cout << "Yes\n";
