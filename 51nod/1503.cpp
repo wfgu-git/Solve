@@ -10,14 +10,6 @@ typedef long double ld;
 const int maxn = 500 + 20;
 const int moder = 1e9 + 7;
 
-/*
------>
-|
-|
-v
-
-dp[i][j] += (s[i][j] == s[n - i + 1][m - j + 1]) * dp[n - i + 1][m - j + 1]
-*/
 int n, m;
 char g[maxn][maxn];
 int dp[2][maxn][maxn];
@@ -44,13 +36,9 @@ void work() {
         int y2 = m - (k - (n - x2));
         if (y2 > m || y2 < 1) continue;
         if (g[x1][y1] != g[x2][y2]) continue;
-        // down left
         dp[t][x1][x2] = (dp[t][x1][x2] + dp[t ^ 1][x1][x2 + 1]) % moder;
-        // right up
         dp[t][x1][x2] = (dp[t][x1][x2] + dp[t ^ 1][x1 - 1][x2]) % moder;
-        // right left
         dp[t][x1][x2] = (dp[t][x1][x2] + dp[t ^ 1][x1 - 1][x2 + 1]) % moder;
-        // down up
         dp[t][x1][x2] = (dp[t][x1][x2] + dp[t ^ 1][x1][x2]) % moder;
       }
     }
