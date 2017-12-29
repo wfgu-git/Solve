@@ -12,7 +12,7 @@ const int maxn = 5000 + 20;
 const int moder = 1e9 + 7;
 
 char a[maxn];
-int dp[maxn][2];
+int dp[maxn][maxn];
 void work() {
   int n;
   cin >> n;
@@ -24,25 +24,29 @@ void work() {
   memset(dp, 0, sizeof(dp));
   dp[0][0] = 1;
   for (int i = 1; i < n; ++i) {
-    if (a[i] == 's') {
-      if (a[i - 1] == 's') {
-        dp[i][0] = dp[i - 1][0] + dp[i - 1][1];
-        dp[i][1] = 0;
-      } else {
-        dp[i][0] = dp[i - 1][0] + dp[i - 1][1];
-        dp[i][1] = dp[i - 1][0] + dp[i - 1][1];
+    if (a[i - 1] == 'f') {
+      dp[i][0] = 0;
+      for (int j = 1; j <= i; ++j) {
+        dp[i][j] = dp[i - 1][j - 1];
       }
-    } else { // f
-      if (a[i - 1] == 's') {
-        dp[i][0] = 0;
-        dp[i][1] = dp[i - 1][0] + dp[i - 1][1];
-      } else {
-        dp[i][0] = 0;
-        dp[i][1] = dp[i - 1][0] + dp[i - 1][1];
+    } else {
+      int t = 0;
+      for (int j = 0; j < i; ++j) {
+        t += dp[i - 1][j];
+        t %= moder;
+      }
+      for (int j = 0; j < i; ++j) {
+
       }
     }
   }
-  cout << dp[n - 1][0] + dp[n - 1][1] << endl;
+
+  int ans = 0;
+  for (int i = 0; i < n; ++i) {
+    ans += dp[n - 1][i];
+    ans %= moder;
+  }
+  cout << ans << endl;
 }
 int main() {
   // freopen("data.in", "r", stdin);
