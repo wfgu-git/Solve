@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="D - New Year and Arbitrary Arrangement" type="name.admitriev.jhelper.configuration.TaskConfigurationType" factoryName="Task" className="TaskD" cppPath="tasks/TaskD.cpp" inputType="STANDARD" outputType="STANDARD" testType="SINGLE">
+    <tests>
+      <test input="1 1 1&#10;" output="2&#10;" active="true" />
+      <test input="3 1 4&#10;" output="370000006&#10;" active="true" />
+    </tests>
+    <method />
+  </configuration>
+</component>

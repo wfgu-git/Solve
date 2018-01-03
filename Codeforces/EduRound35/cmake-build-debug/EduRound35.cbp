@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="EduRound35"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="EduRound35">
+				<Option output="/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/EduRound35" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/7/../../../../include/c++/7"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/7/../../../../include/c++/7/x86_64-redhat-linux"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/7/../../../../include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 EduRound35"/>
+					<CompileFile command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="EduRound35/fast">
+				<Option output="/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/EduRound35" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/7/../../../../include/c++/7"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/7/../../../../include/c++/7/x86_64-redhat-linux"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/7/../../../../include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 EduRound35/fast"/>
+					<CompileFile command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j4 -f &quot;/home/wfgu/Documents/Solve/Codeforces/EduRound35/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/wfgu/Documents/Solve/Codeforces/EduRound35/main.cpp">
+			<Option target="EduRound35"/>
+		</Unit>
+		<Unit filename="/home/wfgu/Documents/Solve/Codeforces/EduRound35/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/wfgu/Documents/Solve/Codeforces/Goodbye2017/tasks/TaskA.cpp
+iostream
+-
+set
+-
+
+/home/wfgu/Documents/Solve/Codeforces/Goodbye2017/testrunner/main.cpp
+/home/wfgu/Documents/Solve/Codeforces/Goodbye2017/tasks/TaskA.cpp
+-
+iostream
+-
+fstream
+-
+sstream
+-
+string
+-
+vector
+-
+cctype
+-
+ctime
+-
+

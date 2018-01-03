@@ -1,0 +1,11 @@
+/*
+教练我想打ACM！
+*/
+#include <bits/stdc++.h>
+using namespace std;
+
+struct %ClassName% {
+	void solve(std::istream& in, std::ostream& out) {
+
+	}
+};

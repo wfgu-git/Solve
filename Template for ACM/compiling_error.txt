@@ -1,0 +1,3 @@
+/home/wfgu/Documents/solve/Template for ACM/Matrix_fast_mod.cpp:62:22: error: ‘ll’ has not been declared
+   Matrix operator ^ (ll b) {
+                      ^~

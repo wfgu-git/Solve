@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/EduRound35.dir/main.cpp.o  -o EduRound35 

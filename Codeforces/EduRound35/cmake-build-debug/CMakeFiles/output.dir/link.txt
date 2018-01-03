@@ -1,0 +1,1 @@
+/usr/bin/c++  -g  -rdynamic CMakeFiles/output.dir/output/main.cpp.o CMakeFiles/output.dir/testrunner/main.cpp.o  -o output 

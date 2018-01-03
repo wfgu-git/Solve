@@ -1,0 +1,1 @@
+/usr/bin/c++  -g  -rdynamic CMakeFiles/test.dir/tasks/TaskA.cpp.o CMakeFiles/test.dir/tasks/TaskB.cpp.o CMakeFiles/test.dir/tasks/TaskC.cpp.o CMakeFiles/test.dir/tasks/TaskD.cpp.o CMakeFiles/test.dir/tasks/TaskE.cpp.o CMakeFiles/test.dir/tasks/TaskF.cpp.o CMakeFiles/test.dir/tasks/TaskG.cpp.o CMakeFiles/test.dir/tasks/TaskH.cpp.o  -o test 
