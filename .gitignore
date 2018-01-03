@@ -1,8 +1,8 @@
-.sh
+*.sh
 cmake-build-debug/CMakeFiles/3.8.2/CompilerIdCXX
 output
 tasks/
 testrunner
-.in
-.out
-.txt
+*.in
+*.out
+*.txt
