@@ -21,3 +21,51 @@ int crt(int *a, int *m, int n) {
   if (ans < d) ans += M;
   return ans;
 }
+
+#include <iostream>
+
+int gcd(int x, int y) {
+  if (y == 0) {
+    return x;
+  }
+  return gcd(y, x % y);
+}
+
+int extend_gcd(int a, int b, int &x, int &y) {
+  if (!b) {
+    x = 1;
+    y = 0;
+    return a;
+  }
+  int d = extend_gcd(b, a % b, x, y);
+  int t = x;
+  x = y;
+  y = t - (a / b) * y;
+  return d;
+}
+
+int main() {
+  /*
+  ax + by = c;
+  */
+  int a, b, c;
+  while (std::cin >> a >> b >> c) {
+    int g = gcd(a, b);
+    if (c % g != 0) {
+      std::cout << "no" << std::endl;
+      continue;
+    }
+    int k = c / g;
+    int x0, y0;
+    extend_gcd(a, b, x0, y0);
+    // special
+    int x = x0 * k;
+    int y = y0 * k;
+    std::cout << "x = " << x << ", y =  " << y << std::endl;
+
+    /* normal
+    ansx += b / g * t;
+    ansy -= a / g * t;
+    */
+  }
+}
